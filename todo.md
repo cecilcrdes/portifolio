@@ -1,6 +1,6 @@
-# Páginas de trabalhos
+# Restauração do formato original
 
-- [x] Mapear os arquivos de projeto existentes no repositório original.
-- [x] Criar páginas por área de trabalho em português e inglês.
-- [x] Conectar os cards da home às páginas correspondentes.
-- [x] Validar navegação, idioma e retorno ao portfólio.
+- [x] Comparar a página atual com as páginas originais do repositório.
+- [x] Reproduzir a estrutura original de cada categoria de trabalhos.
+- [x] Manter as rotas PT/EN e reconectar os cards da home.
+- [x] Validar a navegação e o visual restaurado.
