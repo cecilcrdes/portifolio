@@ -62,6 +62,10 @@ export default function Home() {
   useEffect(() => { setActiveFilter("todos"); setWordIndex(0); }, [language]);
   useEffect(() => { const timer = window.setInterval(() => setWordIndex((value) => (value + 1) % copy.heroWords.length), 2300); return () => window.clearInterval(timer); }, [copy.heroWords.length]);
   const displayed = activeFilter === "todos" ? projects : projects.filter(([category]) => category === activeFilter);
+  const workPath = (category: string) => {
+    const normalized = category === "illustration" ? "illustration" : category === "graphic" ? "graphic" : category;
+    return language === "en" ? `/en/projects/${normalized}` : `/projetos/${normalized === "graphic" ? "grafico" : normalized === "illustration" ? "ilustracao" : normalized}`;
+  };
   const jump = () => setMenuOpen(false);
   const switchLanguage = () => { setMenuOpen(false); navigate(language === "pt" ? "/en" : "/"); };
 
@@ -76,7 +80,7 @@ export default function Home() {
 
       <section id="conhecimentos" className="old-section section-wrap"><SectionTitle index="02" tag={copy.knowledgeTag} title={copy.knowledgeTitle} description={copy.knowledgeDescription} /><div className="knowledge-list">{copy.tools.map(([a, b]) => <div className="knowledge-line" key={a}><span>{a}</span><small>{b}</small></div>)}</div></section>
 
-      <section id="trabalhos" className="old-section section-wrap"><SectionTitle index="03" tag={copy.workTag} title={copy.workTitle} description={copy.workDescription} /><div className="filters">{copy.filters.map(([value, label]) => <button className={activeFilter === value ? "active" : ""} key={value} onClick={() => setActiveFilter(value)}>{label}</button>)}</div><div className="work-grid">{displayed.map(([category, label, year, title, description, color]) => <article className="work-card" key={title + year}><div className="work-top"><span>{label}</span><small>{year}</small></div><h3>{title}</h3><p>{description}</p><a href="#contato">{copy.seeProject} <ArrowUpRight size={14} /></a><div className="work-swatch" style={{ background: color }} /></article>)}</div></section>
+      <section id="trabalhos" className="old-section section-wrap"><SectionTitle index="03" tag={copy.workTag} title={copy.workTitle} description={copy.workDescription} /><div className="filters">{copy.filters.map(([value, label]) => <button className={activeFilter === value ? "active" : ""} key={value} onClick={() => setActiveFilter(value)}>{label}</button>)}</div><div className="work-grid">{displayed.map(([category, label, year, title, description, color]) => <article className="work-card" key={title + year}><div className="work-top"><span>{label}</span><small>{year}</small></div><h3>{title}</h3><p>{description}</p><a href={workPath(category)}>{copy.seeProject} <ArrowUpRight size={14} /></a><div className="work-swatch" style={{ background: color }} /></article>)}</div></section>
 
       <section className="client-band"><div className="marquee"><span>Ellomidia Comunicação</span><span>Calangos Comunicação</span><span>Fintech Aria</span><span>Mercadinho da Rua</span><span>Museus App</span><span>Revista Sputnik</span><span>Festival Vira-Lata</span><span>KSI Consultas</span><span>Recomendaria</span><span>LCR Marcenaria</span><span>Lilaz</span><span>Ellomidia Comunicação</span><span>Calangos Comunicação</span><span>Fintech Aria</span><span>Mercadinho da Rua</span><span>Museus App</span></div></section>
 

@@ -1,5 +1,6 @@
-# Correção da versão em inglês
+# Páginas de trabalhos
 
-- [x] Diagnosticar por que a navegação em inglês deixou de funcionar.
-- [x] Implementar a troca funcional entre português e inglês mantendo o visual original.
-- [x] Validar a rota em inglês, os textos e o retorno para português.
+- [x] Mapear os arquivos de projeto existentes no repositório original.
+- [x] Criar páginas por área de trabalho em português e inglês.
+- [x] Conectar os cards da home às páginas correspondentes.
+- [x] Validar navegação, idioma e retorno ao portfólio.
