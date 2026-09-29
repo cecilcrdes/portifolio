@@ -83,7 +83,7 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
 const normalizeCategory = (value: string): Category => ({ grafico: "graphic", graphic: "graphic", ux: "ux", ilustracao: "illustration", illustration: "illustration", marketing: "marketing" } as Record<string, Category>)[value] || "graphic";
 
 function ProductCarousel({ language }: { language: "pt" | "en" }) {
-  const slides = language === "pt" ? [
+  const products = language === "pt" ? [
     { title: "Camiseta", text: "Mockup de camiseta com a assinatura visual do Glitchcast.", media: "/manus-storage/glitchcast-tshirt-mockup_d6a9501d.png", alt: "Mockup de camiseta preta do Glitchcast" },
     { title: "Caneca", text: "Mockup de caneca com a identidade do podcast.", media: "/manus-storage/glitchcast-mug-mockup_505ebf47.png", alt: "Mockup de caneca branca do Glitchcast" },
     { title: "Moletom", text: "Aplicação da identidade em um moletom roxo, apresentada em um contexto de uso cotidiano.", media: "/manus-storage/glitchcast-purple-hoodie-reference_69a0911b.png", alt: "Pessoa usando moletom roxo com a identidade do Glitchcast" },
@@ -100,16 +100,12 @@ function ProductCarousel({ language }: { language: "pt" | "en" }) {
     { title: "Cap", text: "Purple cap with the Glitchcast emblem embroidered on the front.", media: "/manus-storage/glitchcast-cap-mockup_e5a4ad9a.png", alt: "Purple cap with the Glitchcast emblem" },
     { title: "Notebook", text: "Notebook with a purple cover and the Glitchcast visual signature.", media: "/manus-storage/glitchcast-notebook-mockup_1a4bf8aa.png", alt: "Purple notebook with the Glitchcast identity" },
   ];
-  const [active, setActive] = useState(0);
-  const [zoomed, setZoomed] = useState(false);
-  const current = slides[active];
-  const move = (direction: number) => setActive((value) => (value + direction + slides.length) % slides.length);
-  return <div className="products-carousel" aria-label={language === "pt" ? "Carrossel de produtos Glitchcast" : "Glitchcast products carousel"}>
-    <div className="products-carousel-head"><div><h3>{language === "pt" ? "Galeria de produtos" : "Product gallery"}</h3><p>{current.text}</p></div><div className="products-carousel-controls"><button type="button" onClick={() => move(-1)} aria-label={language === "pt" ? "Produto anterior" : "Previous product"}>←</button><span>{String(active + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</span><button type="button" onClick={() => move(1)} aria-label={language === "pt" ? "Próximo produto" : "Next product"}>→</button></div></div>
-    <div className="products-carousel-stage"><img src={current.media} alt={current.alt} loading="lazy" /><button type="button" className="products-carousel-zoom" onClick={() => setZoomed(true)} aria-label={language === "pt" ? `Ampliar imagem de ${current.title}` : `Enlarge ${current.title} image`}>+</button><div className="products-carousel-label">{current.title}</div></div>
-    {zoomed && <div className="products-lightbox" role="dialog" aria-modal="true" aria-label={current.title} onClick={() => setZoomed(false)}><button type="button" className="products-lightbox-close" onClick={() => setZoomed(false)} aria-label={language === "pt" ? "Fechar imagem ampliada" : "Close enlarged image"}>×</button><img src={current.media} alt={current.alt} onClick={(event) => event.stopPropagation()} /></div>}
-    <div className="products-carousel-thumbs" aria-label={language === "pt" ? "Miniaturas dos produtos" : "Product thumbnails"}>{slides.map((slide, index) => <button type="button" className={active === index ? "active" : ""} onClick={() => setActive(index)} aria-label={language === "pt" ? `Ver ${slide.title}` : `View ${slide.title}`} aria-pressed={active === index} key={`thumb-${slide.title}`}><img src={slide.media} alt="" loading="lazy" /></button>)}</div>
-    <div className="products-carousel-dots" role="tablist" aria-label={language === "pt" ? "Selecionar produto" : "Select product"}>{slides.map((slide, index) => <button type="button" role="tab" aria-selected={active === index} aria-label={slide.title} className={active === index ? "active" : ""} onClick={() => setActive(index)} key={slide.title} />)}</div>
+  const [zoomed, setZoomed] = useState<number | null>(null);
+  const selected = zoomed === null ? null : products[zoomed];
+  return <div className="products-grid-gallery" aria-label={language === "pt" ? "Galeria de produtos Glitchcast" : "Glitchcast products gallery"}>
+    <div className="products-grid-head"><div><h3>{language === "pt" ? "Galeria de produtos" : "Product gallery"}</h3><p>{language === "pt" ? "Aplicações da identidade em uma seleção de produtos." : "Identity applications across a selection of products."}</p></div><span className="products-grid-count">{String(products.length).padStart(2, "0")} {language === "pt" ? "itens" : "items"}</span></div>
+    <div className="products-grid">{products.map((product, index) => <article className="products-grid-card" key={product.title}><div className="products-grid-image"><img src={product.media} alt={product.alt} loading="lazy" /><button type="button" className="products-grid-zoom" onClick={() => setZoomed(index)} aria-label={language === "pt" ? `Ampliar imagem de ${product.title}` : `Enlarge ${product.title} image`}>+</button></div><h4>{product.title}</h4><p>{product.text}</p></article>)}</div>
+    {selected && <div className="products-lightbox" role="dialog" aria-modal="true" aria-label={selected.title} onClick={() => setZoomed(null)}><button type="button" className="products-lightbox-close" onClick={() => setZoomed(null)} aria-label={language === "pt" ? "Fechar imagem ampliada" : "Close enlarged image"}>×</button><img src={selected.media} alt={selected.alt} onClick={(event) => event.stopPropagation()} /></div>}
   </div>;
 }
 
