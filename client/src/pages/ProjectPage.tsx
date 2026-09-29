@@ -8,7 +8,7 @@ type PageCopy = { title: string; intro: string; tag: string; back: string; proje
 
 const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
   graphic: {
-    pt: { title: "Design Gráfico", tag: "Projetos por categoria", intro: "Marcas, sistemas, embalagens e peças gráficas para transformar ideias em presença visual.", back: "← Voltar ao portfólio", projects: [
+    pt: { title: "Branding", tag: "Projetos por categoria", intro: "Marcas, sistemas, embalagens e peças gráficas para transformar ideias em presença visual.", back: "← Voltar ao portfólio", projects: [
       { id: "cafe-formiga", title: "Café Formiga", year: "2024", text: "Marca, embalagens e sinalização de loja para uma torrefadora de bairro, a partir do desenho da formiga-fio.", tools: ["Illustrator", "Photoshop", "Identidade visual"] },
       { id: "vira-lata", title: "Festival Vira-Lata", year: "2023", text: "Sistema de cartazes serigrafados para um festival de música independente, com tipografia recortada à mão.", tools: ["Illustrator", "Photoshop", "Cartaz"] },
       { id: "ksi-identidade", title: "KSI Consultas", year: "2026", text: "Marca e papelaria para uma empresa de consultas especializadas, com foco em tecnologia.", tools: ["Illustrator", "Identidade visual", "Papelaria"] },
@@ -16,7 +16,7 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
       { id: "lcr", title: "LCR Marcenaria", year: "2025", text: "Marca e sinalização de oficina para uma marcenaria artesanal, inspirada nas texturas da madeira bruta.", tools: ["Illustrator", "Identidade visual", "Sinalização"] },
       { id: "lilaz", title: "Lilaz", year: "2025", text: "Identidade e embalagens para um pequeno negócio de decorações personalizadas.", tools: ["Illustrator", "Photoshop", "Embalagem"] },
     ] },
-    en: { title: "Graphic Design", tag: "Projects by category", intro: "Brands, systems, packaging and graphic pieces that turn ideas into visual presence.", back: "← Back to portfolio", projects: [
+    en: { title: "Branding", tag: "Projects by category", intro: "Brands, systems, packaging and graphic pieces that turn ideas into visual presence.", back: "← Back to portfolio", projects: [
       { id: "cafe-formiga", title: "Café Formiga", year: "2024", text: "Branding, packaging and store signage for a neighborhood coffee roaster, built from a thread-ant drawing.", tools: ["Illustrator", "Photoshop", "Visual identity"] },
       { id: "vira-lata", title: "Vira-Lata Festival", year: "2023", text: "A screen-printed poster system for an independent music festival, with hand-cut typography.", tools: ["Illustrator", "Photoshop", "Poster"] },
       { id: "ksi-identidade", title: "KSI Consultas", year: "2026", text: "Brand identity and stationery for a technology-focused specialized consultation company.", tools: ["Illustrator", "Visual identity", "Stationery"] },
