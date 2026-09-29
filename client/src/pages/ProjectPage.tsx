@@ -100,11 +100,17 @@ function ProductCarousel({ language }: { language: "pt" | "en" }) {
     { title: "Cap", text: "Purple cap with the Glitchcast emblem embroidered on the front.", media: "/manus-storage/glitchcast-cap-mockup_e5a4ad9a.png", alt: "Purple cap with the Glitchcast emblem" },
     { title: "Notebook", text: "Notebook with a purple cover and the Glitchcast visual signature.", media: "/manus-storage/glitchcast-notebook-mockup_1a4bf8aa.png", alt: "Purple notebook with the Glitchcast identity" },
   ];
+  const perPage = 3;
+  const pageCount = Math.ceil(products.length / perPage);
+  const [page, setPage] = useState(0);
   const [zoomed, setZoomed] = useState<number | null>(null);
+  const visibleProducts = products.slice(page * perPage, page * perPage + perPage);
   const selected = zoomed === null ? null : products[zoomed];
+  const move = (direction: number) => setPage((value) => (value + direction + pageCount) % pageCount);
   return <div className="products-grid-gallery" aria-label={language === "pt" ? "Galeria de produtos Glitchcast" : "Glitchcast products gallery"}>
-    <div className="products-grid-head"><div><h3>{language === "pt" ? "Galeria de produtos" : "Product gallery"}</h3><p>{language === "pt" ? "Aplicações da identidade em uma seleção de produtos." : "Identity applications across a selection of products."}</p></div><span className="products-grid-count">{String(products.length).padStart(2, "0")} {language === "pt" ? "itens" : "items"}</span></div>
-    <div className="products-grid">{products.map((product, index) => <article className="products-grid-card" key={product.title}><div className="products-grid-image"><img src={product.media} alt={product.alt} loading="lazy" /><button type="button" className="products-grid-zoom" onClick={() => setZoomed(index)} aria-label={language === "pt" ? `Ampliar imagem de ${product.title}` : `Enlarge ${product.title} image`}>+</button></div><h4>{product.title}</h4><p>{product.text}</p></article>)}</div>
+    <div className="products-grid-head"><div><h3>{language === "pt" ? "Galeria de produtos" : "Product gallery"}</h3><p>{language === "pt" ? "Aplicações da identidade em uma seleção de produtos." : "Identity applications across a selection of products."}</p></div><div className="products-grid-controls"><span className="products-grid-count">{String(page + 1).padStart(2, "0")} / {String(pageCount).padStart(2, "0")}</span><button type="button" onClick={() => move(-1)} aria-label={language === "pt" ? "Produtos anteriores" : "Previous products"}>←</button><button type="button" onClick={() => move(1)} aria-label={language === "pt" ? "Próximos produtos" : "Next products"}>→</button></div></div>
+    <div className="products-grid">{visibleProducts.map((product, localIndex) => { const index = page * perPage + localIndex; return <article className="products-grid-card" key={product.title}><div className="products-grid-image"><img src={product.media} alt={product.alt} loading="lazy" /><button type="button" className="products-grid-zoom" onClick={() => setZoomed(index)} aria-label={language === "pt" ? `Ampliar imagem de ${product.title}` : `Enlarge ${product.title} image`}>+</button></div><h4>{product.title}</h4><p>{product.text}</p></article>; })}</div>
+    <a className="glitchcast-app-cta" href={language === "en" ? "/en/projects/ux" : "/projetos/ux"}>{language === "pt" ? "Ver o projeto Glitchcast App →" : "View the Glitchcast App project →"}</a>
     {selected && <div className="products-lightbox" role="dialog" aria-modal="true" aria-label={selected.title} onClick={() => setZoomed(null)}><button type="button" className="products-lightbox-close" onClick={() => setZoomed(null)} aria-label={language === "pt" ? "Fechar imagem ampliada" : "Close enlarged image"}>×</button><img src={selected.media} alt={selected.alt} onClick={(event) => event.stopPropagation()} /></div>}
   </div>;
 }
