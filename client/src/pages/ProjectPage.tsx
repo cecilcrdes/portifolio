@@ -89,19 +89,25 @@ function ProductCarousel({ language }: { language: "pt" | "en" }) {
     { title: "Moletom", text: "Aplicação da identidade em um moletom roxo, apresentada em um contexto de uso cotidiano.", media: "/manus-storage/glitchcast-purple-hoodie-reference_69a0911b.png", alt: "Pessoa usando moletom roxo com a identidade do Glitchcast" },
     { title: "Adesivos", text: "Conjunto de adesivos recortados para levar a identidade do podcast para diferentes superfícies.", media: "/manus-storage/glitchcast-sticker-mockup_085b7c62.png", alt: "Conjunto de adesivos do Glitchcast" },
     { title: "Ecobag", text: "Ecobag de algodão com a assinatura visual do Glitchcast.", media: "/manus-storage/glitchcast-tote-bag-mockup_43dc74cf.png", alt: "Ecobag de algodão com a identidade do Glitchcast" },
+    { title: "Boné", text: "Boné roxo com o símbolo do Glitchcast bordado.", media: "/manus-storage/glitchcast-cap-mockup_e5a4ad9a.png", alt: "Boné roxo com o símbolo do Glitchcast" },
+    { title: "Caderno", text: "Caderno com capa roxa e a assinatura visual do Glitchcast.", media: "/manus-storage/glitchcast-notebook-mockup_1a4bf8aa.png", alt: "Caderno roxo com a identidade do Glitchcast" },
   ] : [
     { title: "T-shirt", text: "T-shirt mockup featuring the Glitchcast visual signature.", media: "/manus-storage/glitchcast-tshirt-mockup_d6a9501d.png", alt: "Black Glitchcast T-shirt mockup" },
     { title: "Mug", text: "Mug mockup featuring the podcast identity.", media: "/manus-storage/glitchcast-mug-mockup_505ebf47.png", alt: "White Glitchcast mug mockup" },
     { title: "Hoodie", text: "The identity applied to a purple hoodie, shown in an everyday use context.", media: "/manus-storage/glitchcast-purple-hoodie-reference_69a0911b.png", alt: "Person wearing a purple hoodie with the Glitchcast identity" },
     { title: "Stickers", text: "A set of die-cut stickers that brings the podcast identity to different surfaces.", media: "/manus-storage/glitchcast-sticker-mockup_085b7c62.png", alt: "Set of Glitchcast stickers" },
     { title: "Tote bag", text: "Cotton tote bag featuring the Glitchcast visual signature.", media: "/manus-storage/glitchcast-tote-bag-mockup_43dc74cf.png", alt: "Cotton tote bag with the Glitchcast identity" },
+    { title: "Cap", text: "Purple cap with the Glitchcast emblem embroidered on the front.", media: "/manus-storage/glitchcast-cap-mockup_e5a4ad9a.png", alt: "Purple cap with the Glitchcast emblem" },
+    { title: "Notebook", text: "Notebook with a purple cover and the Glitchcast visual signature.", media: "/manus-storage/glitchcast-notebook-mockup_1a4bf8aa.png", alt: "Purple notebook with the Glitchcast identity" },
   ];
   const [active, setActive] = useState(0);
+  const [zoomed, setZoomed] = useState(false);
   const current = slides[active];
   const move = (direction: number) => setActive((value) => (value + direction + slides.length) % slides.length);
   return <div className="products-carousel" aria-label={language === "pt" ? "Carrossel de produtos Glitchcast" : "Glitchcast products carousel"}>
     <div className="products-carousel-head"><div><h3>{language === "pt" ? "Galeria de produtos" : "Product gallery"}</h3><p>{current.text}</p></div><div className="products-carousel-controls"><button type="button" onClick={() => move(-1)} aria-label={language === "pt" ? "Produto anterior" : "Previous product"}>←</button><span>{String(active + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</span><button type="button" onClick={() => move(1)} aria-label={language === "pt" ? "Próximo produto" : "Next product"}>→</button></div></div>
-    <div className="products-carousel-stage"><img src={current.media} alt={current.alt} loading="lazy" /><div className="products-carousel-label">{current.title}</div></div>
+    <div className="products-carousel-stage"><img src={current.media} alt={current.alt} loading="lazy" /><button type="button" className="products-carousel-zoom" onClick={() => setZoomed(true)} aria-label={language === "pt" ? `Ampliar imagem de ${current.title}` : `Enlarge ${current.title} image`}>+</button><div className="products-carousel-label">{current.title}</div></div>
+    {zoomed && <div className="products-lightbox" role="dialog" aria-modal="true" aria-label={current.title} onClick={() => setZoomed(false)}><button type="button" className="products-lightbox-close" onClick={() => setZoomed(false)} aria-label={language === "pt" ? "Fechar imagem ampliada" : "Close enlarged image"}>×</button><img src={current.media} alt={current.alt} onClick={(event) => event.stopPropagation()} /></div>}
     <div className="products-carousel-dots" role="tablist" aria-label={language === "pt" ? "Selecionar produto" : "Select product"}>{slides.map((slide, index) => <button type="button" role="tab" aria-selected={active === index} aria-label={slide.title} className={active === index ? "active" : ""} onClick={() => setActive(index)} key={slide.title} />)}</div>
   </div>;
 }
