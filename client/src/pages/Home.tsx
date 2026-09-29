@@ -9,7 +9,7 @@ const projectData = {
   pt: [
     ["ilustracao", "Conteúdo visual", "2020", "Bogused — Assets", "Produção de assets para o jogo Bogused, incluindo design de personagens, cenário e interface.", "#2b3eff"],
     ["ux", "Marketplace regional — UX Design", "2025", "App Mercado da Rua", "Marketplace regional que conecta moradores a mercados, hortifrutis e mercearias do próprio bairro.", "#ff5a2e"],
-    ["grafico", "Identidade visual", "2024", "Café Formiga", "Marca, embalagens e sinalização de loja para uma torrefadora de bairro, a partir do desenho da formiga-fio.", "#f0c23a"],
+    ["grafico", "Identidade visual", "—", "Glitchcast", "Identidade visual para um podcast, com sistema de marca, lettering e variações de aplicação.", "#a45bea"],
     ["marketing", "Campanha — Lançamento", "2024", "Trilha Selvagem", "Direção de arte e conteúdo para o lançamento de uma linha de mochilas, com peças para redes e ponto de venda.", "#2e9e4e"],
     ["ux", "E-commerce", "2024", "Checkout — Loja Verde", "Simplificação do carrinho e pagamento de um marketplace de produtos sustentáveis, com testes A/B em cada etapa.", "#2b3eff"],
     ["ilustracao", "Aventura — plataforma 2D", "2020", "E aí man jogo", "Jogo 2D de aventura e plataforma em que Luketa atravessa a comunidade para encontrar seu amigo desaparecido.", "#ff5a2e"],
@@ -25,7 +25,7 @@ const projectData = {
   en: [
     ["illustration", "Visual content", "2020", "Bogused — Assets", "Assets for the Bogused game, including character, environment and interface design.", "#2b3eff"],
     ["ux", "Regional marketplace — UX Design", "2025", "Mercado da Rua App", "A regional marketplace connecting residents with neighborhood markets and grocery stores.", "#ff5a2e"],
-    ["graphic", "Visual identity", "2024", "Café Formiga", "Branding, packaging and store signage for a neighborhood coffee roaster.", "#f0c23a"],
+    ["graphic", "Branding", "—", "Glitchcast", "Visual identity for a podcast, with a brand system, lettering and application variations.", "#a45bea"],
     ["marketing", "Launch campaign", "2024", "Trilha Selvagem", "Art direction and content for the launch of a new backpack line, across social and retail.", "#2e9e4e"],
     ["ux", "E-commerce", "2024", "Checkout — Loja Verde", "A simpler cart and payment experience for a sustainable products marketplace, tested at each step.", "#2b3eff"],
     ["illustration", "2D adventure platformer", "2020", "E aí man jogo", "A 2D adventure game where Luketa crosses the community to find his missing friend.", "#ff5a2e"],
