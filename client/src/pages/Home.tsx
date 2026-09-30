@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { ArrowDown, ArrowUpRight, Menu, X } from "lucide-react";
 import { useLocation } from "wouter";
+import { trpc } from "@/lib/trpc";
 
 const colors = ["#f0c23a", "#2b3eff", "#ff5a2e", "#2e9e4e", "#f0c23a"];
 
@@ -55,7 +56,10 @@ export default function Home() {
   const [location, navigate] = useLocation();
   const language: Language = location === "/en" ? "en" : "pt";
   const copy = content[language];
-  const projects = projectData[language];
+  const { data: storedProjects } = trpc.portfolio.projects.useQuery({ language }, { staleTime: 60_000 });
+  const projects = storedProjects?.length
+    ? storedProjects.map((project) => [project.category, project.label, project.year, project.title, project.description, project.accentColor] as const)
+    : projectData[language];
   const [activeFilter, setActiveFilter] = useState("todos");
   const [wordIndex, setWordIndex] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
