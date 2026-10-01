@@ -38,7 +38,24 @@ jobs:
           GITHUB_ACTIONS: true
 
       - name: Add SPA fallback and disable Jekyll
-        run: cp dist/public/index.html dist/public/404.html && touch dist/public/.nojekyll
+        run: |
+          cp dist/public/index.html dist/public/404.html
+          touch dist/public/.nojekyll
+          for route in \
+            en \
+            projetos/grafico \
+            projetos/ux \
+            projetos/ilustracao \
+            projetos/marketing \
+            projetos/ux/glitchcast-app \
+            en/projects/graphic \
+            en/projects/ux \
+            en/projects/illustration \
+            en/projects/marketing \
+            en/projects/ux/glitchcast-app; do
+            mkdir -p "dist/public/$route"
+            cp dist/public/index.html "dist/public/$route/index.html"
+          done
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
