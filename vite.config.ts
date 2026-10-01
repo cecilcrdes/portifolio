@@ -151,9 +151,8 @@ function vitePluginManusDebugCollector(): Plugin {
 }
 
 const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
-
 export default defineConfig({
-  base: '/portifolio/'
+  base: process.env.GITHUB_ACTIONS ? "/portifolio/" : "/",
   plugins,
   resolve: {
     alias: {

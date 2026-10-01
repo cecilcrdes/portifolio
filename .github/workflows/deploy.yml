@@ -2,7 +2,8 @@ name: Deploy Portfolio to GitHub Pages
 
 on:
   push:
-    branches: ['gh-pages'] # ou sua branch principal
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -10,8 +11,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: pages
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -19,30 +20,33 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          
-      - name: Install pnpm
+          cache: pnpm
+
+      - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
-          
-      - name: Install dependencies
-        run: pnpm install
-        
-      - name: Build Frontend
-        run: pnpm run build
-        working-directory: ./client # onde está o seu vite.config
-        env:
-          VITE_BASE_PATH: /portifolio/
+          version: 10
 
-      - name: Upload artifact
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build static frontend
+        run: pnpm exec vite build
+        env:
+          GITHUB_ACTIONS: true
+
+      - name: Add SPA fallback and disable Jekyll
+        run: cp dist/public/index.html dist/public/404.html && touch dist/public/.nojekyll
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./client/dist # pasta onde o build gera os arquivos
+          path: dist/public
 
   deploy:
     needs: build
@@ -51,8 +55,8 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
