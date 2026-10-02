@@ -1,0 +1,76 @@
+name: Deploy Portfolio to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build static frontend
+        run: pnpm exec vite build
+        env:
+          GITHUB_ACTIONS: true
+
+      - name: Add SPA fallback and disable Jekyll
+        run: |
+          cp dist/public/index.html dist/public/404.html
+          touch dist/public/.nojekyll
+          for route in \
+            en \
+            projetos/grafico \
+            projetos/ux \
+            projetos/ilustracao \
+            projetos/marketing \
+            projetos/ux/glitchcast-app \
+            en/projects/graphic \
+            en/projects/ux \
+            en/projects/illustration \
+            en/projects/marketing \
+            en/projects/ux/glitchcast-app; do
+            mkdir -p "dist/public/$route"
+            cp dist/public/index.html "dist/public/$route/index.html"
+          done
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
