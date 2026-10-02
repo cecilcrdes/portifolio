@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { ArrowDown, ArrowUpRight, Menu, X } from "lucide-react";
 import { useLocation } from "wouter";
-import { trpc } from "@/lib/trpc";
+import { sitePath } from "@/lib/sitePath";
 
 const colors = ["#f0c23a", "#2b3eff", "#ff5a2e", "#2e9e4e", "#f0c23a"];
 
@@ -56,10 +56,7 @@ export default function Home() {
   const [location, navigate] = useLocation();
   const language: Language = location === "/en" ? "en" : "pt";
   const copy = content[language];
-  const { data: storedProjects } = trpc.portfolio.projects.useQuery({ language }, { staleTime: 60_000 });
-  const projects = storedProjects?.length
-    ? storedProjects.map((project) => [project.category, project.label, project.year, project.title, project.description, project.accentColor] as const)
-    : projectData[language];
+  const projects = projectData[language];
   const [activeFilter, setActiveFilter] = useState("todos");
   const [wordIndex, setWordIndex] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -74,7 +71,7 @@ export default function Home() {
   const switchLanguage = () => { setMenuOpen(false); navigate(language === "pt" ? "/en" : "/"); };
 
   return <div className="portfolio-page">
-    <header className="top-header"><nav className="nav-wrap"><a className="old-logo" href={language === "en" ? "/en" : "/"}>CECÍLIA<span>·</span>RODRIGUES</a><div className={`old-nav ${menuOpen ? "open" : ""}`}>{copy.nav.map((item, index) => <a href={["#sobre", "#conhecimentos", "#trabalhos", "#contato"][index]} onClick={jump} key={item}>{item}</a>)}</div><div className="nav-tools"><span className="availability"><i /> {language === "pt" ? "Disponível p/ projetos" : "Available for projects"}</span><button className="lang-switch" onClick={switchLanguage} aria-label={language === "pt" ? "Switch to English" : "Mudar para português"}>{language === "pt" ? "EN" : "PT"}</button><button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"}>{menuOpen ? <X size={19} /> : <Menu size={19} />}</button></div></nav></header>
+    <header className="top-header"><nav className="nav-wrap"><a className="old-logo" href={sitePath(language === "en" ? "/en" : "/")}>CECÍLIA<span>·</span>RODRIGUES</a><div className={`old-nav ${menuOpen ? "open" : ""}`}>{copy.nav.map((item, index) => <a href={["#sobre", "#conhecimentos", "#trabalhos", "#contato"][index]} onClick={jump} key={item}>{item}</a>)}</div><div className="nav-tools"><span className="availability"><i /> {language === "pt" ? "Disponível p/ projetos" : "Available for projects"}</span><button className="lang-switch" onClick={switchLanguage} aria-label={language === "pt" ? "Switch to English" : "Mudar para português"}>{language === "pt" ? "EN" : "PT"}</button><button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"}>{menuOpen ? <X size={19} /> : <Menu size={19} />}</button></div></nav></header>
 
     <main id="top">
       <section className="old-hero section-wrap"><div className="hero-copy"><p className="old-eyebrow"><span /> {copy.heroEyebrow}</p><h1>{copy.heroTitle[0]}<br />{copy.heroTitle[1]} <span className="cycle-word" style={{ background: colors[wordIndex] }}>{copy.heroWords[wordIndex]}</span>.</h1><p className="hero-sub">{copy.heroSub}</p><div className="hero-buttons"><a className="old-button filled" href="#trabalhos">{copy.heroPrimary} <ArrowDown size={16} /></a><a className="old-button outlined" href="#contato">{copy.heroSecondary} <ArrowUpRight size={16} /></a></div><div className="stamp-row">{copy.stamps.map((stamp, index) => <Stamp tone={["blue", "orange", "ink", "green"][index]} key={stamp}>{stamp}</Stamp>)}</div></div><div className="hero-mark" aria-hidden="true"><div className="mark-ring" /><div className="mark-cross" /><b>{language === "pt" ? <>forma<br />função<br />mensagem</> : <>form<br />function<br />message</>}</b></div></section>
@@ -84,7 +81,7 @@ export default function Home() {
 
       <section id="conhecimentos" className="old-section section-wrap"><SectionTitle index="02" tag={copy.knowledgeTag} title={copy.knowledgeTitle} description={copy.knowledgeDescription} /><div className="knowledge-list">{copy.tools.map(([a, b]) => <div className="knowledge-line" key={a}><span>{a}</span><small>{b}</small></div>)}</div></section>
 
-      <section id="trabalhos" className="old-section section-wrap"><SectionTitle index="03" tag={copy.workTag} title={copy.workTitle} description={copy.workDescription} /><div className="filters">{copy.filters.map(([value, label]) => <button className={activeFilter === value ? "active" : ""} key={value} onClick={() => setActiveFilter(value)}>{label}</button>)}</div><div className="work-grid">{displayed.map(([category, label, year, title, description, color]) => <article className="work-card" key={title + year}><div className="work-top"><span>{label}</span><small>{year}</small></div><h3>{title}</h3><p>{description}</p><a href={workPath(category)}>{copy.seeProject} <ArrowUpRight size={14} /></a><div className="work-swatch" style={{ background: color }} /></article>)}</div></section>
+      <section id="trabalhos" className="old-section section-wrap"><SectionTitle index="03" tag={copy.workTag} title={copy.workTitle} description={copy.workDescription} /><div className="filters">{copy.filters.map(([value, label]) => <button className={activeFilter === value ? "active" : ""} key={value} onClick={() => setActiveFilter(value)}>{label}</button>)}</div><div className="work-grid">{displayed.map(([category, label, year, title, description, color]) => <article className="work-card" key={title + year}><div className="work-top"><span>{label}</span><small>{year}</small></div><h3>{title}</h3><p>{description}</p><a href={sitePath(workPath(category))}>{copy.seeProject} <ArrowUpRight size={14} /></a><div className="work-swatch" style={{ background: color }} /></article>)}</div></section>
 
       <section className="client-band"><div className="marquee"><span>Ellomidia Comunicação</span><span>Calangos Comunicação</span><span>Fintech Aria</span><span>Mercadinho da Rua</span><span>Museus App</span><span>Revista Sputnik</span><span>Festival Vira-Lata</span><span>KSI Consultas</span><span>Recomendaria</span><span>LCR Marcenaria</span><span>Lilaz</span><span>Ellomidia Comunicação</span><span>Calangos Comunicação</span><span>Fintech Aria</span><span>Mercadinho da Rua</span><span>Museus App</span></div></section>
 
