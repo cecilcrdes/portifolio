@@ -13,7 +13,6 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
   graphic: {
     pt: { title: "Branding", tag: "Projetos por categoria", intro: "Marcas, sistemas, embalagens e peças gráficas para transformar ideias em presença visual.", back: "← Voltar ao portfólio", projects: [
       { id: "glitchcast", title: "Glitchcast", year: "2021", text: "Identidade visual desenvolvida em 2021 para o podcast do grupo Glitch404, com sistema de marca, lettering e variações de aplicação.", tools: ["Illustrator", "Photoshop", "Branding"], details: [{ title: "Sistema visual", text: "Desenvolvimento da identidade do Glitchcast a partir do símbolo do microfone, das formas do coelho e de uma paleta vibrante com variações para diferentes fundos.", media: portfolioAsset("ProjetoGlitchcast_0baff893.png"), alt: "Prancha do sistema visual do podcast Glitchcast" }, { title: "Key visuals", text: "Exploração dos elementos principais da identidade em composições que apresentam o universo visual do podcast e suas possibilidades de aplicação.", media: portfolioAsset("glitchcast-chamada_c2fe0fb9.png"), alt: "Key visual do podcast Glitchcast com identidade roxa, amarela e azul" }, { title: "Produtos", text: "Aplicações da identidade em produtos e materiais de divulgação, como camisetas, canecas, adesivos, ecobags e outros itens para criar presença de marca além do podcast." }] },
-      { id: "vira-lata", title: "Festival Vira-Lata", year: "2023", text: "Sistema de cartazes serigrafados para um festival de música independente, com tipografia recortada à mão.", tools: ["Illustrator", "Photoshop", "Cartaz"] },
       { id: "ksi-identidade", title: "KSI Consultas", year: "2026", text: "Marca e papelaria para uma empresa de consultas especializadas, com foco em tecnologia.", tools: ["Illustrator", "Identidade visual", "Papelaria"] },
       { id: "recomendaria", title: "Recomendaria", year: "2026", text: "Naming e identidade para uma plataforma de indicações entre profissionais, do logotipo ao aplicativo.", tools: ["Illustrator", "Figma", "Naming"] },
       { id: "lcr", title: "LCR Marcenaria", year: "2025", text: "Marca e sinalização de oficina para uma marcenaria artesanal, inspirada nas texturas da madeira bruta.", tools: ["Illustrator", "Identidade visual", "Sinalização"] },
@@ -34,14 +33,12 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
       { id: "proposta-valor", title: "Projeto museus", year: "2025", text: "App desenvolvido como catálogo cultural dos Museus da Cidade de Salvador", tools: ["Pesquisa", "Jornada do usuário", "Figma"] },
       { id: "arquitetura", title: "Arquitetura do produto — UX / app", year: "2025", text: "Organização de categorias, busca, loja e pedido em uma navegação simples para uso cotidiano.", tools: ["Figma", "Fluxo de navegação", "Protótipo"] },
       { id: "monetizacao", title: "Modelo de monetização", year: "2025", text: "Exploração de caminhos de receita para equilibrar acesso do usuário e viabilidade dos pequenos negócios.", tools: ["Pesquisa", "Produto", "Estratégia"] },
-      { id: "loja-verde", title: "Checkout — Loja Verde", year: "2024", text: "Simplificação do carrinho e pagamento de um marketplace de produtos sustentáveis, com testes A/B em cada etapa.", tools: ["Figma", "UX / UI", "Testes"] },
     ] },
     en: { title: "UX Design", tag: "Projects by category", intro: "Research, architecture and interfaces designed to make digital products clearer and easier to use.", back: "← Back to portfolio", projects: [
       { id: "mercado-da-rua", title: "Mercado da Rua app", year: "2025", text: "A regional marketplace connecting residents with neighborhood markets and grocery stores.", tools: ["Figma", "Research", "UX / UI"] }, { id: "glitchcast-app", title: "Glitchcast App", year: "2021", text: "Podcast app concept translating the Glitchcast identity into a focused digital listening experience.", tools: ["Figma", "UX research", "UI design"] },
       { id: "proposta-valor", title: "Value proposition and positioning", year: "2025", text: "Audience, needs and differentiators defined to guide the first version of the product.", tools: ["Research", "User journey", "Figma"] },
       { id: "arquitetura", title: "Product architecture — UX / app", year: "2025", text: "Categories, search, stores and orders organized into a simple everyday navigation.", tools: ["Figma", "Navigation flow", "Prototype"] },
       { id: "monetizacao", title: "Monetization model", year: "2025", text: "Revenue paths explored to balance user access and the viability of small businesses.", tools: ["Research", "Product", "Strategy"] },
-      { id: "loja-verde", title: "Checkout — Loja Verde", year: "2024", text: "A simpler cart and payment experience for a sustainable products marketplace, tested at each step.", tools: ["Figma", "UX / UI", "Testing"] },
     ] },
   },
   illustration: {
@@ -68,13 +65,12 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
   },
   marketing: {
     pt: { title: "Marketing", tag: "Projetos por categoria", intro: "Campanhas, conteúdos e presença digital para aproximar marcas de suas pessoas.", back: "← Voltar ao portfólio", projects: [
-      { id: "trilha", title: "Trilha Selvagem", year: "2024", text: "Direção de arte e conteúdo para o lançamento de uma linha de mochilas, com peças para redes e ponto de venda.", tools: ["Canva", "Adobe Express", "Photoshop"] },
-      { id: "bloom", title: "Marca Bloom", year: "2023", text: "Calendário editorial e peças mensais para redes sociais de uma marca de cosméticos naturais.", tools: ["Canva", "CapCut", "Adobe Express"] },
+      { id: "site-aliez", title: "Site Aliez", year: "2024", text: "Site para contratar artistas.", tools: ["Figma", "UX / UI", "Web design"] },
       { id: "ksi-marketing", title: "KSI Consultas", year: "2018–2021", text: "Gerenciamento de redes sociais e construção de marca para uma clínica de consultas especializadas.", tools: ["Canva", "Photoshop"] },
       { id: "in9", title: "In9 Mídia", year: "2021–2026", text: "Gestão de redes sociais e campanhas de Google Ads para empresa de software e sinalização digital.", tools: ["Canva", "Adobe Express", "Google Ads"] },
     ] },
     en: { title: "Marketing", tag: "Projects by category", intro: "Campaigns, content and digital presence to bring brands closer to their people.", back: "← Back to portfolio", projects: [
-      { id: "trilha", title: "Trilha Selvagem", year: "2024", text: "Art direction and content for the launch of a new backpack line, across social and retail.", tools: ["Canva", "Adobe Express", "Photoshop"] },
+      { id: "site-aliez", title: "Site Aliez", year: "2024", text: "Website for hiring artists.", tools: ["Figma", "UX / UI", "Web design"] },
       { id: "bloom", title: "Bloom Brand", year: "2023", text: "Editorial calendar and monthly social assets for a natural cosmetics brand.", tools: ["Canva", "CapCut", "Adobe Express"] },
       { id: "ksi-marketing", title: "KSI Consultas", year: "2018–2021", text: "Social media management and brand building for a specialized healthcare clinic.", tools: ["Canva", "Photoshop"] },
       { id: "in9", title: "In9 Mídia", year: "2021–2026", text: "Social media management and Google Ads campaigns for a software and digital signage company.", tools: ["Canva", "Adobe Express", "Google Ads"] },
