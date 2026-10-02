@@ -71,7 +71,6 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
     ] },
     en: { title: "Marketing", tag: "Projects by category", intro: "Campaigns, content and digital presence to bring brands closer to their people.", back: "← Back to portfolio", projects: [
       { id: "site-aliez", title: "Site Aliez", year: "2024", text: "Website for hiring artists.", tools: ["Figma", "UX / UI", "Web design"] },
-      { id: "bloom", title: "Bloom Brand", year: "2023", text: "Editorial calendar and monthly social assets for a natural cosmetics brand.", tools: ["Canva", "CapCut", "Adobe Express"] },
       { id: "ksi-marketing", title: "KSI Consultas", year: "2018–2021", text: "Social media management and brand building for a specialized healthcare clinic.", tools: ["Canva", "Photoshop"] },
       { id: "in9", title: "In9 Mídia", year: "2021–2026", text: "Social media management and Google Ads campaigns for a software and digital signage company.", tools: ["Canva", "Adobe Express", "Google Ads"] },
     ] },
