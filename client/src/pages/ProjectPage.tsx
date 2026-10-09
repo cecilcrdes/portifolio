@@ -45,8 +45,6 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
         { title: "Lista de obras", media: portfolioAsset("museus/lista-obras.png"), alt: "Lista de obras do aplicativo Museus" },
         { title: "Agenda", media: portfolioAsset("museus/agenda.png"), alt: "Agenda cultural do aplicativo Museus" },
       ] },
-      { id: "arquitetura", title: "Arquitetura do produto — UX / app", year: "2025", text: "Organização de categorias, busca, loja e pedido em uma navegação simples para uso cotidiano.", tools: ["Figma", "Fluxo de navegação", "Protótipo"] },
-      { id: "monetizacao", title: "Modelo de monetização", year: "2025", text: "Exploração de caminhos de receita para equilibrar acesso do usuário e viabilidade dos pequenos negócios.", tools: ["Pesquisa", "Produto", "Estratégia"] },
     ] },
     en: { title: "UX Design", tag: "Projects by category", intro: "Research, architecture and interfaces designed to make digital products clearer and easier to use.", back: "← Back to portfolio", projects: [
       { id: "mercado-da-rua", title: "Mercado da Rua app", year: "2025", text: "A regional marketplace connecting residents with neighborhood markets and grocery stores.", tools: ["Figma", "Research", "UX / UI"] }, { id: "glitchcast-app", title: "Glitchcast App", year: "2021", text: "Podcast app concept translating the Glitchcast identity into a focused digital listening experience.", tools: ["Figma", "UX research", "UI design"] },
@@ -66,8 +64,6 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
         { title: "Artworks list", media: portfolioAsset("museus/lista-obras.png"), alt: "Artworks list in the Museums app" },
         { title: "Agenda", media: portfolioAsset("museus/agenda.png"), alt: "Cultural agenda in the Museums app" },
       ] },
-      { id: "arquitetura", title: "Product architecture — UX / app", year: "2025", text: "Categories, search, stores and orders organized into a simple everyday navigation.", tools: ["Figma", "Navigation flow", "Prototype"] },
-      { id: "monetizacao", title: "Monetization model", year: "2025", text: "Revenue paths explored to balance user access and the viability of small businesses.", tools: ["Research", "Product", "Strategy"] },
     ] },
   },
   illustration: {

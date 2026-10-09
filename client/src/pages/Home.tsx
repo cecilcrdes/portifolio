@@ -10,6 +10,7 @@ const projectData = {
   pt: [
     ["ilustracao", "Branding · UI · Assets", "2020", "Bogused", "Direção visual do jogo, com identidade, interface e produção de assets de personagens e cenários.", "#2b3eff"],
     ["ux", "UX Design", "2025", "App Mercado da Rua", "Marketplace regional que conecta moradores a mercados, hortifrutis e mercearias do próprio bairro.", "#ff5a2e"],
+    ["ux", "UX Design", "2025", "Projeto Museus", "Aplicativo desenvolvido como catálogo cultural dos Museus da Cidade de Salvador.", "#2e9e4e"],
     ["grafico", "Branding · UX Design", "2021", "Glitchcast", "Identidade visual e conceito de aplicativo para o podcast do grupo Glitch404.", "#a45bea"],
     ["ux", "UX Design · Web design", "2024", "Site Aliez", "Site para contratar artistas.", "#2e9e4e"],
     ["ilustracao", "Game design · UI", "2020", "E aí man jogo", "Jogo 2D de aventura, plataforma e puzzle com narrativa sobre amizade e pertencimento.", "#ff5a2e"],
@@ -22,6 +23,7 @@ const projectData = {
   en: [
     ["illustration", "Branding · UI · Assets", "2020", "Bogused", "Game art direction with identity, interface and visual asset production for characters and environments.", "#2b3eff"],
     ["ux", "UX Design", "2025", "Mercado da Rua App", "A regional marketplace connecting residents with neighborhood markets and grocery stores.", "#ff5a2e"],
+    ["ux", "UX Design", "2025", "Museums Project", "An app developed as a cultural catalogue for the Museums of Salvador.", "#2e9e4e"],
     ["graphic", "Branding · UX Design", "2021", "Glitchcast", "Visual identity and app concept for the Glitch404 group podcast.", "#a45bea"],
     ["ux", "UX Design · Web design", "2024", "Site Aliez", "Website for hiring artists.", "#2e9e4e"],
     ["illustration", "Game design · UI", "2020", "E aí man jogo", "A 2D adventure, platform and puzzle game about friendship and belonging.", "#ff5a2e"],
