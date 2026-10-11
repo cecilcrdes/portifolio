@@ -119,7 +119,7 @@ const cases: Record<Language, CaseProject[]> = {
       year: "2025",
       intro: "Marca e sinalização de oficina para uma marcenaria artesanal, inspirada nas texturas da madeira bruta.",
       labels: ["Identidade visual"],
-      sections: [{ id: "identidade-visual", label: "Identidade visual", title: "Identidade visual", text: "Marca desenvolvida para a LCR Marcenaria, combinando as iniciais do nome com uma presença direta e artesanal.", media: [{ src: asset("lcr-marcenaria.png"), alt: "Logotipo LCR Marcenaria" }] }],
+      sections: [{ id: "identidade-visual", label: "Identidade visual", title: "Identidade visual", text: "Marca desenvolvida para a LCR Marcenaria, combinando as iniciais do nome com uma presença direta e artesanal.", media: [{ src: asset("lcr-logo.png"), alt: "Logotipo LCR Marcenaria" }, { src: asset("lcr-cores.png"), alt: "Cores da identidade visual da LCR Marcenaria" }, { src: asset("lcr-logo-variantes.png"), alt: "Variações do logotipo LCR Marcenaria" }] }],
     },
     {
       slug: "lilaz",
