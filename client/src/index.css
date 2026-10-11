@@ -48,3 +48,29 @@
 .case-cta{display:inline-flex;align-items:center;gap:9px;margin-top:54px;border:2px solid var(--ink);border-radius:8px;padding:13px 16px;font-family:'Space Mono',monospace;font-size:11px;text-transform:uppercase;transition:background .2s ease,color .2s ease,transform .2s ease}
 .case-cta:hover{background:var(--blue);border-color:var(--blue);color:var(--paper);transform:translateY(-2px)}
 @media(max-width:640px){.case-hero{padding-top:125px;padding-bottom:54px}.case-hero p{font-size:17px}.case-navigation{top:58px}.case-labels{padding:13px 20px}.case-section{grid-template-columns:1fr;gap:16px;padding:52px 0;scroll-margin-top:120px}.case-section-index{padding-top:0}.case-media-grid{grid-template-columns:1fr}.case-section p{font-size:16px}}
+
+/* Ajustes mobile da seleção de trabalhos e dos cases. */
+.work-top{gap:14px}
+.work-top span{flex:1;min-width:0;line-height:1.45;overflow-wrap:anywhere}
+.work-top small{flex:none;white-space:nowrap}
+@media(max-width:760px){
+  .work-card{min-width:0}
+  .work-card p{max-width:none}
+  .original-project-page .nav{gap:14px;align-items:flex-start}
+  .original-project-page .logo{font-size:17px;line-height:1.05;max-width:145px}
+  .original-project-page .nav-links{max-width:190px;justify-content:flex-end;flex-wrap:wrap;row-gap:8px;column-gap:12px;text-align:right}
+}
+@media(max-width:380px){
+  .work-card{padding:22px}
+  .work-top{margin-bottom:42px;gap:9px}
+  .work-top span,.work-top small{font-size:10px}
+  .filters{gap:7px;margin-bottom:32px}
+  .filters button{font-size:10px;padding:8px 11px}
+  .original-project-page .nav{padding-left:16px;padding-right:16px}
+  .original-project-page .logo{max-width:120px}
+  .original-project-page .nav-links{max-width:165px;font-size:8px;column-gap:9px}
+  .case-hero h1{font-size:clamp(48px,15vw,68px)}
+  .case-hero p{font-size:16px}
+  .case-meta{gap:16px;font-size:9px;flex-wrap:wrap}
+  .case-label{font-size:9px;padding:8px 10px}
+}
