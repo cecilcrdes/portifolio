@@ -74,3 +74,16 @@
   .case-meta{gap:16px;font-size:9px;flex-wrap:wrap}
   .case-label{font-size:9px;padding:8px 10px}
 }
+
+/* Contato persistente nas páginas de projeto. */
+.site-contact-section{background:var(--ink);color:var(--paper);border-top:2px solid var(--ink);padding:78px 0 84px}
+.site-contact-wrap{max-width:var(--max)}
+.site-contact-tag{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;opacity:.62;margin:0 0 18px}
+.site-contact-section h2{font-family:'DM Serif Display',serif;font-size:clamp(42px,7vw,78px);font-weight:400;line-height:.9;text-transform:uppercase;margin:0 0 38px}
+.site-contact-whatsapp{display:inline-flex;align-items:center;gap:10px;font-family:'DM Serif Display',serif;font-size:clamp(26px,4vw,52px);border-bottom:2px solid var(--orange);padding-bottom:5px;transition:color .2s ease}
+.site-contact-whatsapp:hover{color:var(--orange)}
+.site-contact-network{margin-top:50px;display:flex;flex-direction:column;gap:9px}
+.site-contact-network small{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;opacity:.6}
+.site-contact-network a{display:inline-flex;align-items:center;gap:7px;font-size:15px;width:max-content}
+.site-contact-network a:hover{color:var(--yellow)}
+@media(max-width:640px){.site-contact-section{padding:60px 0 66px}.site-contact-whatsapp{font-size:clamp(25px,8vw,40px);line-height:1.05}.site-contact-network{margin-top:38px}}
