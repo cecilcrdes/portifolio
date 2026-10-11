@@ -8,32 +8,32 @@ const colors = ["#f0c23a", "#2b3eff", "#ff5a2e", "#2e9e4e", "#f0c23a"];
 
 const projectData = {
   pt: [
-    ["ilustracao", "Branding · UI · Assets", "2020", "Bogused", "Direção visual do jogo, com identidade, interface e produção de assets de personagens e cenários.", "#2b3eff"],
-    ["ux", "UX Design", "2025", "App Mercado da Rua", "Marketplace regional que conecta moradores a mercados, hortifrutis e mercearias do próprio bairro.", "#ff5a2e"],
-    ["ux", "UX Design", "2025", "Projeto Museus", "Aplicativo desenvolvido como catálogo cultural dos Museus da Cidade de Salvador.", "#2e9e4e"],
-    ["grafico", "Branding · UX Design", "2021", "Glitchcast", "Identidade visual e conceito de aplicativo para o podcast do grupo Glitch404.", "#a45bea"],
-    ["grafico", "Branding", "2025", "Sempre Vitta", "Identidade visual para uma marca ligada a natureza, cuidado e vitalidade.", "#2e9e4e"],
-    ["ux", "UX Design · Web design", "2024", "Site Aliez", "Site para contratar artistas.", "#2e9e4e"],
-    ["ilustracao", "Game design · UI", "2020", "E aí man jogo", "Jogo 2D de aventura, plataforma e puzzle com narrativa sobre amizade e pertencimento.", "#ff5a2e"],
-    ["grafico", "Branding · Mídias sociais", "2018–2026", "KSI Consultas", "Construção de marca, papelaria e gerenciamento de mídias sociais para uma empresa de consultas especializadas.", "#2b3eff"],
-    ["marketing", "Mídias sociais · Google Ads", "2021–2026", "In9 Mídia", "Gestão de redes sociais e campanhas de Google Ads para empresa de software e sinalização digital.", "#f0c23a"],
-    ["grafico", "Branding · Naming", "2026", "Recomendaria", "Naming e identidade para uma plataforma de indicações entre profissionais, do logotipo ao aplicativo.", "#ff5a2e"],
-    ["grafico", "Branding · Sinalização", "2025", "LCR Marcenaria", "Marca e sinalização de oficina para uma marcenaria artesanal, inspirada nas texturas da madeira bruta.", "#f0c23a"],
-    ["grafico", "Branding · Embalagem", "2025", "Lilaz", "Identidade e embalagens para um pequeno negócio de decorações personalizadas.", "#2e9e4e"],
+    ["ilustracao", "Branding · Interface · Assets · Personagens · Cenários", "2020", "Bogused", "Direção visual do jogo, interface e produção de assets de personagens e cenários.", "#2b3eff", "bogused"],
+    ["ux", "UX Design · UI Design · Pesquisa", "2025", "App Mercado da Rua", "Marketplace regional que conecta moradores a mercados, hortifrutis e mercearias do próprio bairro.", "#ff5a2e", "mercado-da-rua"],
+    ["ux", "UX Design · UI Design · Pesquisa · Arquitetura", "2025", "Projeto Museus", "Aplicativo desenvolvido como catálogo cultural dos Museus da Cidade de Salvador.", "#2e9e4e", "museus"],
+    ["grafico", "Identidade visual · Branding · Mídias sociais · Ilustrações · Aplicativo", "2021", "Glitchcast", "Identidade visual, conteúdo e aplicativo para o podcast do grupo Glitch404.", "#a45bea", "glitchcast"],
+    ["ux", "UX Design · Web design", "2024", "Site Aliez", "Site para contratar artistas.", "#2e9e4e", "site-aliez"],
+    ["grafico", "Branding · Papelaria · Mídias sociais", "2018–2026", "KSI Consultas", "Construção de marca, papelaria e gerenciamento de mídias sociais para uma empresa de consultas especializadas.", "#2b3eff", "ksi-consultas"],
+    ["marketing", "Mídias sociais · Google Ads", "2021–2026", "In9 Mídia", "Gestão de redes sociais e campanhas de Google Ads para empresa de software e sinalização digital.", "#f0c23a", "in9-midia"],
+    ["grafico", "Branding · Naming", "2026", "Recomendaria", "Naming e identidade para uma plataforma de indicações entre profissionais, do logotipo ao aplicativo.", "#ff5a2e", "recomendaria"],
+    ["grafico", "Identidade visual", "2025", "Sempre Vitta", "Identidade visual para uma marca ligada a natureza, cuidado e vitalidade.", "#2e9e4e", "sempre-vitta"],
+    ["grafico", "Identidade visual", "2025", "LCR Marcenaria", "Marca e sinalização de oficina para uma marcenaria artesanal, inspirada nas texturas da madeira bruta.", "#f0c23a", "lcr-marcenaria"],
+    ["grafico", "Identidade visual · Embalagem", "2025", "Lilaz", "Identidade e embalagens para um pequeno negócio de decorações personalizadas.", "#2e9e4e", "lilaz"],
+    ["ilustracao", "Game design · Level design · Ilustração", "2020", "E aí man jogo", "Jogo 2D de aventura, plataforma e puzzle com narrativa sobre amizade e pertencimento.", "#ff5a2e", "e-ai-man-jogo"],
   ],
   en: [
-    ["illustration", "Branding · UI · Assets", "2020", "Bogused", "Game art direction with identity, interface and visual asset production for characters and environments.", "#2b3eff"],
-    ["ux", "UX Design", "2025", "Mercado da Rua App", "A regional marketplace connecting residents with neighborhood markets and grocery stores.", "#ff5a2e"],
-    ["ux", "UX Design", "2025", "Museums Project", "An app developed as a cultural catalogue for the Museums of Salvador.", "#2e9e4e"],
-    ["graphic", "Branding · UX Design", "2021", "Glitchcast", "Visual identity and app concept for the Glitch404 group podcast.", "#a45bea"],
-    ["graphic", "Branding", "2025", "Sempre Vitta", "Visual identity for a brand connected to nature, care and vitality.", "#2e9e4e"],
-    ["ux", "UX Design · Web design", "2024", "Site Aliez", "Website for hiring artists.", "#2e9e4e"],
-    ["illustration", "Game design · UI", "2020", "E aí man jogo", "A 2D adventure, platform and puzzle game about friendship and belonging.", "#ff5a2e"],
-    ["graphic", "Branding · Social media", "2018–2026", "KSI Consultas", "Brand identity, stationery and social media management for a specialized healthcare company.", "#2b3eff"],
-    ["marketing", "Social media · Google Ads", "2021–2026", "In9 Mídia", "Social media management and Google Ads campaigns for a software and digital signage company.", "#f0c23a"],
-    ["graphic", "Branding · Naming", "2026", "Recomendaria", "Naming and identity for a professional referral platform, from logo to app.", "#ff5a2e"],
-    ["graphic", "Branding · Signage", "2025", "LCR Marcenaria", "Brand identity and workshop signage inspired by raw wood textures.", "#f0c23a"],
-    ["graphic", "Branding · Packaging", "2025", "Lilaz", "Identity and packaging for a small custom decoration business.", "#2e9e4e"],
+    ["illustration", "Branding · Interface · Assets · Characters · Environments", "2020", "Bogused", "Game art direction with interface and visual asset production for characters and environments.", "#2b3eff", "bogused"],
+    ["ux", "UX Design · UI Design · Research", "2025", "Mercado da Rua App", "A regional marketplace connecting residents with neighborhood markets and grocery stores.", "#ff5a2e", "mercado-da-rua"],
+    ["ux", "UX Design · UI Design · Research · Architecture", "2025", "Museums Project", "An app developed as a cultural catalogue for the Museums of Salvador.", "#2e9e4e", "museus"],
+    ["graphic", "Visual identity · Branding · Social media · Illustrations · App", "2021", "Glitchcast", "Visual identity, content and app concept for the Glitch404 group podcast.", "#a45bea", "glitchcast"],
+    ["ux", "UX Design · Web design", "2024", "Site Aliez", "Website for hiring artists.", "#2e9e4e", "site-aliez"],
+    ["graphic", "Branding · Stationery · Social media", "2018–2026", "KSI Consultas", "Brand identity, stationery and social media management for a specialized healthcare company.", "#2b3eff", "ksi-consultas"],
+    ["marketing", "Social media · Google Ads", "2021–2026", "In9 Mídia", "Social media management and Google Ads campaigns for a software and digital signage company.", "#f0c23a", "in9-midia"],
+    ["graphic", "Branding · Naming", "2026", "Recomendaria", "Naming and identity for a professional referral platform, from logo to app.", "#ff5a2e", "recomendaria"],
+    ["graphic", "Visual identity", "2025", "Sempre Vitta", "Visual identity for a brand connected to nature, care and vitality.", "#2e9e4e", "sempre-vitta"],
+    ["graphic", "Visual identity", "2025", "LCR Marcenaria", "Brand identity and workshop signage inspired by raw wood textures.", "#f0c23a", "lcr-marcenaria"],
+    ["graphic", "Visual identity · Packaging", "2025", "Lilaz", "Identity and packaging for a small custom decoration business.", "#2e9e4e", "lilaz"],
+    ["illustration", "Game design · Level design · Illustration", "2020", "E aí man jogo", "A 2D adventure, platform and puzzle game about friendship and belonging.", "#ff5a2e", "e-ai-man-jogo"],
   ],
 };
 
@@ -59,10 +59,7 @@ export default function Home() {
   useEffect(() => { setActiveFilter("todos"); setWordIndex(0); }, [language]);
   useEffect(() => { const timer = window.setInterval(() => setWordIndex((value) => (value + 1) % copy.heroWords.length), 2300); return () => window.clearInterval(timer); }, [copy.heroWords.length]);
   const displayed = activeFilter === "todos" ? projects : projects.filter(([category]) => category === activeFilter);
-  const workPath = (category: string) => {
-    const normalized = category === "illustration" ? "illustration" : category === "graphic" ? "graphic" : category;
-    return language === "en" ? `/en/projects/${normalized}` : `/projetos/${normalized === "graphic" ? "grafico" : normalized === "illustration" ? "ilustracao" : normalized}`;
-  };
+  const casePath = (slug: string) => language === "en" ? `/en/cases/${slug}` : `/cases/${slug}`;
   const jump = () => setMenuOpen(false);
   const switchLanguage = () => { setMenuOpen(false); navigate(language === "pt" ? "/en" : "/"); };
 
@@ -82,7 +79,7 @@ export default function Home() {
 
       <section id="conhecimentos" className="old-section section-wrap"><SectionTitle index="02" tag={copy.knowledgeTag} title={copy.knowledgeTitle} description={copy.knowledgeDescription} /><div className="knowledge-list">{copy.tools.map(([a, b]) => <div className="knowledge-line" key={a}><span>{a}</span><small>{b}</small></div>)}</div></section>
 
-      <section id="trabalhos" className="old-section section-wrap"><SectionTitle index="03" tag={copy.workTag} title={copy.workTitle} description={copy.workDescription} /><div className="filters">{copy.filters.map(([value, label]) => <button className={activeFilter === value ? "active" : ""} key={value} onClick={() => setActiveFilter(value)}>{label}</button>)}</div><div className="work-grid">{displayed.map(([category, label, year, title, description, color]) => <article className="work-card" key={title + year}><div className="work-top"><span>{label}</span><small>{year}</small></div><h3>{title}</h3><p>{description}</p><a href={sitePath(workPath(category))}>{copy.seeProject} <ArrowUpRight size={14} /></a></article>)}</div></section>
+      <section id="trabalhos" className="old-section section-wrap"><SectionTitle index="03" tag={copy.workTag} title={copy.workTitle} description={copy.workDescription} /><div className="filters">{copy.filters.map(([value, label]) => <button className={activeFilter === value ? "active" : ""} key={value} onClick={() => setActiveFilter(value)}>{label}</button>)}</div><div className="work-grid">{displayed.map(([category, label, year, title, description, color, slug]) => <article className="work-card" key={slug}><div className="work-top"><span>{label}</span><small>{year}</small></div><h3>{title}</h3><p>{description}</p><a href={sitePath(casePath(slug))}>{copy.seeProject} <ArrowUpRight size={14} /></a></article>)}</div></section>
 
       <section className="client-band"><div className="marquee"><span>Ellomidia Comunicação</span><span>Calangos Comunicação</span><span>Fintech Aria</span><span>Mercadinho da Rua</span><span>Museus App</span><span>Revista Sputnik</span><span>KSI Consultas</span><span>Recomendaria</span><span>LCR Marcenaria</span><span>Lilaz</span><span>Ellomidia Comunicação</span><span>Calangos Comunicação</span><span>Fintech Aria</span><span>Mercadinho da Rua</span><span>Museus App</span></div></section>
 

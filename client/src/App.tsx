@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import ProjectPage from "./pages/ProjectPage";
 import GlitchcastAppPage from "./pages/GlitchcastAppPage";
+import CasePage from "./pages/CasePage";
 
 function Router() {
   return (
@@ -14,6 +15,8 @@ function Router() {
       <Switch>
       <Route path="/" component={Home} />
       <Route path="/en" component={Home} />
+      <Route path="/cases/:slug" component={CasePage} />
+      <Route path="/en/cases/:slug" component={CasePage} />
       <Route path="/projetos/ux/glitchcast-app" component={GlitchcastAppPage} />
       <Route path="/en/projects/ux/glitchcast-app" component={GlitchcastAppPage} />
       <Route path="/projetos/:category" component={ProjectPage} />
