@@ -70,7 +70,7 @@ export default function Home() {
       <section className="old-hero section-wrap">
         <div className="hero-copy">
           <p className="old-eyebrow">
-            <span /> {copy.heroEyebrow}</p><h1>{copy.heroTitle[0]}<br />{copy.heroTitle[1]} <span className="cycle-word" style={{ background: colors[wordIndex] }}>{copy.heroWords[wordIndex]}</span>.</h1><p className="hero-sub">{copy.heroSub}</p><div className="hero-buttons"><a className="old-button filled" href="#trabalhos">{copy.heroPrimary} <ArrowDown size={16} /></a><a className="old-button outlined" href="#contato">{copy.heroSecondary} <ArrowUpRight size={16} /></a></div><div className="stamp-row">{copy.stamps.map((stamp, index) => <Stamp tone={["blue", "orange", "ink", "green"][index]} key={stamp}>{stamp}</Stamp>)}</div></div>
+            <span /> {copy.heroEyebrow}</p><h1>{copy.heroTitle[0]}<br />{copy.heroTitle[1]} <span className="cycle-word" style={{ background: colors[wordIndex] }}>{copy.heroWords[wordIndex]}.</span></h1><p className="hero-sub">{copy.heroSub}</p><div className="hero-buttons"><a className="old-button filled" href="#trabalhos">{copy.heroPrimary} <ArrowDown size={16} /></a><a className="old-button outlined" href="#contato">{copy.heroSecondary} <ArrowUpRight size={16} /></a></div><div className="stamp-row">{copy.stamps.map((stamp, index) => <Stamp tone={["blue", "orange", "ink", "green"][index]} key={stamp}>{stamp}</Stamp>)}</div></div>
        
       </section>
 
