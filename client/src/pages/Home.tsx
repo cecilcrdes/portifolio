@@ -1,6 +1,7 @@
 // Portfólio original: direção gráfica expressiva, papel claro, cores pontuais e navegação PT/EN.
 import { useEffect, useState } from "react";
 import { ArrowDown, ArrowUpRight, Menu, X } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
 import { useLocation } from "wouter";
 import { sitePath } from "@/lib/sitePath";
 
@@ -64,7 +65,7 @@ export default function Home() {
   const switchLanguage = () => { setMenuOpen(false); navigate(language === "pt" ? "/en" : "/"); };
 
   return <div className="portfolio-page">
-    <header className="top-header"><nav className="nav-wrap"><a className="old-logo" href={sitePath(language === "en" ? "/en" : "/")}>CECÍLIA<span>·</span>RODRIGUES</a><div className={`old-nav ${menuOpen ? "open" : ""}`}>{copy.nav.map((item, index) => <a href={["#sobre", "#conhecimentos", "#trabalhos", "#contato"][index]} onClick={jump} key={item}>{item}</a>)}</div><div className="nav-tools"><span className="availability"><i /> {language === "pt" ? "Disponível p/ projetos" : "Available for projects"}</span><button className="lang-switch" onClick={switchLanguage} aria-label={language === "pt" ? "Switch to English" : "Mudar para português"}>{language === "pt" ? "EN" : "PT"}</button><button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"}>{menuOpen ? <X size={19} /> : <Menu size={19} />}</button></div></nav></header>
+    <header className="top-header"><nav className="nav-wrap"><a className="old-logo" href={sitePath(language === "en" ? "/en" : "/")}>CECÍLIA<span>·</span>RODRIGUES</a><div className={`old-nav ${menuOpen ? "open" : ""}`}>{copy.nav.map((item, index) => <a href={["#sobre", "#conhecimentos", "#trabalhos", "#contato"][index]} onClick={jump} key={item}>{item}</a>)}</div><div className="nav-tools"><ThemeToggle language={language} /><span className="availability"><i /> {language === "pt" ? "Disponível p/ projetos" : "Available for projects"}</span><button className="lang-switch" onClick={switchLanguage} aria-label={language === "pt" ? "Switch to English" : "Mudar para português"}>{language === "pt" ? "EN" : "PT"}</button><button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"}>{menuOpen ? <X size={19} /> : <Menu size={19} />}</button></div></nav></header>
 
     <main id="top">
       <section className="old-hero section-wrap">
