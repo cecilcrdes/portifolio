@@ -72,7 +72,7 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
   illustration: {
     pt: { title: "Conteúdo visual", tag: "Projetos por categoria", intro: "Projetos de conteúdo visual desenvolvidos para transformar ideias em imagens memoráveis.", back: "← Voltar ao portfólio", projects: [
       { id: "bogused", title: "Bogused — Assets", year: "2020", text: "Produção de assets visuais para o jogo Bogused, com foco na criação de personagens, cenários e elementos de interface.", tools: ["Branding", "UI design", "Assets"], details: [
-        { title: "Apresentação do jogo", text: "Bogused é um projeto de jogo com uma direção visual própria. Fiquei responsável por desenvolver personagens, cenários e interface, criando um conjunto coerente de elementos para a experiência.", media: portfolioAsset("personagens-prancha_d84c54c1.png"), alt: "Prancha de personagens do jogo Bogused" },
+        { title: "Apresentação do jogo", text: "Bogused é um projeto de jogo com uma direção visual própria. Fiquei responsável por desenvolver personagens, cenários e interface, criando um conjunto coerente de elementos para a experiência." },
         { title: "Design de personagens", media: portfolioAsset("personagens-prancha_d84c54c1.png"), alt: "Estudos de personagens do jogo Bogused" },
         { title: "Design de cenário", media: portfolioAsset("arvore_0deab038.jpg"), alt: "Ilustração de árvore para o cenário de Bogused" },
         { title: "Elementos de cenário", media: portfolioAsset("forca_15b587a0.png"), alt: "Estrutura de madeira criada para o cenário" },
@@ -82,7 +82,7 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
     ] },
     en: { title: "Visual content", tag: "Projects by category", intro: "Visual content projects developed to turn ideas into memorable images.", back: "← Back to portfolio", projects: [
       { id: "bogused", title: "Bogused — Assets", year: "2020", text: "Visual assets for the Bogused game, focused on characters, environments and interface elements.", tools: ["Branding", "UI design", "Assets"], details: [
-        { title: "Game presentation", text: "Bogused is a game project with its own visual direction. I developed characters, environments and interface, creating a coherent set of elements for the game experience.", media: portfolioAsset("personagens-prancha_d84c54c1.png"), alt: "Bogused game character board" },
+        { title: "Game presentation", text: "Bogused is a game project with its own visual direction. I developed characters, environments and interface, creating a coherent set of elements for the game experience." },
         { title: "Character design", media: portfolioAsset("personagens-prancha_d84c54c1.png"), alt: "Bogused character studies" },
         { title: "Environment design", media: portfolioAsset("arvore_0deab038.jpg"), alt: "Tree illustration for the Bogused environment" },
         { title: "Environment elements", media: portfolioAsset("forca_15b587a0.png"), alt: "Wooden structure created for the environment" },

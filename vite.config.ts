@@ -151,8 +151,10 @@ function vitePluginManusDebugCollector(): Plugin {
 }
 
 const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
+const pagesBasePath = process.env.VITE_BASE_PATH?.replace(/^\/+|\/+$/g, "");
+
 export default defineConfig({
-  base: process.env.GITHUB_ACTIONS ? "/portifolio/" : "/",
+  base: pagesBasePath ? `/${pagesBasePath}/` : "/",
   plugins,
   resolve: {
     alias: {
