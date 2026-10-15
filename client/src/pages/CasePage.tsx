@@ -77,7 +77,7 @@ const cases: Record<Language, CaseProject[]> = {
     {
       slug: "site-aliez",
       title: "Site Aliez",
-      year: "2024",
+      year: "2025",
       intro: "Site para contratar artistas, com foco em descoberta, portfólio e contato.",
       labels: ["UX Design", "Web design"],
       sections: [{ id: "ux-design", label: "UX Design", title: "Arquitetura e jornada", text: "Estrutura para aproximar pessoas interessadas em contratar artistas dos portfólios certos." }, { id: "web-design", label: "Web design", title: "Interface web", text: "Direção de interface para apresentar artistas e facilitar o início de uma contratação." }],
@@ -85,7 +85,7 @@ const cases: Record<Language, CaseProject[]> = {
     {
       slug: "ksi-consultas",
       title: "KSI Consultas",
-      year: "2018–2026",
+      year: "2018–2021",
       intro: "Construção de marca, papelaria e gerenciamento de mídias sociais para uma empresa de consultas especializadas.",
       labels: ["Branding", "Papelaria", "Mídias sociais"],
       sections: [{ id: "branding", label: "Branding", title: "Identidade de marca", text: "Construção da identidade visual para comunicar confiança, clareza e especialização." }, { id: "papelaria", label: "Papelaria", title: "Papelaria", text: "Aplicações da identidade nos materiais de comunicação da empresa." }, { id: "midias-sociais", label: "Mídias sociais", title: "Conteúdo para redes sociais", text: "Criação e gestão de conteúdo para aproximar a marca do público.", media: [{ src: asset("ksi-redes-sociais.png"), alt: "Presença digital e redes sociais da KSI Consultas" }, { src: asset("ksi-posts.png"), alt: "Peças para redes sociais da KSI Consultas" }] }],
@@ -101,7 +101,7 @@ const cases: Record<Language, CaseProject[]> = {
     {
       slug: "recomendaria",
       title: "Recomendaria",
-      year: "2026",
+      year: "2019",
       intro: "Naming e identidade para uma plataforma de indicações entre profissionais, do logotipo ao aplicativo.",
       labels: ["Branding", "Naming"],
       sections: [{ id: "branding", label: "Branding", title: "Identidade visual", text: "Desenvolvimento de uma marca para uma plataforma baseada em confiança e indicação profissional.", media: [{ src: asset("recomendaria-logo-icone.jpg"), alt: "Símbolo da marca Recomendaria" }, { src: asset("recomendaria-logo-completa.jpg"), alt: "Logotipo completo da Recomendaria" }] }, { id: "naming", label: "Naming", title: "Naming", text: "Nome pensado para comunicar recomendação, proximidade e credibilidade." }],
@@ -109,7 +109,7 @@ const cases: Record<Language, CaseProject[]> = {
     {
       slug: "sempre-vitta",
       title: "Sempre Vitta",
-      year: "2025",
+      year: "2017",
       intro: "Identidade visual para uma marca ligada a natureza, cuidado e vitalidade.",
       labels: ["Identidade visual"],
       sections: [{ id: "identidade-visual", label: "Identidade visual", title: "Identidade visual", text: "Construção de uma linguagem orgânica e acolhedora para Sempre Vitta, apresentada a partir da relação entre natureza, cuidado e vitalidade.", media: [{ src: asset("sempre-vitta-logo-1.png"), alt: "Logotipo Sempre Vitta" }, { src: asset("sempre-vitta-logo-2.png"), alt: "Variações do logotipo Sempre Vitta" }, { src: asset("sempre-vitta-tshirt.png"), alt: "Camiseta com a identidade Sempre Vitta" }, { src: asset("sempre-vitta-tote-bag.png"), alt: "Ecobag com a identidade Sempre Vitta" }, { src: asset("sempre-vitta-goji.png"), alt: "Embalagem de goji berries Sempre Vitta" }] }],
@@ -117,7 +117,7 @@ const cases: Record<Language, CaseProject[]> = {
     {
       slug: "lcr-marcenaria",
       title: "LCR Marcenaria",
-      year: "2025",
+      year: "2018",
       intro: "Marca e sinalização de oficina para uma marcenaria artesanal, inspirada nas texturas da madeira bruta.",
       labels: ["Identidade visual"],
       sections: [{ id: "identidade-visual", label: "Identidade visual", title: "Identidade visual", text: "Marca desenvolvida para a LCR Marcenaria, combinando as iniciais do nome com uma presença direta e artesanal.", media: [{ src: asset("lcr-logo.png"), alt: "Logotipo LCR Marcenaria" }, { src: asset("lcr-cores.png"), alt: "Cores da identidade visual da LCR Marcenaria" }, { src: asset("lcr-logo-variantes.png"), alt: "Variações do logotipo LCR Marcenaria" }] }],
@@ -125,7 +125,7 @@ const cases: Record<Language, CaseProject[]> = {
     {
       slug: "lilaz",
       title: "Lilaz",
-      year: "2025",
+      year: "2018",
       intro: "Identidade e embalagens para um pequeno negócio de decorações personalizadas.",
       labels: ["Identidade visual", "Embalagem"],
       sections: [{ id: "identidade-visual", label: "Identidade visual", title: "Identidade visual", text: "Uma identidade delicada e reconhecível para um negócio de decorações personalizadas." }, { id: "embalagem", label: "Embalagem", title: "Embalagem", text: "Aplicações pensadas para levar a identidade ao momento de entrega e experiência do produto." }],
@@ -133,7 +133,7 @@ const cases: Record<Language, CaseProject[]> = {
     {
       slug: "e-ai-man-jogo",
       title: "E aí man jogo",
-      year: "2020",
+      year: "2016",
       intro: "Jogo 2D de aventura, plataforma e puzzle com narrativa sobre amizade e pertencimento.",
       labels: ["Game design", "Level design", "Ilustração"],
       sections: [{ id: "game-design", label: "Game design", title: "Game design", text: "Concepção de uma experiência de aventura, plataforma e puzzle voltada para crianças e adolescentes." }, { id: "level-design", label: "Level design", title: "Level design", text: "Estruturação de fases e desafios para acompanhar a progressão da narrativa." }, { id: "ilustracao", label: "Ilustração", title: "Ilustração", text: "Direção visual para personagens, cenários e situações da história." }],
@@ -191,5 +191,5 @@ export default function CasePage() {
     }),
   }));
 
-  return <div className="original-project-page case-page"><header><nav className="nav"><a href={sitePath(homePath)} className="logo">CECÍLIA<span>·</span>RODRIGUES</a><div className="nav-links"><a href={sitePath(`${homePath}#sobre`)}>{language === "en" ? "About" : "Sobre"}</a><a href={sitePath(`${homePath}#trabalhos`)}>{language === "en" ? "Work" : "Trabalhos"}</a><a href={sitePath(`${homePath}#contato`)}>{language === "en" ? "Contact" : "Contato"}</a><ThemeToggle language={language} /><button className="plain-language" onClick={() => navigate(switchPath)}>{language === "en" ? "PT" : "EN"}</button></div></nav></header><main><section className="case-hero"><div className="wrap"><div className="eyebrow mono">{language === "en" ? "Project case" : "Case de projeto"}</div><h1>{project.title}</h1><p>{project.intro}</p><div className="case-meta"><span>{project.year}</span><span>{language === "en" ? "Selected work" : "Trabalho selecionado"}</span></div></div></section><section className="case-navigation"><div className="wrap"><div className="case-labels" aria-label={language === "en" ? "Project areas" : "Áreas do projeto"}>{project.labels.map((label, index) => <a key={label} href={`#${project.sections[index]?.id || project.sections[0].id}`} className="case-label">{label} <ArrowUpRight size={13} /></a>)}</div></div></section><section><div className="wrap case-sections">{sectionsWithUniqueMedia.map((section, index) => <article className="case-section" id={section.id} key={`${project.slug}-${section.id}`}><div className="case-section-index">{String(index + 1).padStart(2, "0")} / {String(project.sections.length).padStart(2, "0")}</div><div className="case-section-content"><div className="case-section-heading"><span className="case-section-label">{section.label}</span><h2>{section.title}</h2></div><p>{section.text}</p>{section.media && section.media.length > 0 && <div className="case-media-grid">{section.media.map((media) => <figure key={media.src}><img src={media.src} alt={media.alt} loading="lazy" /></figure>)}</div>}</div></article>)}{ctaHref && <a className="case-cta" href={ctaHref}>{project.cta?.label} <ArrowUpRight size={17} /></a>}</div></section><SiteContact language={language} /></main><footer><div className="wrap">© 2026 Cecília Rodrigues</div></footer></div>;
+  return <div className="original-project-page case-page"><header><nav className="nav"><a href={sitePath(homePath)} className="logo">CECÍLIA<span>·</span>RODRIGUES</a><div className="nav-links"><a href={sitePath(`${homePath}#sobre`)}>{language === "en" ? "About" : "Sobre"}</a><a href={sitePath(`${homePath}#trabalhos`)}>{language === "en" ? "Work" : "Trabalhos"}</a><a href={sitePath(`${homePath}#contato`)}>{language === "en" ? "Contact" : "Contato"}</a><ThemeToggle language={language} /><button className="plain-language" onClick={() => navigate(switchPath)}>{language === "en" ? "PT" : "EN"}</button></div></nav></header><main><section className="case-hero"><div className="wrap"><div className="eyebrow mono">{language === "en" ? "Project case" : "Case de projeto"}</div><h1>{project.title}</h1><p>{project.intro}</p><div className="case-meta"><span>{project.year}</span><span>{language === "en" ? "Selected work" : "Trabalho selecionado"}</span></div></div></section><section className="case-navigation"><div className="wrap"><div className="case-labels" aria-label={language === "en" ? "Project areas" : "Áreas do projeto"}>{project.labels.map((label, index) => <a key={label} href={`#${project.sections[index]?.id || project.sections[0].id}`} className="case-label">{label} <ArrowUpRight size={13} /></a>)}</div></div></section><section><div className="wrap case-sections">{sectionsWithUniqueMedia.map((section, index) => <article className="case-section" id={section.id} key={`${project.slug}-${section.id}`}><div className="case-section-index">{String(index + 1).padStart(2, "0")} / {String(project.sections.length).padStart(2, "0")}</div><div className="case-section-content"><div className="case-section-heading"><span className="case-section-label">{section.label}</span><h2>{section.title}</h2></div><p>{section.text}</p>{section.media && section.media.length > 0 && <div className="case-media-grid">{section.media.map((media) => <figure key={media.src}><img src={media.src} alt={media.alt} loading="lazy" /></figure>)}</div>}</div></article>)}{ctaHref && <a className="case-cta" href={ctaHref}>{project.cta?.label} <ArrowUpRight size={17} /></a>}</div></section><section className="case-project-nav"><div className="wrap"><div className="case-project-nav-heading"><span className="case-section-label">{language === "en" ? "Explore more" : "Continue explorando"}</span><h2>{language === "en" ? "Other projects" : "Outros projetos"}</h2></div><nav className="case-project-links" aria-label={language === "en" ? "Other project cases" : "Outros cases de projeto"}>{cases[language].filter((otherCase) => otherCase.slug !== project.slug).map((otherCase) => <a className="case-project-link" key={otherCase.slug} href={sitePath(language === "en" ? `/en/cases/${otherCase.slug}` : `/cases/${otherCase.slug}`)}>{otherCase.title} <ArrowUpRight size={13} aria-hidden="true" /></a>)}</nav></div></section><SiteContact language={language} /></main><footer><div className="wrap">© 2026 Cecília Rodrigues</div></footer></div>;
 }
