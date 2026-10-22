@@ -32,7 +32,7 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
   },
   ux: {
     pt: { title: "UX Design", tag: "Projetos por categoria", intro: "Pesquisa, arquitetura e interfaces desenhadas para tornar produtos digitais mais claros e fáceis de usar.", back: "← Voltar ao portfólio", projects: [
-      { id: "mercado-da-rua", title: "App Mercado da Rua", year: "2025", text: "Marketplace regional que conecta moradores a mercados, hortifrutis e mercearias do próprio bairro.", tools: ["Figma", "Pesquisa", "UX / UI"] }, { id: "glitchcast-app", title: "Glitchcast App", year: "2021", text: "Conceito de aplicativo de podcast para transformar a identidade Glitchcast em uma experiência digital de escuta.", tools: ["Figma", "Pesquisa UX", "UI design"] },
+      { id: "glitchcast-app", title: "Glitchcast App", year: "2021", text: "Conceito de aplicativo de podcast para transformar a identidade Glitchcast em uma experiência digital de escuta.", tools: ["Figma", "Pesquisa UX", "UI design"] },
       { id: "proposta-valor", title: "Projeto museus", year: "2025", text: "App desenvolvido como catálogo cultural dos Museus da Cidade de Salvador", tools: ["Pesquisa", "Jornada do usuário", "Figma"], details: [
         { title: "Visão geral", text: "Aplicativo pensado para reunir museus, exposições, obras e artistas em uma experiência de descoberta cultural.", media: portfolioAsset("museus/digitalizado.jpg"), alt: "Visão geral do projeto Museus" },
         { title: "Cadastro", media: portfolioAsset("museus/cadastro.png"), alt: "Tela de cadastro do aplicativo Museus" },
@@ -51,7 +51,7 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
       ] },
     ] },
     en: { title: "UX Design", tag: "Projects by category", intro: "Research, architecture and interfaces designed to make digital products clearer and easier to use.", back: "← Back to portfolio", projects: [
-      { id: "mercado-da-rua", title: "Mercado da Rua app", year: "2025", text: "A regional marketplace connecting residents with neighborhood markets and grocery stores.", tools: ["Figma", "Research", "UX / UI"] }, { id: "glitchcast-app", title: "Glitchcast App", year: "2021", text: "Podcast app concept translating the Glitchcast identity into a focused digital listening experience.", tools: ["Figma", "UX research", "UI design"] },
+      { id: "glitchcast-app", title: "Glitchcast App", year: "2021", text: "Podcast app concept translating the Glitchcast identity into a focused digital listening experience.", tools: ["Figma", "UX research", "UI design"] },
       { id: "proposta-valor", title: "Museums project", year: "2025", text: "App developed as a cultural catalogue for the Museums of Salvador.", tools: ["Research", "User journey", "Figma"], details: [
         { title: "Overview", text: "An app designed to bring museums, exhibitions, artworks and artists together in a cultural discovery experience.", media: portfolioAsset("museus/digitalizado.jpg"), alt: "Overview of the Museums project" },
         { title: "Sign up", media: portfolioAsset("museus/cadastro.png"), alt: "Sign up screen of the Museums app" },
@@ -94,11 +94,9 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
   },
   marketing: {
     pt: { title: "Marketing", tag: "Projetos por categoria", intro: "Campanhas, conteúdos e presença digital para aproximar marcas de suas pessoas.", back: "← Voltar ao portfólio", projects: [
-      { id: "site-aliez", title: "Site Aliez", year: "2025", text: "Site para contratar artistas.", tools: ["Figma", "UX / UI", "Web design"] },
       { id: "in9", title: "In9 Mídia", year: "2021–2026", text: "Gestão de redes sociais e campanhas de Google Ads para empresa de software e sinalização digital.", tools: ["Canva", "Adobe Express", "Google Ads"] },
     ] },
     en: { title: "Marketing", tag: "Projects by category", intro: "Campaigns, content and digital presence to bring brands closer to their people.", back: "← Back to portfolio", projects: [
-      { id: "site-aliez", title: "Site Aliez", year: "2025", text: "Website for hiring artists.", tools: ["Figma", "UX / UI", "Web design"] },
       { id: "in9", title: "In9 Mídia", year: "2021–2026", text: "Social media management and Google Ads campaigns for a software and digital signage company.", tools: ["Canva", "Adobe Express", "Google Ads"] },
     ] },
   },
