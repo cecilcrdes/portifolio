@@ -102,3 +102,5 @@
 .case-project-link{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid var(--line);border-radius:999px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.035em;text-transform:uppercase;white-space:nowrap;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
 .case-project-link:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 @media(max-width:640px){.case-project-nav{padding:36px 0 46px}.case-project-links{flex-wrap:nowrap;overflow-x:auto;padding:2px 2px 10px;overscroll-behavior-x:contain;scrollbar-width:thin}.case-project-link{flex:none}}
+
+.case-media-grid figure{background:transparent!important;border-color:transparent!important}.case-image-zoom{width:100%;min-height:inherit;height:100%;padding:0;border:0;background:transparent;display:flex;align-items:center;justify-content:center;cursor:zoom-in}.case-image-zoom img{transition:transform .2s ease}.case-image-zoom:hover img{transform:scale(1.025)}
