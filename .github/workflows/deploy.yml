@@ -37,7 +37,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build static frontend
-        run: pnpm exec vite build
+        run: pnpm exec vite build --config vite.config.ci.ts
         env:
           VITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
