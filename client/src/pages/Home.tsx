@@ -13,7 +13,6 @@ type FeaturedProject = {
   slug: string;
   title: string;
   year: string;
-  badge: { pt: string; en: string };
   category: { pt: string; en: string };
   description: { pt: string; en: string };
   image: string;
@@ -25,46 +24,42 @@ const featuredProjects: FeaturedProject[] = [
     slug: "in9-midia",
     title: "In9 Mídia",
     year: "2014 — Presente",
-    badge: { pt: "Atuação Contínua · Empresa Atual", en: "Current Company · Continuous Role" },
     category: { pt: "Digital Signage · UI Design · DOOH · Marketing", en: "Digital Signage · UI Design · DOOH · Marketing" },
     description: {
       pt: "Mais de 10 anos de atuação contínua liderando a criação de templates dinâmicos para Digital Signage (DOOH), wireframes de interfaces para apps e plataformas corporativas, além de gestão de campanhas de Google Ads.",
       en: "Over 10 years of continuous role leading dynamic templates for Digital Signage (DOOH), app and software interface wireframes, and corporate Google Ads campaigns.",
     },
-    image: asset("in9-dooh-templates-1.png"),
+    image: asset("in9/templatesin9.png"),
     tags: ["Digital Signage", "DOOH", "UI Wireframes", "Google Ads", "Redes Sociais"],
   },
   {
     slug: "museus",
     title: "Projeto Museus",
     year: "2025",
-    badge: { pt: "Primeiro Grande Case UX", en: "First Major UX Case" },
     category: { pt: "UX Design · UI Design · Pesquisa · Arquitetura", en: "UX Design · UI Design · Research · Architecture" },
     description: {
       pt: "Aplicativo desenvolvido como catálogo cultural dos Museus da Cidade de Salvador. Pesquisa com usuários, mapeamento de jornadas e interface editorial de alta fidelidade para facilitar a descoberta de exposições e acervos.",
       en: "Cultural catalog app for the Museums of Salvador. In-depth user research, journey mapping, and a refined editorial interface designed for cultural discovery.",
     },
-    image: asset("museus/homepage.png"),
+    image: asset("museus/2-Homepage.png"),
     tags: ["UX Research", "Figma", "UI Design", "Arquitetura da Informação", "Cultura"],
   },
   {
     slug: "ksi-consultas",
     title: "KSI Consultas",
     year: "2018–2021",
-    badge: { pt: "Branding & Presença Digital", en: "Branding & Digital Presence" },
     category: { pt: "Identidade Visual · Papelaria · Redes Sociais · Web", en: "Visual Identity · Stationery · Social Media · Web" },
     description: {
       pt: "Construção de marca completa, papelaria física e institucional, estratégia contínua de conteúdo para redes sociais e reestruturação web para empresa de consultas médicas especializadas.",
       en: "Comprehensive brand identity system, corporate stationery, social media content strategy, and website restructuring for a specialized healthcare clinic.",
     },
-    image: asset("ksi-posts.png"),
+    image: asset("ksi/ksiposts.png"),
     tags: ["Identidade de Marca", "Papelaria", "Mídias Sociais", "Design Gráfico"],
   },
   {
     slug: "e-ai-man-jogo",
     title: "E aí Man (Jogo)",
     year: "2020",
-    badge: { pt: "Game Design, UI & Arte", en: "Game Design, UI & Art" },
     category: { pt: "UI de Jogo · Level Design · Concept Art · Personagens", en: "Game UI · Level Design · Concept Art · Characters" },
     description: {
       pt: "Jogo 2D de aventura, plataforma e puzzle ambientado em uma comunidade brasileira. Desenvolvimento conceitual completo: interfaces de jogo (menus, HUD), level design de fases e ilustração de personagens.",
@@ -96,7 +91,7 @@ const archiveProjects: ArchiveProject[] = [
       en: "Visual identity, brand system, merchandise and app concept for the Glitch404 group podcast.",
     },
     slug: "glitchcast",
-    image: asset("glitchcast-logo-aplicacoes.png"),
+    image: asset("glitchcast/Projeto Glitchcast2.png"),
   },
   {
     category: "ilustracao",
@@ -108,7 +103,7 @@ const archiveProjects: ArchiveProject[] = [
       en: "Game art direction, dark interface design, and asset production for characters and environments.",
     },
     slug: "bogused",
-    image: asset("bogused-selection-screen.png"),
+    image: asset("bogused/bogused interface.png"),
   },
   {
     category: "ux",
@@ -132,7 +127,7 @@ const archiveProjects: ArchiveProject[] = [
       en: "Naming and brand identity for a professional referral and networking platform.",
     },
     slug: "recomendaria",
-    image: asset("recomendaria-logo-completa.jpg"),
+    image: asset("recomendaria/recomendaria logo completa.jpg"),
   },
   {
     category: "grafico",
@@ -144,7 +139,7 @@ const archiveProjects: ArchiveProject[] = [
       en: "Organic visual language and packaging system for a health and vitality food brand.",
     },
     slug: "sempre-vitta",
-    image: asset("sempre-vitta-logo-1.png"),
+    image: asset("sempre-vitta/semprevittalogo1.png"),
   },
   {
     category: "grafico",
@@ -156,7 +151,7 @@ const archiveProjects: ArchiveProject[] = [
       en: "Brand identity and rustic workshop signage inspired by raw timber textures.",
     },
     slug: "lcr-marcenaria",
-    image: asset("lcr-logo.png"),
+    image: asset("lcr/lcrlogo.png"),
   },
   {
     category: "grafico",
@@ -172,15 +167,15 @@ const archiveProjects: ArchiveProject[] = [
   },
   {
     category: "ilustracao",
-    label: { pt: "Identidade visual · Ilustração", en: "Visual identity · Illustration" },
+    label: { pt: "Ilustração Editorial · Design de Capa", en: "Editorial Illustration · Cover Design" },
     year: "2023",
     title: "Os Periquitos",
     description: {
-      pt: "Identidade e universo visual ilustrado para o projeto independente Os Periquitos.",
-      en: "Visual identity and illustrated universe for the independent Os Periquitos project.",
+      pt: "Capa e ilustrações digitais para o livro de Rodrigo Reis em comemoração aos 200 anos da Independência da Bahia.",
+      en: "Cover and digital illustrations for Rodrigo Reis’s book commemorating the 200th anniversary of Bahia’s Independence.",
     },
     slug: "os-periquitos",
-    image: asset("osperiquitos/1681842238739.jpg"),
+    image: asset("osperiquitos/capa.jpg"),
   },
 ];
 
@@ -489,7 +484,6 @@ export default function Home() {
             {featuredProjects.map((project) => (
               <article className="featured-card" key={project.slug}>
                 <div className="featured-card-media">
-                  <span className="featured-badge">{project.badge[language]}</span>
                   <img src={project.image} alt={project.title} loading="lazy" />
                 </div>
                 <div className="featured-card-content">
