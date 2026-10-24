@@ -41,48 +41,8 @@ jobs:
         env:
           VITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
-      - name: Add SPA fallback and disable Jekyll
-        run: |
-          cp dist/public/index.html dist/public/404.html
-          touch dist/public/.nojekyll
-          for route in \
-            en \
-            projetos/grafico \
-            projetos/ux \
-            projetos/ilustracao \
-            projetos/marketing \
-            projetos/ux/glitchcast-app \
-            en/projects/graphic \
-            en/projects/ux \
-            en/projects/illustration \
-            en/projects/marketing \
-            en/projects/ux/glitchcast-app; do
-            mkdir -p "dist/public/$route"
-            cp dist/public/index.html "dist/public/$route/index.html"
-          done
-          for slug in \
-            bogused \
-            mercado-da-rua \
-            museus \
-            glitchcast \
-            site-aliez \
-            ksi-consultas \
-            in9-midia \
-            recomendaria \
-            sempre-vitta \
-            lcr-marcenaria \
-            lilaz \
-            e-ai-man-jogo; do
-            for locale in pt en; do
-              if [ "$locale" = "en" ]; then
-                route="en/cases/$slug"
-              else
-                route="cases/$slug"
-              fi
-              mkdir -p "dist/public/$route"
-              cp dist/public/index.html "dist/public/$route/index.html"
-            done
-          done
+      - name: Prepare project routes and SPA fallback
+        run: node scripts/prepare-pages.mjs
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
