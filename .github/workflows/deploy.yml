@@ -12,7 +12,8 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  # Let an active Pages deployment finish; a newer push can run immediately after it.
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -43,6 +44,14 @@ jobs:
 
       - name: Prepare project routes and SPA fallback
         run: node scripts/prepare-pages.mjs
+
+      - name: Verify Pages artifact
+        run: |
+          test -s dist/public/index.html
+          test -s dist/public/404.html
+          test -f dist/public/.nojekyll
+          test -s dist/public/cases/in9-midia/index.html
+          test -s dist/public/en/cases/in9-midia/index.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
