@@ -94,8 +94,10 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
 const normalizeCategory = (value: string): Category => ({ grafico: "graphic", graphic: "graphic", ux: "ux", ilustracao: "illustration", illustration: "illustration", marketing: "marketing" } as Record<string, Category>)[value] || "graphic";
 
 function MuseumsCarousel({ project, language }: { project: Project; language: "pt" | "en" }) {
-  const slides = (project.details || []).filter((detail) => detail.media);
+  const slides = (project.details || []).filter((detail) => detail.media && !detail.title.toLowerCase().includes(language === "pt" ? "visão geral" : "overview"));
+  const overview = (project.details || []).find((detail) => detail.title.toLowerCase().includes(language === "pt" ? "visão geral" : "overview"));
   return <div className="museum-carousel" aria-label={language === "pt" ? "Galeria de telas do projeto Museus" : "Museums project screen gallery"}>
+    {overview?.media && <section className="museum-lowfi" aria-labelledby="museum-lowfi-title"><h3 id="museum-lowfi-title">{language === "pt" ? "Mockup de baixa fidelidade" : "Low-fidelity mockup"}</h3>{overview.text && <p>{overview.text}</p>}<div className="museum-lowfi-gallery"><img src={overview.media} alt={overview.alt || overview.title} loading="lazy" /></div></section>}
     <div className="museum-carousel-head"><div><h3>{language === "pt" ? "Fluxos e telas" : "Flows and screens"}</h3><p>{language === "pt" ? "Visão geral das principais telas do aplicativo." : "An overview of the app's main screens."}</p></div></div>
     <div className="museum-screen-gallery">{slides.map((slide, index) => <figure className={`museum-screen-gallery-item museum-screen-gallery-item-${index % 3}`} key={slide.title}><img src={slide.media} alt={slide.alt || slide.title} loading="lazy" /><figcaption>{slide.title}</figcaption></figure>)}</div>
   </div>;
