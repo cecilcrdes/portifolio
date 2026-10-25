@@ -1,9 +1,7 @@
 // Páginas de trabalhos no formato original: uma página por categoria, lista linear e linguagem de portfólio.
-import { ArrowLeft } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import SiteContact from "@/components/SiteContact";
 import { useLocation, useRoute } from "wouter";
-import { useRef } from "react";
 import { sitePath } from "@/lib/sitePath";
 import { getMuseumsMockups } from "@/lib/museumsMockups";
 
