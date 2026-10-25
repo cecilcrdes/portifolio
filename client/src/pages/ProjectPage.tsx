@@ -105,10 +105,11 @@ function MuseumsCarousel({ project, language }: { project: Project; language: "p
 
 
 function MuseumsMockups({ language }: { language: "pt" | "en" }) {
+  const mockups = getMuseumsMockups(language);
   return <section className="museum-mockups detail-block" aria-labelledby="museum-mockups-title">
     <h3 id="museum-mockups-title">{language === "pt" ? "Mockup de alta fidelidade" : "High-fidelity mockups"}</h3>
     <p>{language === "pt" ? "Telas em alta fidelidade do aplicativo Museus, com cores, imagens e detalhes da interface." : "High-fidelity screens of the Museums app, showing colors, imagery and interface details."}</p>
-    <div className="case-media-grid">{getMuseumsMockups(language).map((media) => <figure key={media.src}>
+    <div className="case-media-gallery">{mockups.map((media, index) => <figure key={media.src} className={`case-media-gallery-item case-media-gallery-item-${index % 3}`}>
       <img src={media.src} alt={media.alt} loading="lazy" />
     </figure>)}</div>
   </section>;

@@ -82,18 +82,6 @@ type ArchiveProject = {
 
 const archiveProjects: ArchiveProject[] = [
   {
-    category: "marketing",
-    label: { pt: "Mídias sociais · Apresentações", en: "Social media · Presentations" },
-    year: "2022",
-    title: "Jorginho Trader",
-    description: {
-      pt: "Criação de posts para captação de leads e apresentações em PowerPoint para o cliente Jorginho Trader.",
-      en: "Social media posts for lead generation and PowerPoint presentations for Jorginho Trader.",
-    },
-    slug: "jorginho-trader",
-    image: asset("jorginho-trader/carrossel1.jpg"),
-  },
-  {
     category: "grafico",
     label: { pt: "Identidade visual · Branding · Ilustrações · App", en: "Visual identity · Branding · Illustrations · App" },
     year: "2021",

@@ -101,24 +101,6 @@ function OsPeriquitosStory({ language }: { language: Language }) {
 const cases: Record<Language, CaseProject[]> = {
   pt: [
     {
-      slug: "jorginho-trader",
-      title: "Jorginho Trader",
-      year: "2022",
-      intro: "Criação de posts para captação de leads e apresentações em PowerPoint para o cliente Jorginho Trader.",
-      labels: ["Mídias sociais", "Apresentações"],
-      sections: [
-        {
-          id: "midias-sociais", label: "Mídias sociais", title: "Posts para captação de leads",
-          text: "Criação de peças para redes sociais, incluindo posts e carrosséis, com foco na captação de leads para o cliente.",
-          media: ["carrossel1.jpg", "carrossel2.jpg", "carrossel3.jpg", "carrossel4.jpg", "4902471380885416660.jpg", "4902471380885416661.jpg", "4902471380885416663.jpg", "4902471380885416668.jpg", "5093963279465385133.jpg", "png_20221027_214729_0000.png", "tdrago2-2.png", "tdrago3.png"].map((filename) => ({ src: asset(`jorginho-trader/${filename}`), alt: "Post para redes sociais do projeto Jorginho Trader" })),
-        },
-        {
-          id: "apresentacoes", label: "Apresentações", title: "Apresentações em PowerPoint",
-          text: "Criação de apresentações em formato PPTX para o cliente, com organização do conteúdo e composição visual dos slides.",
-        },
-      ],
-    },
-    {
       slug: "glitchcast",
       title: "Glitchcast",
       year: "2021",
@@ -245,13 +227,6 @@ const cases: Record<Language, CaseProject[]> = {
 type CaseSectionCopy = Pick<CaseSection, "label" | "title" | "text"> & Partial<Pick<CaseSection, "id" | "content">>;
 
 const englishCopy: Record<string, { intro: string; sections: CaseSectionCopy[] }> = {
-  "jorginho-trader": {
-    intro: "Social media posts for lead generation and PowerPoint presentations for Jorginho Trader.",
-    sections: [
-      { label: "Social media", title: "Posts for lead generation", text: "Social media content, including posts and carousels, focused on generating leads for the client." },
-      { label: "Presentations", title: "PowerPoint presentations", text: "PPTX presentations for the client, including content organization and visual slide composition." },
-    ],
-  },
   glitchcast: { intro: "Visual identity, content and app concept for the Glitch404 group podcast.", sections: [{ label: "Visual identity", title: "Visual identity", text: "Identity developed for the Glitchcast podcast, with symbol, lettering, vibrant palette and variations for different backgrounds." }, { label: "Branding", title: "Branding", text: "The brand system organizes Glitchcast's visual elements and creates recognition across different touchpoints." }, { label: "Social media", title: "Social media", text: "Communication pieces for episodes, content and podcast promotion across social platforms." }, { label: "Illustrations", title: "Illustrations and key visuals", text: "Exploration of the identity's main elements in compositions that present the podcast's visual universe." }, { label: "App", title: "Glitchcast app", text: "Podcast app concept translating the visual identity into a digital listening, discovery and community experience." }] },
   bogused: { intro: "Game art direction, interface and visual asset production for characters and environments.", sections: [{ label: "Branding", title: "Visual direction", text: "Bogused is a game project with its own visual direction, built from a dark atmosphere and expressive characters." }, { label: "Interface", title: "Game interface", text: "A selection screen that organizes the characters and translates Bogused's narrative into a game experience." },  { label: "Characters", title: "Character design", text: "Character studies developed to give personality and coherence to the game universe." }, { label: "Environments", title: "Environment design", text: "Environment elements and illustrations that build the game's atmosphere." }] },
   museus: { intro: "First major UX Design project — developed as a cultural catalogue app for the Museums of Salvador.", sections: [{ label: "UX Design", title: "Experience and journey", text: "An app designed to bring museums, exhibitions, artworks and artists together in a cultural discovery experience." }, { label: "UI Design", title: "Flows and screens", text: "An editorial interface for navigating cultural content with clarity." }, { label: "High fidelity", title: "High-fidelity mockups", text: "High-fidelity screens of the Museums app, showing colors, imagery and interface details." }, { label: "Research", title: "Research and architecture", text: "Content and flow organization to make it easier to discover museums, exhibitions, artworks and artists." }] },

@@ -52,9 +52,15 @@
 @media(max-width:640px){.ksi-brand-process{grid-template-columns:1fr;gap:20px}}
 .case-media-grid figure{margin:0;background:var(--paper-dim);border:1.5px solid var(--ink);min-height:170px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .case-media-grid img{width:100%;height:100%;max-height:560px;object-fit:contain}
+.case-media-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:190px;grid-auto-flow:row dense;gap:14px;margin-top:30px;align-items:start}
+.case-media-gallery-item{margin:0;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--paper-dim)}
+.case-media-gallery-item-0{grid-row:span 2}
+.case-media-gallery-item-1{grid-row:span 2;margin-top:62px}
+.case-media-gallery-item-2{grid-row:span 2;margin-top:10px}
+.case-media-gallery img{display:block;width:100%;height:100%;object-fit:contain}
 .case-cta{display:inline-flex;align-items:center;gap:9px;margin-top:54px;border:2px solid var(--ink);border-radius:8px;padding:13px 16px;font-family:'Space Mono',monospace;font-size:11px;text-transform:uppercase;transition:background .2s ease,color .2s ease,transform .2s ease}
 .case-cta:hover{background:var(--blue);border-color:var(--blue);color:var(--paper);transform:translateY(-2px)}
-@media(max-width:640px){.case-hero{padding-top:125px;padding-bottom:54px}.case-hero p{font-size:17px}.case-navigation{top:0}.case-labels{padding:13px 20px}.case-section{grid-template-columns:1fr;gap:16px;padding:52px 0;scroll-margin-top:120px}.case-section-index{padding-top:0}.case-media-grid{grid-template-columns:1fr}.case-section p{font-size:16px}}
+@media(max-width:640px){.case-hero{padding-top:125px;padding-bottom:54px}.case-hero p{font-size:17px}.case-navigation{top:0}.case-labels{padding:13px 20px}.case-section{grid-template-columns:1fr;gap:16px;padding:52px 0;scroll-margin-top:120px}.case-section-index{padding-top:0}.case-media-grid{grid-template-columns:1fr}.case-media-gallery{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:150px;gap:10px}.case-media-gallery-item-0{grid-row:span 2;margin-top:0}.case-media-gallery-item-1{grid-row:span 2;margin-top:30px}.case-media-gallery-item-2{grid-row:span 2;margin-top:0}.case-section p{font-size:16px}}
 
 /* Ajustes mobile da seleção de trabalhos e dos cases. */
 .work-top{gap:14px}
