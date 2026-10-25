@@ -94,10 +94,11 @@ const normalizeCategory = (value: string): Category => ({ grafico: "graphic", gr
 function MuseumsCarousel({ project, language }: { project: Project; language: "pt" | "en" }) {
   const slides = (project.details || []).filter((detail) => detail.media && !detail.title.toLowerCase().includes(language === "pt" ? "visão geral" : "overview"));
   const overview = (project.details || []).find((detail) => detail.title.toLowerCase().includes(language === "pt" ? "visão geral" : "overview"));
+  const galleryColumns = [0, 1, 2].map((column) => slides.filter((_, index) => index % 3 === column));
   return <div className="museum-carousel" aria-label={language === "pt" ? "Galeria de telas do projeto Museus" : "Museums project screen gallery"}>
-    {overview?.media && <section className="museum-lowfi" aria-labelledby="museum-lowfi-title"><h3 id="museum-lowfi-title">{language === "pt" ? "Mockup de baixa fidelidade" : "Low-fidelity mockup"}</h3>{overview.text && <p>{overview.text}</p>}<div className="museum-lowfi-gallery">{[0, 1, 2].map((column) => <div className={`museum-lowfi-column museum-lowfi-column-${column}`} key={column}>{column === 1 && <img src={overview.media} alt={overview.alt || overview.title} loading="lazy" />}</div>)}</div></section>}
+    {overview?.media && <section className="museum-lowfi" aria-labelledby="museum-lowfi-title"><h3 id="museum-lowfi-title">{language === "pt" ? "Mockup de baixa fidelidade" : "Low-fidelity mockup"}</h3>{overview.text && <p>{overview.text}</p>}<div className="museum-lowfi-gallery"><div className="museum-lowfi-column museum-lowfi-column-0" /><div className="museum-lowfi-column museum-lowfi-column-1"><img src={overview.media} alt={overview.alt || overview.title} loading="lazy" /></div><div className="museum-lowfi-column museum-lowfi-column-2" /></div></section>}
     <div className="museum-carousel-head"><div><h3>{language === "pt" ? "Fluxos e telas" : "Flows and screens"}</h3><p>{language === "pt" ? "Visão geral das principais telas do aplicativo." : "An overview of the app's main screens."}</p></div></div>
-    <div className="museum-screen-gallery">{slides.map((slide, index) => <figure className={`museum-screen-gallery-item museum-screen-gallery-item-${index % 3}`} key={slide.title}><img src={slide.media} alt={slide.alt || slide.title} loading="lazy" /><figcaption>{slide.title}</figcaption></figure>)}</div>
+    <div className="museum-screen-gallery">{galleryColumns.map((columnSlides, column) => <div className={`museum-screen-gallery-column museum-screen-gallery-column-${column}`} key={column}>{columnSlides.map((slide) => <figure className="museum-screen-gallery-item" key={slide.title}><img src={slide.media} alt={slide.alt || slide.title} loading="lazy" /><figcaption>{slide.title}</figcaption></figure>)}</div>)}</div>
   </div>;
 }
 
@@ -107,7 +108,7 @@ function MuseumsMockups({ language }: { language: "pt" | "en" }) {
   return <section className="museum-mockups detail-block" aria-labelledby="museum-mockups-title">
     <h3 id="museum-mockups-title">{language === "pt" ? "Mockup de alta fidelidade" : "High-fidelity mockups"}</h3>
     <p>{language === "pt" ? "Telas em alta fidelidade do aplicativo Museus, com cores, imagens e detalhes da interface." : "High-fidelity screens of the Museums app, showing colors, imagery and interface details."}</p>
-    <div className="case-media-gallery">{mockups.map((media, index) => <figure key={media.src} className={`case-media-gallery-item case-media-gallery-item-${index % 3}`}>
+    <div className="case-media-gallery museum-highfi-gallery">{mockups.map((media, index) => <figure key={media.src} className={`case-media-gallery-item case-media-gallery-item-${index % 3}`}>
       <img src={media.src} alt={media.alt} loading="lazy" />
     </figure>)}</div>
   </section>;
