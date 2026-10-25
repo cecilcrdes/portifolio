@@ -47,6 +47,9 @@
 .museum-highfi-gallery .case-media-gallery-item-1{margin-top:clamp(48px,8vw,100px)}
 .museum-highfi-gallery .case-media-gallery-item-2{margin-top:clamp(12px,3vw,36px)}
 .museum-highfi-gallery img{width:100%;height:auto;max-height:none;object-fit:contain}
+.case-page .case-section[id="level-design"] .case-media-grid figure,.case-page .case-section[id="telas-de-jogo"] .case-media-grid figure{min-height:0;background:transparent;border:0}
+.case-page .case-section[id="level-design"] .case-image-zoom,.case-page .case-section[id="telas-de-jogo"] .case-image-zoom{height:auto;min-height:0}
+.case-page .case-section[id="level-design"] .case-image-zoom img,.case-page .case-section[id="telas-de-jogo"] .case-image-zoom img{width:auto;height:auto;max-width:100%;max-height:none;object-fit:contain}
 .case-museum-gallery{width:100%;margin-top:30px}
 .case-museum-gallery .museum-screen-gallery-item img{height:auto;max-height:none}
 .case-museum-gallery .case-image-zoom{min-height:0;height:auto;cursor:zoom-in}
