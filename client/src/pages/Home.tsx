@@ -41,7 +41,7 @@ const featuredProjects: FeaturedProject[] = [
       pt: "Aplicativo desenvolvido como catálogo cultural dos Museus da Cidade de Salvador. Pesquisa com usuários, mapeamento de jornadas e interface editorial de alta fidelidade para facilitar a descoberta de exposições e acervos.",
       en: "Cultural catalog app for the Museums of Salvador. In-depth user research, journey mapping, and a refined editorial interface designed for cultural discovery.",
     },
-    image: asset("museus/2-Homepagealta.png"),
+    image: asset("museus/mockups-museus-tamanho-real.png"),
     tags: ["UX Research", "Figma", "UI Design", "Arquitetura da Informação", "Cultura"],
   },
   {
