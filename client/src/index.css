@@ -36,8 +36,11 @@
 .museum-lowfi h3{font-family:'DM Serif Display',serif;font-size:clamp(25px,3.5vw,38px);line-height:1;font-weight:400;text-transform:uppercase;margin:0 0 13px}
 .museum-lowfi p{font-size:16px;line-height:1.6;font-weight:300;max-width:62ch;margin:0 0 18px}
 .museum-lowfi-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start;margin-top:22px}
-.museum-lowfi-gallery img{grid-column:2;width:100%;height:auto;object-fit:contain;background:var(--paper-dim)}
-@media(max-width:640px){.museum-lowfi-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.museum-lowfi-gallery img{grid-column:1 / -1;width:min(100%,360px);justify-self:center}}
+.museum-lowfi-column{min-width:0;min-height:1px}
+.museum-lowfi-column-0,.museum-lowfi-column-2{padding-top:clamp(24px,4vw,54px)}
+.museum-lowfi-column-1{padding-top:clamp(64px,9vw,112px)}
+.museum-lowfi-column img{width:100%;height:auto;object-fit:contain;background:var(--paper-dim)}
+@media(max-width:640px){.museum-lowfi-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.museum-lowfi-column-0{grid-column:1;grid-row:1;padding-top:0}.museum-lowfi-column-1{grid-column:2;grid-row:1;padding-top:30px}.museum-lowfi-column-2{grid-column:1 / -1;grid-row:2;padding-top:0}.museum-lowfi-column-2:empty{display:none}}
 
 /* Cases por projeto: labels navegáveis e seções ancoradas. */
 .case-hero{padding:150px 0 72px;border-bottom:2px solid var(--ink)}
