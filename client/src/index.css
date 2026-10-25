@@ -52,6 +52,9 @@
 .case-museum-gallery .case-image-zoom{min-height:0;height:auto;cursor:zoom-in}
 .museum-lowfi-case-gallery .museum-screen-gallery-column-1{padding-top:clamp(64px,9vw,112px)}
 .museum-highfi-case-gallery .museum-screen-gallery-column-0,.museum-lowfi-case-gallery .museum-screen-gallery-column-0{padding-top:0}
+.museum-lowfi-gallery .museum-lowfi-column-0,.museum-lowfi-gallery .museum-lowfi-column-2,.museum-lowfi-case-gallery .museum-screen-gallery-column-0,.museum-lowfi-case-gallery .museum-screen-gallery-column-2{display:none}
+.museum-lowfi-gallery .museum-lowfi-column-1,.museum-lowfi-case-gallery .museum-screen-gallery-column-1{grid-column:1 / -1;padding-top:0}
+.museum-lowfi-gallery .museum-lowfi-column-1 img{width:min(100%,900px);margin:0 auto}
 @media(max-width:640px){.museum-highfi-gallery{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:auto}.museum-highfi-gallery .case-media-gallery-item-1{margin-top:30px}.museum-highfi-gallery .case-media-gallery-item-2{margin-top:0}.case-museum-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.case-museum-gallery .museum-screen-gallery-column-2{display:none}.museum-lowfi-case-gallery .museum-screen-gallery-column-1{padding-top:30px}}
 
 /* Cases por projeto: labels navegáveis e seções ancoradas. */
