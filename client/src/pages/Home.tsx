@@ -106,18 +106,6 @@ const archiveProjects: ArchiveProject[] = [
     image: asset("bogused/bogused interface.png"),
   },
   {
-    category: "ux",
-    label: { pt: "UX Design · UX Research · UI Design", en: "UX Design · UX Research · UI Design" },
-    year: "2023",
-    title: "Rosalune",
-    description: {
-      pt: "Projeto de UX e arquitetura de informação para um e-commerce de moda alternativa.",
-      en: "UX design and information architecture for an alternative fashion e-commerce website.",
-    },
-    slug: "rosalune",
-    image: asset("rosalune/4936291903289273529.jpg"),
-  },
-  {
     category: "grafico",
     label: { pt: "Branding · Naming", en: "Branding · Naming" },
     year: "2019",
@@ -163,7 +151,7 @@ const archiveProjects: ArchiveProject[] = [
       en: "Delicate identity and custom packaging for a boutique decoration studio.",
     },
     slug: "lilaz",
-    image: asset("lilaz/lilazcaderno.png"),
+    image: asset("lilaz/lilaz-logo1.png"),
   },
   {
     category: "ilustracao",
