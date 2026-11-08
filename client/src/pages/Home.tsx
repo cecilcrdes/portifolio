@@ -59,14 +59,14 @@ const featuredProjects: FeaturedProject[] = [
   {
     slug: "e-ai-man-jogo",
     title: "E aí Man (Jogo)",
-    year: "2020",
+    year: "2016-Presente",
     category: { pt: "UI de Jogo · Level Design · Concept Art · Personagens", en: "Game UI · Level Design · Concept Art · Characters" },
     description: {
       pt: "Jogo 2D de aventura, plataforma e puzzle ambientado em uma comunidade brasileira. Desenvolvimento conceitual completo: interfaces de jogo (menus, HUD), level design de fases e ilustração de personagens.",
       en: "A 2D adventure and puzzle platformer set in a Brazilian community. Complete visual development: in-game UI (menus, HUD), level design progression, and character concept art.",
     },
     image: asset("eaiman/eaiman-grupo.jpg"),
-    tags: ["Game UI", "Level Design", "Ilustração", "Construct 2", "Narrativa"],
+    tags: ["Game UI", "Level Design", "Ilustração", "Construct2","JavaScript", "Narrativa"],
   },
 ];
 
@@ -111,8 +111,8 @@ const archiveProjects: ArchiveProject[] = [
     year: "2019",
     title: "Recomendaria",
     description: {
-      pt: "Naming e identidade de marca para plataforma colaborativa de recomendações profissionais.",
-      en: "Naming and brand identity for a professional referral and networking platform.",
+      pt: "Identidade de marca para plataforma  de recomendações.",
+      en: "Brand identity for a recommendation platform.",
     },
     slug: "recomendaria",
     image: asset("recomendaria/recomendaria logo completa.jpg"),
@@ -123,8 +123,8 @@ const archiveProjects: ArchiveProject[] = [
     year: "2017",
     title: "Sempre Vitta",
     description: {
-      pt: "Identidade visual acolhedora e embalagens para marca ligada à alimentação natural e vitalidade.",
-      en: "Organic visual language and packaging system for a health and vitality food brand.",
+      pt: "Identidade visual acolhedora e embalagens para marca de alimentos naturais e vida saudável.",
+      en: "A welcoming visual identity and packaging for a natural foods and healthy living brand.",
     },
     slug: "sempre-vitta",
     image: asset("sempre-vitta/semprevittalogo1.png"),
