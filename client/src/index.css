@@ -259,3 +259,5 @@
 }
 /* Evita que o conteúdo do case alargue a página no celular (carrossel de jornadas do Museus). */
 .case-section-content{min-width:0}
+/* Vídeo curto dentro da galeria, no mesmo tamanho das imagens. */
+.case-media-grid .case-media-video video{display:block;width:100%;height:auto;max-height:784px;object-fit:contain}
