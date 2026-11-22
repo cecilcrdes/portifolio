@@ -125,11 +125,11 @@ const archiveProjects: ArchiveProject[] = [
   },
   {
     category: "grafico",
-    label: { pt: "Branding · Naming", en: "Branding · Naming" },
+    label: { pt: "Branding", en: "Branding" },
     year: "2019",
     title: "Recomendaria",
     description: {
-      pt: "Identidade de marca para plataforma  de recomendações.",
+      pt: "Identidade de marca para plataforma de recomendações.",
       en: "Brand identity for a recommendation platform.",
     },
     slug: "recomendaria",
