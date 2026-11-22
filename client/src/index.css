@@ -234,3 +234,10 @@
 .reveal.is-visible{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.old-hero .hero-copy>*,.case-hero .wrap>*,.original-project-page .page-hero .wrap>*{animation:none}}
 @media print{.reveal{opacity:1;transform:none}}
+/* Galeria "Outros trabalhos": cards separados com linhas leves (sem fundo escuro na célula vazia). */
+.work-grid{gap:18px;background:transparent;border:0;border-radius:0;overflow:visible}
+.work-card{border:1px solid var(--line);border-radius:16px;transition:background .25s ease,border-color .25s ease}
+.work-card:hover{border-color:rgba(21,20,15,.35)}
+.dark .work-card:hover{border-color:rgba(243,240,230,.4)}
+.work-card-thumb{border:1px solid var(--line)}
+@media(max-width:760px){.work-grid{gap:14px}}
