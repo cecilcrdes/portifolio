@@ -261,3 +261,6 @@
 .case-section-content{min-width:0}
 /* Vídeo curto dentro da galeria, no mesmo tamanho das imagens. */
 .case-media-grid .case-media-video video{display:block;width:100%;height:auto;max-height:784px;object-fit:contain}
+/* Card cuja imagem é um logotipo: mostra a imagem inteira sobre fundo branco, sem cortar. */
+.work-card-thumb.work-card-thumb-contain{background:#fff}
+.work-card-thumb.work-card-thumb-contain img{object-fit:contain}

@@ -31,7 +31,7 @@ const featuredProjects: FeaturedProject[] = [
       pt: "Mais de 10 anos de atuação contínua liderando a criação de templates dinâmicos para Digital Signage (DOOH), wireframes de interfaces para apps e plataformas corporativas, além de gestão de campanhas de Google Ads.",
       en: "Over 10 years of continuous work leading the creation of dynamic Digital Signage (DOOH) templates, interface wireframes for apps and corporate platforms, and Google Ads campaign management.",
     },
-    image: asset("in9/templatesin9.png"),
+    image: asset("in9/templates-dooh-rua.jpg"),
     tags: ["Digital Signage", "DOOH", "UI Wireframes", "Google Ads", "Redes Sociais"],
   },
   {
@@ -55,7 +55,7 @@ const featuredProjects: FeaturedProject[] = [
       pt: "Construção de marca completa, papelaria física e institucional, estratégia contínua de conteúdo para redes sociais e reestruturação web para uma empresa especializada em consultas a bancos de dados e recuperação de crédito.",
       en: "Comprehensive brand identity system, corporate stationery, ongoing social media content strategy, and website restructuring for a company specializing in database lookups and credit recovery.",
     },
-    image: asset("ksi/ksiposts.png"),
+    image: asset("ksi/papelaria-completa.jpg"),
     tags: ["Identidade de Marca", "Papelaria", "Mídias Sociais", "Design Gráfico"],
   },
   {
@@ -94,6 +94,8 @@ type ArchiveProject = {
   description: { pt: string; en: string };
   slug: string;
   image: string;
+  // "contain" mostra a imagem inteira (útil para logotipos que seriam cortados no recorte do card).
+  imageFit?: "contain";
 };
 
 const archiveProjects: ArchiveProject[] = [
@@ -107,7 +109,7 @@ const archiveProjects: ArchiveProject[] = [
       en: "Visual identity, brand system, merchandise and app concept for the Glitch404 group podcast.",
     },
     slug: "glitchcast",
-    image: asset("glitchcast/Projeto Glitchcast2.png"),
+    image: asset("glitchcast/hoodiesebones.jpg"),
   },
   {
     category: "ilustracao",
@@ -132,6 +134,7 @@ const archiveProjects: ArchiveProject[] = [
     },
     slug: "recomendaria",
     image: asset("recomendaria/recomendaria logo completa.jpg"),
+    imageFit: "contain",
   },
   {
     category: "grafico",
@@ -143,7 +146,7 @@ const archiveProjects: ArchiveProject[] = [
       en: "A welcoming visual identity and packaging for a natural foods and healthy living brand.",
     },
     slug: "sempre-vitta",
-    image: asset("sempre-vitta/semprevittalogo1.png"),
+    image: asset("sempre-vitta/embalagens.jpg"),
   },
   {
     category: "grafico",
@@ -155,7 +158,7 @@ const archiveProjects: ArchiveProject[] = [
       en: "Brand identity and rustic workshop signage inspired by raw timber textures.",
     },
     slug: "lcr-marcenaria",
-    image: asset("lcr/lcrlogo.png"),
+    image: asset("lcr/uniforme1.jpg"),
   },
   {
     category: "grafico",
@@ -167,7 +170,7 @@ const archiveProjects: ArchiveProject[] = [
       en: "Delicate identity and custom packaging for a boutique decoration studio.",
     },
     slug: "lilaz",
-    image: asset("lilaz/lilaz-logo1.png"),
+    image: asset("lilaz/embalagens.jpg"),
   },
   {
     category: "ilustracao",
@@ -179,7 +182,7 @@ const archiveProjects: ArchiveProject[] = [
       en: "Cover and digital illustrations for Rodrigo Reis’s book commemorating the 200th anniversary of Bahia’s Independence.",
     },
     slug: "os-periquitos",
-    image: asset("osperiquitos/capa.jpg"),
+    image: asset("osperiquitos/livro-mockup.jpg"),
   },
 ];
 
@@ -548,7 +551,7 @@ export default function Home() {
           <div className="work-grid">
             {displayedArchive.map((item) => (
               <article className="work-card" key={item.slug}>
-                <div className="work-card-thumb">
+                <div className={`work-card-thumb${item.imageFit === "contain" ? " work-card-thumb-contain" : ""}`}>
                   <img src={item.image} alt={item.title} loading="lazy" />
                 </div>
                 <div className="work-top">
