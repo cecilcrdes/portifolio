@@ -1,0 +1,4 @@
+Checkpoint criado em 21/11/2026, antes da reorganização da página Lilaz.
+
+Guarda CasePage.tsx e Home.tsx como estavam (a Home.tsx tinha marcas de conflito do Git).
+Para desfazer, copie os arquivos de volta para client/src/pages/.
