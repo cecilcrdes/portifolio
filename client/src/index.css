@@ -241,3 +241,21 @@
 .dark .work-card:hover{border-color:rgba(243,240,230,.4)}
 .work-card-thumb{border:1px solid var(--line)}
 @media(max-width:760px){.work-grid{gap:14px}}
+/* "Reduzir movimento" ativado no sistema: as entradas viram um esmaecimento suave, sem deslocamento. */
+@keyframes reveal-fade-in{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:0;transition:opacity .6s ease!important;transition-delay:calc(var(--reveal-index,0) * 70ms)!important}.reveal.is-visible{opacity:1}.old-hero .hero-copy>*,.case-hero .wrap>*,.original-project-page .page-hero .wrap>*{animation:reveal-fade-in .6s ease both!important}}
+/* Contêineres com linhas leves, no mesmo padrão dos cards de "Outros trabalhos". */
+.featured-card{border:1px solid var(--line)}
+.featured-card:hover{border-color:rgba(21,20,15,.35)}
+.dark .featured-card:hover{border-color:rgba(243,240,230,.4)}
+.featured-card-media{border-bottom:1px solid var(--line)}
+.contact-card-box{border:1px solid rgba(247,246,241,.18);border:1px solid color-mix(in srgb,currentColor 18%,transparent);border-radius:16px}
+/* Galerias dos cases 40% maiores: em telas largas, a galeria ultrapassa a coluna de texto e fica centralizada na página. */
+.case-sections-area{container-type:inline-size}
+@media(min-width:900px){
+.case-section .case-media-grid,.case-section .museum-journey-carousel,.case-section .museum-screen-gallery{--gallery-width:min(1250px,calc(100cqw - 64px));--content-left:calc(max(32px,(100cqw - 1180px) / 2 + 32px) + 170px);width:var(--gallery-width);max-width:none;margin-left:calc((100cqw - var(--gallery-width)) / 2 - var(--content-left))}
+.case-media-grid img{max-height:784px}
+.museum-journey-track figure{flex-basis:min(78%,1064px)}
+}
+/* Evita que o conteúdo do case alargue a página no celular (carrossel de jornadas do Museus). */
+.case-section-content{min-width:0}

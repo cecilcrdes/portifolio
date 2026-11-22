@@ -15,13 +15,14 @@ const FADE_ONLY_SELECTOR = ".work-card";
 
 /**
  * Aplica animação de entrada aos blocos da página quando eles entram na tela.
- * Sem suporte a IntersectionObserver ou com "reduzir movimento" ativado, o conteúdo aparece direto.
+ * Sem suporte a IntersectionObserver, o conteúdo aparece direto. Com "reduzir movimento" ativado no sistema,
+ * os blocos só esmaecem (sem deslocamento), uma transição suave que não causa desconforto.
  */
 export function useReveal(deps: unknown[] = []) {
   // useLayoutEffect: as classes entram antes da primeira pintura, sem "piscar" o conteúdo.
   useLayoutEffect(() => {
     if (typeof window === "undefined" || !("IntersectionObserver" in window)) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const elements = Array.from(document.querySelectorAll<HTMLElement>(REVEAL_SELECTOR)).filter(
       (element) => element.dataset.revealed !== "true",
@@ -53,7 +54,7 @@ export function useReveal(deps: unknown[] = []) {
         element.style.setProperty("--reveal-index", String(siblings.indexOf(element) % 4));
       }
       element.classList.add("reveal");
-      if (element.matches(FADE_ONLY_SELECTOR)) element.classList.add("reveal-fade");
+      if (reduceMotion || element.matches(FADE_ONLY_SELECTOR)) element.classList.add("reveal-fade");
       observer.observe(element);
     });
 
