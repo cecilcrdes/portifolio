@@ -2,6 +2,8 @@ import { useLocation } from "wouter";
 import SiteContact from "@/components/SiteContact";
 import ThemeToggle from "@/components/ThemeToggle";
 import { sitePath } from "@/lib/sitePath";
+import { useReveal } from "@/lib/useReveal";
+import { usePageMeta } from "@/lib/pageMeta";
 
 export default function GlitchcastAppPage() {
   const [location] = useLocation();
@@ -10,7 +12,7 @@ export default function GlitchcastAppPage() {
     tag: "UX Design / Glitchcast",
     title: "Glitchcast App",
     intro: "A podcast app concept that extends the Glitchcast identity into a focused listening experience.",
-    back: "← Back to UX Design",
+    back: "← Back to the Glitchcast case",
     overview: "The Glitchcast App project translates the podcast brand into a digital product, balancing discovery, listening and community around a clear, familiar interface.",
     problemTitle: "Context and challenge",
     problem: "Design a space where listeners can discover episodes, continue listening and explore the Glitch404 group universe without losing the energy of the original identity.",
@@ -24,7 +26,7 @@ export default function GlitchcastAppPage() {
     tag: "UX Design / Glitchcast",
     title: "Glitchcast App",
     intro: "Um conceito de aplicativo de podcast que leva a identidade Glitchcast para uma experiência de escuta focada.",
-    back: "← Voltar para UX Design",
+    back: "← Voltar para o case Glitchcast",
     overview: "O projeto Glitchcast App traduz a marca do podcast para um produto digital, equilibrando descoberta, escuta e comunidade em uma interface clara e familiar.",
     problemTitle: "Contexto e desafio",
     problem: "Criar um espaço em que ouvintes possam descobrir episódios, continuar escutando e explorar o universo do grupo Glitch404 sem perder a energia da identidade original.",
@@ -36,5 +38,9 @@ export default function GlitchcastAppPage() {
     note: "Projeto de UX apresentado no portfólio de Cecília Rodrigues",
   };
 
-  return <div className="original-project-page"><header><nav className="nav"><a href={sitePath(language === "en" ? "/en" : "/")} className="logo">CECÍLIA<span>·</span>RODRIGUES</a><div className="nav-links"><a href={sitePath(language === "en" ? "/en#sobre" : "/#sobre")}>{language === "en" ? "About" : "Sobre"}</a><a href={sitePath(language === "en" ? "/en#conhecimentos" : "/#conhecimentos")}>{language === "en" ? "Knowledge" : "Conhecimentos"}</a><a href={sitePath(language === "en" ? "/en#trabalhos" : "/#trabalhos")}>{language === "en" ? "Work" : "Trabalhos"}</a><a href={sitePath(language === "en" ? "/en#contato" : "/#contato")}>{language === "en" ? "Contact" : "Contato"}</a><ThemeToggle language={language} /><a className="plain-language" href={sitePath(language === "en" ? "/projetos/ux/glitchcast-app" : "/en/projects/ux/glitchcast-app")}>{language === "en" ? "PT" : "EN"}</a></div></nav></header><main><section className="page-hero"><div className="wrap"><div className="eyebrow mono">{copy.tag}</div><h1>{copy.title}</h1><p>{copy.intro}</p><a className="back-link" href={sitePath(language === "en" ? "/en/projects/ux" : "/projetos/ux")}>{copy.back}</a></div></section><section><div className="wrap"><article className="project-detail glitchcast-app-case"><div className="project-index">01 / 01<br /><br />2021</div><div><h2>{copy.title}</h2><p>{copy.overview}</p><div className="project-tools">{copy.tools.map((tool) => <span className="project-tool" key={tool}>{tool}</span>)}</div><div className="detail-block"><h3>{copy.problemTitle}</h3><p>{copy.problem}</p></div><div className="detail-block"><h3>{copy.processTitle}</h3><p>{copy.process}</p></div><div className="detail-block"><h3>{copy.interfaceTitle}</h3><p>{copy.interface}</p></div><div className="detail-note">{copy.note}</div></div></article></div></section><SiteContact language={language} /></main><footer><div className="wrap">© 2026 Cecília Rodrigues</div></footer></div>;
+  usePageMeta(copy.title, language);
+
+  useReveal([language]);
+
+  return <div className="original-project-page"><header><nav className="nav"><a href={sitePath(language === "en" ? "/en" : "/")} className="logo">CECÍLIA<span>·</span>RODRIGUES</a><div className="nav-links"><a href={sitePath(language === "en" ? "/en#sobre" : "/#sobre")}>{language === "en" ? "About" : "Sobre"}</a><a href={sitePath(language === "en" ? "/en#conhecimentos" : "/#conhecimentos")}>{language === "en" ? "Knowledge" : "Conhecimentos"}</a><a href={sitePath(language === "en" ? "/en#trabalhos" : "/#trabalhos")}>{language === "en" ? "Work" : "Trabalhos"}</a><a href={sitePath(language === "en" ? "/en#contato" : "/#contato")}>{language === "en" ? "Contact" : "Contato"}</a><ThemeToggle language={language} /><a className="plain-language" href={sitePath(language === "en" ? "/projetos/ux/glitchcast-app" : "/en/projects/ux/glitchcast-app")}>{language === "en" ? "PT" : "EN"}</a></div></nav></header><main><section className="page-hero"><div className="wrap"><div className="eyebrow mono">{copy.tag}</div><h1>{copy.title}</h1><p>{copy.intro}</p><a className="back-link" href={sitePath(language === "en" ? "/en/cases/glitchcast" : "/cases/glitchcast")}>{copy.back}</a></div></section><section><div className="wrap"><article className="project-detail glitchcast-app-case"><div className="project-index">01 / 01<br /><br />2021</div><div><h2>{copy.title}</h2><p>{copy.overview}</p><div className="project-tools">{copy.tools.map((tool) => <span className="project-tool" key={tool}>{tool}</span>)}</div><div className="detail-block"><h3>{copy.problemTitle}</h3><p>{copy.problem}</p></div><div className="detail-block"><h3>{copy.processTitle}</h3><p>{copy.process}</p></div><div className="detail-block"><h3>{copy.interfaceTitle}</h3><p>{copy.interface}</p></div><div className="detail-note">{copy.note}</div></div></article></div></section><SiteContact language={language} /></main><footer><div className="wrap">© 2026 Cecília Rodrigues</div></footer></div>;
 }

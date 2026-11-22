@@ -1,6 +1,7 @@
 import { ArrowUpRight, Check, Copy, FileText, Mail } from "lucide-react";
 import { useState } from "react";
 import { sitePath } from "@/lib/sitePath";
+import { copyText } from "@/lib/pageMeta";
 
 type SiteContactProps = { language: "pt" | "en" };
 
@@ -9,8 +10,8 @@ export default function SiteContact({ language }: SiteContactProps) {
   const [copied, setCopied] = useState(false);
   const email = "ceciliacrdes@gmail.com";
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(email);
+  const handleCopy = async () => {
+    if (!(await copyText(email))) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2200);
   };

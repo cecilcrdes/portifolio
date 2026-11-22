@@ -1,0 +1,667 @@
+From a99e8abfb16cb5ee3db5aec5f28dfd6b7e5ba5b8 Mon Sep 17 00:00:00 2001
+From: x <x@x>
+Date: Sat, 21 Nov 2026 22:41:25 -0300
+Subject: [PATCH] =?UTF-8?q?Corre=C3=A7=C3=B5es=20de=20funcionamento=20e=20?=
+ =?UTF-8?q?textos=20(PT/EN)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- Home em inglês ao abrir /en/ diretamente; tags e anos traduzidos
+- Filtro sem projetos deixa de aparecer; case inexistente mostra 404
+- Página 404 bilíngue; título da aba e idioma por página
+- og:image com endereço completo; copiar e-mail com tratamento de erro
+- Textos: KSI, anos In9/E aí Man, títulos, gramática PT e inglês
+- Textos alternativos e títulos de vídeos em inglês
+- Script de depuração do Manus fora do site publicado
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01UXrWAY24NJB2SoF9ZSjHEq
+---
+ client/index.html                      |  5 +-
+ client/src/components/SiteContact.tsx  |  5 +-
+ client/src/lib/pageMeta.ts             | 42 +++++++++++++
+ client/src/pages/CasePage.tsx          | 83 ++++++++++++++++++--------
+ client/src/pages/GlitchcastAppPage.tsx |  9 ++-
+ client/src/pages/Home.tsx              | 65 +++++++++++++-------
+ client/src/pages/NotFound.tsx          | 15 +++--
+ client/src/pages/ProjectPage.tsx       |  8 ++-
+ scripts/prepare-pages.mjs              |  4 +-
+ 9 files changed, 172 insertions(+), 64 deletions(-)
+ create mode 100644 client/src/lib/pageMeta.ts
+
+diff --git a/client/index.html b/client/index.html
+index 228b338..b815cb4 100644
+--- a/client/index.html
++++ b/client/index.html
+@@ -10,15 +10,16 @@
+ 
+     <!-- Open Graph / Redes Sociais -->
+     <meta property="og:type" content="website" />
++    <meta property="og:url" content="https://cecilcrdes.github.io/portifolio/" />
+     <meta property="og:title" content="Cecília Rodrigues — Designer Multidisciplinar & UX" />
+     <meta property="og:description" content="12+ anos de experiência na fronteira entre produto digital, Digital Signage, identidades visuais, ilustração e game art." />
+-    <meta property="og:image" content="./assets/portfolio/glitchcast-sistema-cores.png" />
++    <meta property="og:image" content="https://cecilcrdes.github.io/portifolio/assets/portfolio/glitchcast-sistema-cores.png" />
+ 
+     <!-- Twitter Card -->
+     <meta name="twitter:card" content="summary_large_image" />
+     <meta name="twitter:title" content="Cecília Rodrigues — Designer Multidisciplinar & UX" />
+     <meta name="twitter:description" content="12+ anos de experiência na fronteira entre produto digital, Digital Signage, identidades visuais, ilustração e game art." />
+-    <meta name="twitter:image" content="./assets/portfolio/glitchcast-sistema-cores.png" />
++    <meta name="twitter:image" content="https://cecilcrdes.github.io/portifolio/assets/portfolio/glitchcast-sistema-cores.png" />
+   </head>
+ 
+   <body>
+diff --git a/client/src/components/SiteContact.tsx b/client/src/components/SiteContact.tsx
+index 79d0554..8412122 100644
+--- a/client/src/components/SiteContact.tsx
++++ b/client/src/components/SiteContact.tsx
+@@ -1,6 +1,7 @@
+ import { ArrowUpRight, Check, Copy, FileText, Mail } from "lucide-react";
+ import { useState } from "react";
+ import { sitePath } from "@/lib/sitePath";
++import { copyText } from "@/lib/pageMeta";
+ 
+ type SiteContactProps = { language: "pt" | "en" };
+ 
+@@ -9,8 +10,8 @@ export default function SiteContact({ language }: SiteContactProps) {
+   const [copied, setCopied] = useState(false);
+   const email = "ceciliacrdes@gmail.com";
+ 
+-  const handleCopy = () => {
+-    navigator.clipboard.writeText(email);
++  const handleCopy = async () => {
++    if (!(await copyText(email))) return;
+     setCopied(true);
+     setTimeout(() => setCopied(false), 2200);
+   };
+diff --git a/client/src/lib/pageMeta.ts b/client/src/lib/pageMeta.ts
+new file mode 100644
+index 0000000..296d85e
+--- /dev/null
++++ b/client/src/lib/pageMeta.ts
+@@ -0,0 +1,42 @@
++import { useEffect } from "react";
++
++type Language = "pt" | "en";
++
++const SITE_NAME = "Cecília Rodrigues";
++
++/** Atualiza o título da aba e o idioma do documento conforme a página aberta. */
++export function usePageMeta(title: string | undefined, language: Language) {
++  useEffect(() => {
++    document.documentElement.lang = language === "en" ? "en" : "pt-BR";
++    document.title = title ? `${title} — ${SITE_NAME}` : `${SITE_NAME} — ${language === "en" ? "Multidisciplinary Designer & UX" : "Designer Multidisciplinar & UX"}`;
++  }, [title, language]);
++}
++
++/** Traduz o marcador de período em andamento ("atual") para o inglês. */
++export function localizeYear(year: string, language: Language) {
++  return language === "en" ? year.replace(/\batual\b/i, "present") : year;
++}
++
++/** Copia texto para a área de transferência; devolve false se o navegador bloquear. */
++export async function copyText(text: string) {
++  try {
++    await navigator.clipboard.writeText(text);
++    return true;
++  } catch {
++    // Alternativa para navegadores sem permissão para a API de área de transferência.
++    try {
++      const field = document.createElement("textarea");
++      field.value = text;
++      field.setAttribute("readonly", "");
++      field.style.position = "fixed";
++      field.style.opacity = "0";
++      document.body.appendChild(field);
++      field.select();
++      const copied = document.execCommand("copy");
++      document.body.removeChild(field);
++      return copied;
++    } catch {
++      return false;
++    }
++  }
++}
+diff --git a/client/src/pages/CasePage.tsx b/client/src/pages/CasePage.tsx
+index 6a5e1ea..e542334 100644
+--- a/client/src/pages/CasePage.tsx
++++ b/client/src/pages/CasePage.tsx
+@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
+ import type { ReactNode } from "react";
+ import { sitePath } from "@/lib/sitePath";
+ import { getMuseumsMockups } from "@/lib/museumsMockups";
++import { localizeYear, usePageMeta } from "@/lib/pageMeta";
++import NotFound from "@/pages/NotFound";
+ 
+ type Language = "pt" | "en";
+ type CaseSection = {
+@@ -31,7 +33,7 @@ type CaseProject = {
+ 
+ const asset = (filename: string) => `${import.meta.env.BASE_URL}assets/portfolio/${filename}`;
+ 
+-function MuseumJourneyCarousel({ media, onEnlarge }: { media: NonNullable<CaseSection["media"]>; onEnlarge: (media: { src: string; alt: string }) => void }) {
++function MuseumJourneyCarousel({ media, onEnlarge, language }: { media: NonNullable<CaseSection["media"]>; onEnlarge: (media: { src: string; alt: string }) => void; language: Language }) {
+   const trackRef = useRef<HTMLDivElement>(null);
+   const scroll = (direction: -1 | 1) => {
+     const track = trackRef.current;
+@@ -39,11 +41,11 @@ function MuseumJourneyCarousel({ media, onEnlarge }: { media: NonNullable<CaseSe
+   };
+   return <div className="museum-journey-carousel">
+     <div className="museum-journey-controls">
+-      <button type="button" onClick={() => scroll(-1)} aria-label="Jornadas anteriores"><ChevronLeft size={20} /></button>
+-      <button type="button" onClick={() => scroll(1)} aria-label="Próximas jornadas"><ChevronRight size={20} /></button>
++      <button type="button" onClick={() => scroll(-1)} aria-label={language === "en" ? "Previous journeys" : "Jornadas anteriores"}><ChevronLeft size={20} /></button>
++      <button type="button" onClick={() => scroll(1)} aria-label={language === "en" ? "Next journeys" : "Próximas jornadas"}><ChevronRight size={20} /></button>
+     </div>
+     <div className="museum-journey-track" ref={trackRef}>
+-      {media.map((item) => <figure key={item.src}><button className="case-image-zoom" type="button" onClick={() => onEnlarge(item)} aria-label={`Ampliar ${item.alt}`}><img src={item.src} alt={item.alt} loading="lazy" /></button><figcaption>{item.alt}</figcaption></figure>)}
++      {media.map((item) => <figure key={item.src}><button className="case-image-zoom" type="button" onClick={() => onEnlarge(item)} aria-label={`${language === "en" ? "Enlarge" : "Ampliar"} ${item.alt}`}><img src={item.src} alt={item.alt} loading="lazy" /></button><figcaption>{item.alt}</figcaption></figure>)}
+     </div>
+   </div>;
+ }
+@@ -175,7 +177,7 @@ const cases: Record<Language, CaseProject[]> = {
+       slug: "museus",
+       title: "Projeto Museus",
+       year: "2025",
+-      intro: "Primeiro grande projeto de UX Design da designer — desenvolvido como catálogo cultural para os Museus da Cidade de Salvador.",
++      intro: "Meu primeiro grande projeto de UX Design, desenvolvido como catálogo cultural para os Museus da Cidade de Salvador.",
+       labels: ["UX Design", "Pesquisa e arquitetura", "UI Design", "Mockup de alta fidelidade", "Aplicação em tamanho real"],
+       sections: [
+         { id: "ux-design", label: "UX Design", title: "Experiência e jornada", text: "", content: <><p>Mais do que indicar museus, exposições, obras e artistas, o projeto busca facilitar o acesso à cultura e ao patrimônio histórico de Salvador.</p><p>Para compreender os diferentes contextos de visitação, foram desenvolvidas sete personas hipotéticas, representando públicos com necessidades, interesses e condições de acesso distintos.</p><p>O mapeamento de suas jornadas permitiu explorar dificuldades relacionadas à descoberta de espaços culturais, ao planejamento das visitas, à mobilidade e à acessibilidade.</p><p>A partir dessa análise, foram identificadas oportunidades para tornar a experiência cultural mais simples, inclusiva e acessível.</p></>, carousel: true, media: [{ src: asset("museus/jornada-dona-lucia.png"), alt: "Jornada cultural da persona Dona Lúcia" }, { src: asset("museus/jornada-rafael-santos.png"), alt: "Jornada cultural da persona Rafael Santos" }, { src: asset("museus/jornada-juliana-santos.png"), alt: "Jornada da persona Juliana Santos" }, { src: asset("museus/jornada-camila-ferreira.png"), alt: "Jornada de acessibilidade da persona Camila Ferreira" }, { src: asset("museus/jornada-marcos-almeida.png"), alt: "Mapa da jornada da persona Marcos Almeida" }], insightGroups: [{ eyebrow: "Principais dores", title: "O que as jornadas revelaram?", intro: "A análise das jornadas dos sete perfis de usuários mostrou desafios recorrentes que dificultam o acesso e a experiência nos museus de Salvador.", items: [{ title: "Informações dispersas", text: "Os usuários precisam consultar diferentes fontes para encontrar dados sobre museus, horários, ingressos e exposições." }, { title: "Planejamento da visita", text: "Há insegurança sobre transporte, tempo de deslocamento, custos e como organizar roteiros de acordo com o interesse e a disponibilidade." }, { title: "Acessibilidade e inclusão", text: "Faltam informações claras sobre acessibilidade física, sensorial e comunicacional, o que limita a autonomia de parte dos visitantes." }, { title: "Atividades e conteúdos", text: "É difícil encontrar informações sobre exposições, eventos e atividades educativas adequadas a diferentes interesses e faixas etárias." }, { title: "Custos e benefícios", text: "Os usuários têm dúvidas sobre valores, gratuidade, meia-entrada e benefícios para estudantes, professores e grupos." }, { title: "Orientação no local", text: "Há dificuldade para encontrar informações sobre a estrutura do museu, como serviços, banheiros, áreas de descanso e sinalização interna." }, { title: "Descoberta e relevância", text: "Os usuários sentem falta de recomendações personalizadas e de um canal para acompanhar novas exposições e eventos." }, { title: "Registro e compartilhamento", text: "Muitos usuários gostariam de salvar suas visitas, criar listas de favoritos e compartilhar experiências, mas não encontram esses recursos de forma simples." }] }, { eyebrow: "Possibilidades para o app", title: "Como o app pode ajudar?", intro: "A partir das necessidades e dificuldades identificadas nas jornadas dos sete perfis de usuários, foram definidas oportunidades para orientar as funcionalidades do aplicativo.", items: [{ title: "Informações centralizadas", text: "Reunir em um único lugar dados confiáveis sobre museus, exposições, horários, ingressos e serviços." }, { title: "Planejamento da visita", text: "Oferecer mapas, rotas de transporte público, tempo de deslocamento e sugestões de roteiros de acordo com o interesse e a disponibilidade do usuário." }, { title: "Acessibilidade detalhada", text: "Disponibilizar informações claras sobre acessibilidade física, sensorial e comunicacional, ajudando o usuário a planejar sua visita com autonomia e segurança." }, { title: "Exposições e eventos atualizados", text: "Divulgar a programação de exposições, eventos, oficinas e atividades educativas, com filtros por tema, faixa etária e tipo de atividade." }, { title: "Filtros de ingresso e benefícios", text: "Indicar valores, gratuidade, meia-entrada e benefícios para estudantes, professores, grupos e outros públicos específicos." }, { title: "Informações sobre a estrutura do museu", text: "Apresentar detalhes sobre banheiros, áreas de descanso, alimentação, guarda-volumes e outros serviços, facilitando a orientação no local." }, { title: "Recomendações personalizadas", text: "Sugerir museus, exposições e roteiros de acordo com os interesses do usuário, como história, arte contemporânea, atividades para crianças ou eventos gratuitos." }, { title: "Favoritos e compartilhamento", text: "Permitir salvar museus e eventos de interesse, criar listas de visitas e compartilhar recomendações com amigos, familiares ou grupos da escola ou faculdade." }] }] },
+@@ -189,14 +191,14 @@ const cases: Record<Language, CaseProject[]> = {
+       slug: "ksi-consultas",
+       title: "KSI Consultas",
+       year: "2018–2021",
+-      intro: "Construção de marca, papelaria e gerenciamento de mídias sociais para uma empresa de consultas especializadas.",
++      intro: "Construção de marca, papelaria e gerenciamento de mídias sociais para uma empresa especializada em consultas a bancos de dados e recuperação de crédito.",
+       labels: ["Branding", "Papelaria", "Mídias sociais"],
+       sections: [{ id: "branding", label: "Branding", title: "Identidade de marca", text: "", content: <KsiBrandStory language="pt" />, media: [{ src: asset("ksi/ksilogo1.png"), alt: "Identidade de marca e aplicação do logotipo KSI Consultas" }, { src: asset("ksi/ksilogo2.png"), alt: "Identidade de marca e aplicação do logotipo KSI Consultas" }] }, { id: "papelaria", label: "Papelaria", title: "Papelaria", text: "Aplicações da identidade nos materiais de comunicação da empresa.", media: [{ src: asset("ksi/KSI Consultas pasta corporativa.png"), alt: "Papelaria e materiais corporativos da KSI Consultas" }, { src: asset("ksi/KSI Consultas timbrado.png"), alt: "Papelaria e materiais corporativos da KSI Consultas" }, { src: asset("ksi/Crachás corporativos KSI Consultas em vermelho.png"), alt: "Papelaria e materiais corporativos da KSI Consultas" }] }, { id: "midias-sociais", label: "Mídias sociais", title: "Conteúdo para redes sociais", text: "Criação e gestão de conteúdo para aproximar a marca do público.", media: [{ src: asset("ksi/landing page.jpg"), alt: "Material de comunicação da KSI Consultas" }, { src: asset("ksi/ksi-midiassociais.png"), alt: "Material de comunicação da KSI Consultas" }, { src: asset("ksi/ksiposdestaq.jpg"), alt: "Material de comunicação da KSI Consultas" }, { src: asset("ksi/ksiposdestaq2.jpg"), alt: "Material de comunicação da KSI Consultas" }, { src: asset("ksi/ksipost.png"), alt: "Material de comunicação da KSI Consultas" }, { src: asset("ksi/ksiposts.png"), alt: "Material de comunicação da KSI Consultas" }] }],
+     },
+     {
+       slug: "in9-midia",
+       title: "In9 Mídia",
+-      year: "2014 — atualmente",
++      year: "2014 — atual",
+       intro: "Atuação contínua desde 2014 em design gráfico e UI na In9 Mídia, conectando a identidade da empresa às soluções de sinalização digital, produtos, campanhas e comunicação com clientes.",
+       labels: ["Identidade e mascotes", "Apresentações e soluções", "Templates do sistema", "Conteúdos e formatos", "Lançamentos: produtos e aplicativos", "Lançamentos: templates DOOH", "Campanhas e eventos", "Vídeos"],
+       sections: [
+@@ -252,12 +254,12 @@ const cases: Record<Language, CaseProject[]> = {
+     },
+     {
+       slug: "e-ai-man-jogo",
+-      title: "E aí man jogo",
+-      year: "2020",
++      title: "E aí Man",
++      year: "2016 — atual",
+       intro: "Jogo 2D de aventura, plataforma e puzzle com narrativa sobre amizade e pertencimento.",
+       labels: ["Game Design", "Level Design", "Assets", "Telas de jogo", "Arte conceitual", "Gameplay"],
+       sections: [
+-        { id: "game-design", label: "Game Design", title: "E aí Man — Game Design", text: "", content: <><p><strong>Gênero:</strong> Aventura, plataforma 2D e puzzle<br /><strong>Ano:</strong> 2020<br /><strong>Categoria:</strong> Game Design, Game Art e Design de Personagens</p><p><em>E aí Man</em> é um jogo de aventura e plataforma 2D que acompanha Luketa, um garoto de 12 anos que parte em busca de seu melhor amigo desaparecido durante uma gincana na comunidade onde vivem.</p><p>Ambientado em uma comunidade brasileira, o jogo combina exploração, combate e resolução de puzzles em fases inspiradas no cotidiano urbano. Ao longo da jornada, o jogador enfrenta equipes rivais, coleta itens, supera obstáculos e utiliza materiais recicláveis para criar e aprimorar equipamentos.</p><p>O projeto contempla a construção da narrativa, a concepção de personagens e cenários, o planejamento das mecânicas de gameplay, a progressão de dificuldade e a estruturação das interfaces e dos fluxos de jogo. A direção visual busca representar a identidade cultural dos ambientes e personagens por meio de uma estética 2D inspirada na cultura urbana, no hip-hop e nas relações de amizade.</p><p><strong>Minha contribuição:</strong> desenvolvimento conceitual e visual do jogo, com foco em Game Design, Game Art, criação de personagens e ambientação, conforme as etapas desenvolvidas no projeto.</p><p><strong>Ferramenta:</strong> Construct 2.</p><p><em>Projeto desenvolvido em colaboração com Geisa França e Tiana Duarte.</em></p></> },
++        { id: "game-design", label: "Game Design", title: "E aí Man — Game Design", text: "", content: <><p><strong>Gênero:</strong> Aventura, plataforma 2D e puzzle<br /><strong>Ano:</strong> 2016 — atual<br /><strong>Categoria:</strong> Game Design, Game Art e Design de Personagens</p><p><em>E aí Man</em> é um jogo de aventura e plataforma 2D que acompanha Luketa, um garoto de 12 anos que parte em busca de seu melhor amigo desaparecido durante uma gincana na comunidade onde vivem.</p><p>Ambientado em uma comunidade brasileira, o jogo combina exploração, combate e resolução de puzzles em fases inspiradas no cotidiano urbano. Ao longo da jornada, o jogador enfrenta equipes rivais, coleta itens, supera obstáculos e utiliza materiais recicláveis para criar e aprimorar equipamentos.</p><p>O projeto contempla a construção da narrativa, a concepção de personagens e cenários, o planejamento das mecânicas de gameplay, a progressão de dificuldade e a estruturação das interfaces e dos fluxos de jogo. A direção visual busca representar a identidade cultural dos ambientes e personagens por meio de uma estética 2D inspirada na cultura urbana, no hip-hop e nas relações de amizade.</p><p><strong>Minha contribuição:</strong> desenvolvimento conceitual e visual do jogo, com foco em Game Design, Game Art, criação de personagens e ambientação, conforme as etapas desenvolvidas no projeto.</p><p><strong>Ferramenta:</strong> Construct 2.</p><p><em>Projeto desenvolvido em colaboração com Geisa França e Tiana Duarte.</em></p></> },
+         { id: "level-design", label: "Level Design", title: "Level Design", text: "Fases e mapas que estruturam a exploração e a progressão do jogo.", media: [{ src: asset("eaiman/leveldesign.jpg"), alt: "Visão geral do level design de E aí Man" }, { src: asset("eaiman/level1.png"), alt: "Level design do jogo E aí Man" }, { src: asset("eaiman/level2.png"), alt: "Level design do jogo E aí Man" }, { src: asset("eaiman/level3.png"), alt: "Level design do jogo E aí Man" }] },
+         { id: "assets", label: "Assets", title: "Assets do jogo", text: "Assets de personagens e elementos visuais preparados para o gameplay.", media: [{ src: asset("eaiman/assets-player.jpg"), alt: "Asset do jogo E aí Man" }, { src: asset("eaiman/assets-enemy1.jpg"), alt: "Asset do jogo E aí Man" }, { src: asset("eaiman/assets-enemy2.jpg"), alt: "Asset do jogo E aí Man" }, { src: asset("eaiman/assets4.jpg"), alt: "Asset do jogo E aí Man" }] },
+         { id: "telas-de-jogo", label: "Telas de jogo", title: "Telas de jogo", text: "Interfaces e telas do jogo, incluindo HUD, início, conquistas e créditos.", media: [{ src: asset("eaiman/HUD_GAMEPLAY.png"), alt: "Tela de gameplay em alta resolução do jogo E aí Man" }, { src: asset("eaiman/hud gameplyapc.jpg"), alt: "Tela do jogo E aí Man" }, { src: asset("eaiman/HUD_GAMEPLAYmobile.png"), alt: "Tela do jogo E aí Man" }, { src: asset("eaiman/telainicio.png"), alt: "Tela do jogo E aí Man" }, { src: asset("eaiman/tela2.png"), alt: "Tela do jogo E aí Man" }, { src: asset("eaiman/telaachievments.png"), alt: "Tela do jogo E aí Man" }, { src: asset("eaiman/telacreditos.png"), alt: "Tela do jogo E aí Man" }] },
+@@ -274,7 +276,7 @@ type CaseSectionCopy = Pick<CaseSection, "label" | "title" | "text"> & Partial<P
+ const englishCopy: Record<string, { intro: string; sections: CaseSectionCopy[] }> = {
+   glitchcast: { intro: "Visual identity, content and app concept for the Glitch404 group podcast.", sections: [{ label: "Visual identity", title: "Visual identity", text: "Identity developed for the Glitchcast podcast, with symbol, lettering, vibrant palette and variations for different backgrounds." }, { label: "Branding", title: "Branding", text: "The brand system organizes Glitchcast's visual elements and creates recognition across different touchpoints." }, { label: "Social media", title: "Social media", text: "Communication pieces for episodes, content and podcast promotion across social platforms." }, { label: "Illustrations", title: "Illustrations and key visuals", text: "Exploration of the identity's main elements in compositions that present the podcast's visual universe." }, { label: "App", title: "Glitchcast app", text: "Podcast app concept translating the visual identity into a digital listening, discovery and community experience." }] },
+   bogused: { intro: "Game art direction, interface and visual asset production for characters and environments.", sections: [{ label: "Branding", title: "Visual direction", text: "Bogused is a game project with its own visual direction, built from a dark atmosphere and expressive characters." }, { label: "Interface", title: "Game interface", text: "A selection screen that organizes the characters and translates Bogused's narrative into a game experience." },  { label: "Characters", title: "Character design", text: "Character studies developed to give personality and coherence to the game universe." }, { label: "Environments", title: "Environment design", text: "Environment elements and illustrations that build the game's atmosphere." }] },
+-  museus: { intro: "First major UX Design project — developed as a cultural catalogue app for the Museums of Salvador.", sections: [{ label: "UX Design", title: "Experience and journey", text: "An app designed to bring museums, exhibitions, artworks and artists together in a cultural discovery experience." }, { label: "Research", title: "Research and architecture", text: "Content and flow organization to make it easier to discover museums, exhibitions, artworks and artists." }, { label: "UI Design", title: "Flows and screens", text: "An editorial interface for navigating cultural content with clarity." }, { label: "High fidelity", title: "High-fidelity mockups", text: "High-fidelity screens of the Museums app, showing colors, imagery and interface details." }] },
++  museus: { intro: "My first major UX Design project, developed as a cultural catalog app for the Museums of Salvador.", sections: [{ label: "UX Design", title: "Experience and journey", text: "An app designed to bring museums, exhibitions, artworks and artists together in a cultural discovery experience." }, { label: "Research", title: "Research and architecture", text: "Content and flow organization to make it easier to discover museums, exhibitions, artworks and artists." }, { label: "UI Design", title: "Flows and screens", text: "An editorial interface for navigating cultural content with clarity." }, { label: "High fidelity", title: "High-fidelity mockups", text: "High-fidelity screens of the Museums app, showing colors, imagery and interface details." }] },
+   "ksi-consultas": { intro: "Brand identity, stationery and social media management for a database lookup and credit recovery company.", sections: [{ id: "branding", label: "Branding", title: "Brand identity", text: "", content: <KsiBrandStory language="en" /> }, { id: "papelaria", label: "Stationery", title: "Stationery", text: "Identity applications across the company communication materials." }, { id: "midias-sociais", label: "Social media", title: "Social media content", text: "Content creation and management to bring the brand closer to its audience." }] },
+   "in9-midia": { intro: "Ongoing work since 2014 in graphic and UI design at In9 Mídia, connecting the company identity with digital signage solutions, products, campaigns and customer communications.", sections: [{ id: "institucional", label: "Company identity", title: "Identity, mascots and brand presentation", text: "Materials presenting In9 Mídia's visual identity, mascots and the solutions offered by the company." }, { id: "produtos-aplicativos", label: "Products and apps", title: "Digital experiences for different businesses", text: "Product presentations from In9 Mídia, including the NeoNews Studio app, a store management system and digital menu solutions." }, { id: "templates-dooh", label: "DOOH templates", title: "Templates for digital signage", text: "Layouts for news, scoreboards, offers and other content displayed on digital screens, adapted to the DOOH format." }, { id: "redes-sociais", label: "Social media", title: "Social media content", text: "Content pieces and digital formats presenting In9 Mídia products, services and news." }, { id: "campanhas-eventos", label: "Campaigns and events", title: "Campaigns, ads and special dates", text: "Promotional campaigns, ads and seasonal content for products and audiences across digital channels." }, { id: "videos", label: "Videos", title: "Product and communication videos", text: "Videos introducing and promoting In9 Mídia solutions, products and services." }] },
+   "os-periquitos": { intro: "Editorial illustration and historical literature commemorating the 200th anniversary of Bahia’s Independence.", sections: [{ label: "Presentation", title: "Os Periquitos — Editorial Illustration and Historical Literature", text: "", content: <OsPeriquitosStory language="en" /> }] },
+@@ -282,7 +284,7 @@ const englishCopy: Record<string, { intro: string; sections: CaseSectionCopy[] }
+   "sempre-vitta": { intro: "Visual identity for a brand connected to nature, care and vitality.", sections: [{ label: "Visual identity", title: "Visual identity", text: "An organic and welcoming visual language for Sempre Vitta, built around the relationship between nature, care and vitality." }] },
+   "lcr-marcenaria": { intro: "Brand identity and workshop signage inspired by raw wood textures.", sections: [{ label: "Visual identity", title: "Visual identity", text: "Identity developed for LCR Marcenaria, combining the initials of the name with a direct, handcrafted presence." }] },
+   lilaz: { intro: "Identity and packaging for a small custom decoration business.", sections: [{ label: "Visual identity", title: "Visual identity", text: "A delicate and recognizable identity for a custom decoration business." }, { label: "Packaging", title: "Packaging", text: "Applications designed to carry the identity into the delivery and product experience." }] },
+-  "e-ai-man-jogo": { intro: "A 2D adventure platformer and puzzle game about friendship and belonging.", sections: [{ label: "Game Design", title: "E aí Man — Game Design", text: "", content: <><p><strong>Genre:</strong> 2D adventure platformer and puzzle game<br /><strong>Year:</strong> 2020<br /><strong>Category:</strong> Game Design, Game Art and Character Design</p><p><em>E aí Man</em> is a 2D adventure platformer starring Luketa, a 12-year-old boy who sets out to find his best friend after he goes missing during a community field day.</p><p>Set in a Brazilian community, the game combines exploration, combat and puzzle-solving across levels inspired by everyday urban life. Along the way, players face rival teams, collect items, overcome obstacles, and use recyclable materials to craft and upgrade equipment.</p><p>The project brings together narrative development, character and environment design, gameplay mechanics, difficulty progression, and the structure of the game's interfaces and flows. Its visual direction represents the cultural identity of its settings and characters through a 2D aesthetic inspired by urban culture, hip-hop and friendship.</p><p><strong>My contribution:</strong> Conceptual and visual development of the game, with a focus on Game Design, Game Art, character creation and world-building, across the project's development stages.</p><p><strong>Tool:</strong> Construct 2.</p><p><em>Project developed in collaboration with Geisa França and Tiana Duarte.</em></p></> }, { label: "Level Design", title: "Level Design", text: "Levels and maps structure the game's exploration and progression." }, { label: "Assets", title: "Game assets", text: "Character and visual assets prepared for gameplay." }, { label: "Game screens", title: "Game screens", text: "Interfaces and screens, including the HUD, title screen, achievements and credits." }, { label: "Concept art", title: "Concept art", text: "Visual studies of the characters and the game world." }, { label: "Gameplay", title: "Gameplay videos", text: "Previews of the game running in Construct 2." }] },
++  "e-ai-man-jogo": { intro: "A 2D adventure platformer and puzzle game about friendship and belonging.", sections: [{ label: "Game Design", title: "E aí Man — Game Design", text: "", content: <><p><strong>Genre:</strong> 2D adventure platformer and puzzle game<br /><strong>Year:</strong> 2016 — present<br /><strong>Category:</strong> Game Design, Game Art and Character Design</p><p><em>E aí Man</em> is a 2D adventure platformer starring Luketa, a 12-year-old boy who sets out to find his best friend after he goes missing during a community field day.</p><p>Set in a Brazilian community, the game combines exploration, combat and puzzle-solving across levels inspired by everyday urban life. Along the way, players face rival teams, collect items, overcome obstacles, and use recyclable materials to craft and upgrade equipment.</p><p>The project brings together narrative development, character and environment design, gameplay mechanics, difficulty progression, and the structure of the game's interfaces and flows. Its visual direction represents the cultural identity of its settings and characters through a 2D aesthetic inspired by urban culture, hip-hop and friendship.</p><p><strong>My contribution:</strong> Conceptual and visual development of the game, with a focus on Game Design, Game Art, character creation and world-building, across the project's development stages.</p><p><strong>Tool:</strong> Construct 2.</p><p><em>Project developed in collaboration with Geisa França and Tiana Duarte.</em></p></> }, { label: "Level Design", title: "Level Design", text: "Levels and maps structure the game's exploration and progression." }, { label: "Assets", title: "Game assets", text: "Character and visual assets prepared for gameplay." }, { label: "Game screens", title: "Game screens", text: "Interfaces and screens, including the HUD, title screen, achievements and credits." }, { label: "Concept art", title: "Concept art", text: "Visual studies of the characters and the game world." }, { label: "Gameplay", title: "Gameplay videos", text: "Previews of the game running in Construct 2." }] },
+ };
+ 
+ englishCopy["in9-midia"].sections = [
+@@ -308,20 +310,44 @@ englishCopy.museus.sections[0].insightGroups = [
+   { eyebrow: "App opportunities", title: "How can the app help?", intro: "Needs and difficulties identified across the seven user profiles informed opportunities to guide the app's features.", items: [{ title: "Centralized information", text: "Bring reliable information about museums, exhibitions, hours, tickets and services together in one place." }, { title: "Visit planning", text: "Offer maps, public transit routes, travel times and itinerary suggestions based on each user's interests and availability." }, { title: "Detailed accessibility", text: "Provide clear details about physical, sensory and communication accessibility so users can plan independently and safely." }, { title: "Updated exhibitions and events", text: "Share exhibitions, events, workshops and educational activities, with filters by topic, age group and activity type." }, { title: "Ticket and benefit filters", text: "Show prices, free admission, discounts and benefits for students, teachers, groups and other audiences." }, { title: "Museum facilities", text: "Present details about restrooms, rest areas, food, lockers and other services to help visitors find their way." }, { title: "Personalized recommendations", text: "Suggest museums, exhibitions and itineraries based on interests such as history, contemporary art, children's activities or free events." }, { title: "Favorites and sharing", text: "Let people save museums and events, build visit lists and share recommendations with friends, family or school groups." }] },
+ ];
+ 
++// Títulos em inglês quando diferem do original.
++const englishTitles: Record<string, string> = { museus: "Museums Project" };
++
++// Títulos dos vídeos em inglês, na mesma ordem da versão em português.
++const englishVideoTitles: Record<string, string[]> = {
++  "in9-midia": ["In9 Mídia company presentation", "NeoNews Studio presentation", "SGA system presentation", "Digital menu boards presentation", "COVID-19 awareness campaign", "In9 Mídia webinar"],
++  "e-ai-man-jogo": ["E aí Man — Gameplay 1", "E aí Man — Gameplay 2"],
++};
++
++// Textos alternativos em inglês: nome da persona para as jornadas e "projeto — seção" para as demais imagens.
++function englishAlt(alt: string, projectTitle: string, sectionTitle: string, index: number, total: number) {
++  const persona = alt.match(/persona (.+)$/);
++  if (persona) return `Journey map — persona ${persona[1]}`;
++  return total > 1 ? `${projectTitle} — ${sectionTitle} (${index + 1})` : `${projectTitle} — ${sectionTitle}`;
++}
++
+ cases.en = cases.pt.map((project) => {
+   const copy = englishCopy[project.slug];
++  const title = englishTitles[project.slug] || project.title;
+   return {
+     ...project,
++    title,
+     intro: copy?.intro || project.intro,
+     labels: copy ? copy.sections.map((section) => section.label) : project.labels,
+-    sections: project.sections.map((section, index) => ({
+-      ...section,
+-      ...(copy?.sections[index] || {}),
+-      // Both languages use the same gallery and section anchor.
+-      id: section.id,
+-      media: section.media,
+-      videos: section.videos,
+-    })),
++    sections: project.sections.map((section, index) => {
++      const translated = copy?.sections[index];
++      const sectionTitle = translated?.title || section.title;
++      return {
++        ...section,
++        ...(translated || {}),
++        // Both languages use the same gallery and section anchor.
++        id: section.id,
++        media: section.id === "mockup-alta-fidelidade" && project.slug === "museus"
++          ? getMuseumsMockups("en")
++          : section.media?.map((media, mediaIndex, all) => ({ ...media, alt: englishAlt(media.alt, title, sectionTitle, mediaIndex, all.length) })),
++        videos: section.videos?.map((video, videoIndex) => ({ ...video, title: englishVideoTitles[project.slug]?.[videoIndex] || video.title })),
++      };
++    }),
+     cta: project.cta ? { label: "View the full app study →", href: "/en/projects/ux/glitchcast-app" } : undefined,
+   };
+ });
+@@ -332,11 +358,9 @@ export default function CasePage() {
+   const [enMatch, enParams] = useRoute("/en/cases/:slug");
+   const [, ptParams] = useRoute("/cases/:slug");
+   const language: Language = enMatch || location.startsWith("/en/") ? "en" : "pt";
+-  const slug = enParams?.slug || ptParams?.slug || "glitchcast";
+-  const project = cases[language].find((item) => item.slug === slug) || cases[language][0];
+-  const homePath = language === "en" ? "/en" : "/";
+-  const switchPath = language === "en" ? `/cases/${project.slug}` : `/en/cases/${project.slug}`;
+-  const ctaHref = project.cta ? sitePath(language === "en" ? "/en/projects/ux/glitchcast-app" : project.cta.href) : undefined;
++  const slug = enParams?.slug || ptParams?.slug;
++  const project = cases[language].find((item) => item.slug === slug);
++  usePageMeta(project?.title ?? (language === "en" ? "Page not found" : "Página não encontrada"), language);
+ 
+   useEffect(() => {
+     if (!enlargedMedia) return;
+@@ -346,6 +370,13 @@ export default function CasePage() {
+     return () => { document.removeEventListener("keydown", closeOnEscape); document.body.style.overflow = ""; };
+   }, [enlargedMedia]);
+ 
++  // Endereço de case inexistente mostra a página "não encontrada" em vez de outro projeto.
++  if (!project) return <NotFound />;
++
++  const homePath = language === "en" ? "/en" : "/";
++  const switchPath = language === "en" ? `/cases/${project.slug}` : `/en/cases/${project.slug}`;
++  const ctaHref = project.cta ? sitePath(language === "en" ? "/en/projects/ux/glitchcast-app" : project.cta.href) : undefined;
++
+   // Evita exibir o mesmo arquivo de imagem mais de uma vez dentro do mesmo case.
+   // A primeira ocorrência é mantida; imagens de projetos diferentes não são afetadas.
+   const seenMedia = new Set<string>();
+@@ -359,5 +390,5 @@ export default function CasePage() {
+   }));
+   const isMuseumsCase = project.slug === "museus";
+ 
+-  return <div className="original-project-page case-page"><header><nav className="nav"><a href={sitePath(homePath)} className="logo">CECÍLIA<span>·</span>RODRIGUES</a><div className="nav-links"><a href={sitePath(`${homePath}#sobre`)}>{language === "en" ? "About" : "Sobre"}</a><a href={sitePath(`${homePath}#trabalhos`)}>{language === "en" ? "Work" : "Trabalhos"}</a><a href={sitePath(`${homePath}#contato`)}>{language === "en" ? "Contact" : "Contato"}</a><ThemeToggle language={language} /><button className="plain-language" onClick={() => navigate(switchPath)}>{language === "en" ? "PT" : "EN"}</button></div></nav></header><main><section className="case-hero"><div className="wrap"><div className="eyebrow mono">{language === "en" ? "Project case" : "Case de projeto"}</div><h1>{project.title}</h1><p>{project.intro}</p><div className="case-meta"><span>{project.year}</span><span>{language === "en" ? "Selected work" : "Trabalho selecionado"}</span></div></div></section><section className="case-navigation"><div className="wrap"><div className="case-labels" aria-label={language === "en" ? "Project areas" : "Áreas do projeto"}>{project.labels.map((label, index) => <a key={label} href={`#${project.sections[index]?.id || project.sections[0].id}`} className="case-label">{label} <ArrowUpRight size={13} /></a>)}</div></div></section><section><div className="wrap case-sections">{sectionsWithUniqueMedia.map((section, index) => <article className="case-section" id={section.id} key={`${project.slug}-${section.id}`}><div className="case-section-index">{String(index + 1).padStart(2, "0")} / {String(project.sections.length).padStart(2, "0")}</div><div className="case-section-content"><div className="case-section-heading"><span className="case-section-label">{section.label}</span><h2>{section.title}</h2></div>{section.content ? <div className="case-richtext">{section.content}</div> : section.text && <p>{section.text}</p>}{isMuseumsCase && section.id === "pesquisa" && <MuseumArchitecture language={language} />}{section.carousel && section.media ? <MuseumJourneyCarousel media={section.media} onEnlarge={setEnlargedMedia} /> : section.media && section.media.length > 0 && isMuseumsCase && (section.id === "pesquisa" || section.id === "mockup-alta-fidelidade" || section.id === "ui-design") ? <div className={`museum-screen-gallery case-museum-gallery ${section.id === "pesquisa" ? "museum-lowfi-case-gallery" : "museum-highfi-case-gallery"}`}>{[0, 1, 2].map((columnIndex) => <div className={`museum-screen-gallery-column museum-screen-gallery-column-${columnIndex}`} key={columnIndex}>{section.media!.filter((_, mediaIndex) => mediaIndex % 3 === columnIndex).map((media) => <figure className="museum-screen-gallery-item" key={media.src}><button className="case-image-zoom" type="button" onClick={() => setEnlargedMedia(media)} aria-label={language === "en" ? `Enlarge ${media.alt}` : `Ampliar ${media.alt}`}><img src={media.src} alt={media.alt} loading="lazy" /></button></figure>)}</div>)}</div> : section.media && section.media.length > 0 && <div className="case-media-grid">{section.media.map((media) => <figure key={media.src}><button className="case-image-zoom" type="button" onClick={() => setEnlargedMedia(media)} aria-label={language === "en" ? `Enlarge ${media.alt}` : `Ampliar ${media.alt}`}><img src={media.src} alt={media.alt} loading="lazy" /></button></figure>)}</div>}{section.videos && <div className="case-video-list">{section.videos.map((video) => <figure key={video.src}><video controls muted playsInline preload="metadata" aria-label={video.title}><source src={video.src} type="video/mp4" />{language === "en" ? "Your browser does not support embedded video." : "Seu navegador não oferece suporte a vídeo incorporado."}</video><figcaption>{video.title}</figcaption></figure>)}</div>}{section.insightGroups && <div className="museum-insight-groups">{section.insightGroups.map((group) => <section className="museum-insight-group" key={group.eyebrow}><span className="museum-insight-eyebrow">{group.eyebrow}</span><h3>{group.title}</h3><p>{group.intro}</p><div className="museum-insight-grid">{group.items.map((item, itemIndex) => <article key={item.title}><span>{String(itemIndex + 1).padStart(2, "0")}</span><h4>{item.title}</h4><i /><p>{item.text}</p></article>)}</div></section>)}</div>}</div></article>)}{ctaHref && <a className="case-cta" href={ctaHref}>{project.cta?.label} <ArrowUpRight size={17} /></a>}</div></section><section className="case-project-nav"><div className="wrap"><div className="case-project-nav-heading"><span className="case-section-label">{language === "en" ? "Explore more" : "Continue explorando"}</span><h2>{language === "en" ? "Other projects" : "Outros projetos"}</h2></div><nav className="case-project-links" aria-label={language === "en" ? "Other project cases" : "Outros cases de projeto"}>{cases[language].filter((otherCase) => otherCase.slug !== project.slug).map((otherCase) => <a className="case-project-link" key={otherCase.slug} href={sitePath(language === "en" ? `/en/cases/${otherCase.slug}` : `/cases/${otherCase.slug}`)}>{otherCase.title} <ArrowUpRight size={13} aria-hidden="true" /></a>)}</nav></div></section><SiteContact language={language} /></main><footer><div className="wrap">© 2026 Cecília Rodrigues</div></footer>{enlargedMedia && <div className="case-lightbox" role="dialog" aria-modal="true" aria-label={language === "en" ? "Enlarged project image" : "Imagem ampliada do projeto"} onMouseDown={(event) => { if (event.target === event.currentTarget) setEnlargedMedia(null); }}><button className="case-lightbox-back" type="button" onClick={() => setEnlargedMedia(null)}><ArrowLeft size={18} />{language === "en" ? "Back" : "Voltar"}</button><button className="case-lightbox-close" type="button" onClick={() => setEnlargedMedia(null)} aria-label={language === "en" ? "Close enlarged image" : "Fechar imagem ampliada"}><X size={22} /></button><img src={enlargedMedia.src} alt={enlargedMedia.alt} /><p>{enlargedMedia.alt}</p></div>}</div>;
++  return <div className="original-project-page case-page"><header><nav className="nav"><a href={sitePath(homePath)} className="logo">CECÍLIA<span>·</span>RODRIGUES</a><div className="nav-links"><a href={sitePath(`${homePath}#sobre`)}>{language === "en" ? "About" : "Sobre"}</a><a href={sitePath(`${homePath}#trabalhos`)}>{language === "en" ? "Work" : "Trabalhos"}</a><a href={sitePath(`${homePath}#contato`)}>{language === "en" ? "Contact" : "Contato"}</a><ThemeToggle language={language} /><button className="plain-language" onClick={() => navigate(switchPath)}>{language === "en" ? "PT" : "EN"}</button></div></nav></header><main><section className="case-hero"><div className="wrap"><div className="eyebrow mono">{language === "en" ? "Project case" : "Case de projeto"}</div><h1>{project.title}</h1><p>{project.intro}</p><div className="case-meta"><span>{localizeYear(project.year, language)}</span><span>{language === "en" ? "Selected work" : "Trabalho selecionado"}</span></div></div></section><section className="case-navigation"><div className="wrap"><div className="case-labels" aria-label={language === "en" ? "Project areas" : "Áreas do projeto"}>{project.labels.map((label, index) => <a key={label} href={`#${project.sections[index]?.id || project.sections[0].id}`} className="case-label">{label} <ArrowUpRight size={13} /></a>)}</div></div></section><section><div className="wrap case-sections">{sectionsWithUniqueMedia.map((section, index) => <article className="case-section" id={section.id} key={`${project.slug}-${section.id}`}><div className="case-section-index">{String(index + 1).padStart(2, "0")} / {String(project.sections.length).padStart(2, "0")}</div><div className="case-section-content"><div className="case-section-heading"><span className="case-section-label">{section.label}</span><h2>{section.title}</h2></div>{section.content ? <div className="case-richtext">{section.content}</div> : section.text && <p>{section.text}</p>}{isMuseumsCase && section.id === "pesquisa" && <MuseumArchitecture language={language} />}{section.carousel && section.media ? <MuseumJourneyCarousel media={section.media} onEnlarge={setEnlargedMedia} language={language} /> : section.media && section.media.length > 0 && isMuseumsCase && (section.id === "pesquisa" || section.id === "mockup-alta-fidelidade" || section.id === "ui-design") ? <div className={`museum-screen-gallery case-museum-gallery ${section.id === "pesquisa" ? "museum-lowfi-case-gallery" : "museum-highfi-case-gallery"}`}>{[0, 1, 2].map((columnIndex) => <div className={`museum-screen-gallery-column museum-screen-gallery-column-${columnIndex}`} key={columnIndex}>{section.media!.filter((_, mediaIndex) => mediaIndex % 3 === columnIndex).map((media) => <figure className="museum-screen-gallery-item" key={media.src}><button className="case-image-zoom" type="button" onClick={() => setEnlargedMedia(media)} aria-label={language === "en" ? `Enlarge ${media.alt}` : `Ampliar ${media.alt}`}><img src={media.src} alt={media.alt} loading="lazy" /></button></figure>)}</div>)}</div> : section.media && section.media.length > 0 && <div className="case-media-grid">{section.media.map((media) => <figure key={media.src}><button className="case-image-zoom" type="button" onClick={() => setEnlargedMedia(media)} aria-label={language === "en" ? `Enlarge ${media.alt}` : `Ampliar ${media.alt}`}><img src={media.src} alt={media.alt} loading="lazy" /></button></figure>)}</div>}{section.videos && <div className="case-video-list">{section.videos.map((video) => <figure key={video.src}><video controls muted playsInline preload="metadata" aria-label={video.title}><source src={video.src} type="video/mp4" />{language === "en" ? "Your browser does not support embedded video." : "Seu navegador não oferece suporte a vídeo incorporado."}</video><figcaption>{video.title}</figcaption></figure>)}</div>}{section.insightGroups && <div className="museum-insight-groups">{section.insightGroups.map((group) => <section className="museum-insight-group" key={group.eyebrow}><span className="museum-insight-eyebrow">{group.eyebrow}</span><h3>{group.title}</h3><p>{group.intro}</p><div className="museum-insight-grid">{group.items.map((item, itemIndex) => <article key={item.title}><span>{String(itemIndex + 1).padStart(2, "0")}</span><h4>{item.title}</h4><i /><p>{item.text}</p></article>)}</div></section>)}</div>}</div></article>)}{ctaHref && <a className="case-cta" href={ctaHref}>{project.cta?.label} <ArrowUpRight size={17} /></a>}</div></section><section className="case-project-nav"><div className="wrap"><div className="case-project-nav-heading"><span className="case-section-label">{language === "en" ? "Explore more" : "Continue explorando"}</span><h2>{language === "en" ? "Other projects" : "Outros projetos"}</h2></div><nav className="case-project-links" aria-label={language === "en" ? "Other project cases" : "Outros cases de projeto"}>{cases[language].filter((otherCase) => otherCase.slug !== project.slug).map((otherCase) => <a className="case-project-link" key={otherCase.slug} href={sitePath(language === "en" ? `/en/cases/${otherCase.slug}` : `/cases/${otherCase.slug}`)}>{otherCase.title} <ArrowUpRight size={13} aria-hidden="true" /></a>)}</nav></div></section><SiteContact language={language} /></main><footer><div className="wrap">© 2026 Cecília Rodrigues</div></footer>{enlargedMedia && <div className="case-lightbox" role="dialog" aria-modal="true" aria-label={language === "en" ? "Enlarged project image" : "Imagem ampliada do projeto"} onMouseDown={(event) => { if (event.target === event.currentTarget) setEnlargedMedia(null); }}><button className="case-lightbox-back" type="button" onClick={() => setEnlargedMedia(null)}><ArrowLeft size={18} />{language === "en" ? "Back" : "Voltar"}</button><button className="case-lightbox-close" type="button" onClick={() => setEnlargedMedia(null)} aria-label={language === "en" ? "Close enlarged image" : "Fechar imagem ampliada"}><X size={22} /></button><img src={enlargedMedia.src} alt={enlargedMedia.alt} /><p>{enlargedMedia.alt}</p></div>}</div>;
+ }
+diff --git a/client/src/pages/GlitchcastAppPage.tsx b/client/src/pages/GlitchcastAppPage.tsx
+index e8c36cf..cd03b9d 100644
+--- a/client/src/pages/GlitchcastAppPage.tsx
++++ b/client/src/pages/GlitchcastAppPage.tsx
+@@ -2,6 +2,7 @@ import { useLocation } from "wouter";
+ import SiteContact from "@/components/SiteContact";
+ import ThemeToggle from "@/components/ThemeToggle";
+ import { sitePath } from "@/lib/sitePath";
++import { usePageMeta } from "@/lib/pageMeta";
+ 
+ export default function GlitchcastAppPage() {
+   const [location] = useLocation();
+@@ -10,7 +11,7 @@ export default function GlitchcastAppPage() {
+     tag: "UX Design / Glitchcast",
+     title: "Glitchcast App",
+     intro: "A podcast app concept that extends the Glitchcast identity into a focused listening experience.",
+-    back: "← Back to UX Design",
++    back: "← Back to the Glitchcast case",
+     overview: "The Glitchcast App project translates the podcast brand into a digital product, balancing discovery, listening and community around a clear, familiar interface.",
+     problemTitle: "Context and challenge",
+     problem: "Design a space where listeners can discover episodes, continue listening and explore the Glitch404 group universe without losing the energy of the original identity.",
+@@ -24,7 +25,7 @@ export default function GlitchcastAppPage() {
+     tag: "UX Design / Glitchcast",
+     title: "Glitchcast App",
+     intro: "Um conceito de aplicativo de podcast que leva a identidade Glitchcast para uma experiência de escuta focada.",
+-    back: "← Voltar para UX Design",
++    back: "← Voltar para o case Glitchcast",
+     overview: "O projeto Glitchcast App traduz a marca do podcast para um produto digital, equilibrando descoberta, escuta e comunidade em uma interface clara e familiar.",
+     problemTitle: "Contexto e desafio",
+     problem: "Criar um espaço em que ouvintes possam descobrir episódios, continuar escutando e explorar o universo do grupo Glitch404 sem perder a energia da identidade original.",
+@@ -36,5 +37,7 @@ export default function GlitchcastAppPage() {
+     note: "Projeto de UX apresentado no portfólio de Cecília Rodrigues",
+   };
+ 
+-  return <div className="original-project-page"><header><nav className="nav"><a href={sitePath(language === "en" ? "/en" : "/")} className="logo">CECÍLIA<span>·</span>RODRIGUES</a><div className="nav-links"><a href={sitePath(language === "en" ? "/en#sobre" : "/#sobre")}>{language === "en" ? "About" : "Sobre"}</a><a href={sitePath(language === "en" ? "/en#conhecimentos" : "/#conhecimentos")}>{language === "en" ? "Knowledge" : "Conhecimentos"}</a><a href={sitePath(language === "en" ? "/en#trabalhos" : "/#trabalhos")}>{language === "en" ? "Work" : "Trabalhos"}</a><a href={sitePath(language === "en" ? "/en#contato" : "/#contato")}>{language === "en" ? "Contact" : "Contato"}</a><ThemeToggle language={language} /><a className="plain-language" href={sitePath(language === "en" ? "/projetos/ux/glitchcast-app" : "/en/projects/ux/glitchcast-app")}>{language === "en" ? "PT" : "EN"}</a></div></nav></header><main><section className="page-hero"><div className="wrap"><div className="eyebrow mono">{copy.tag}</div><h1>{copy.title}</h1><p>{copy.intro}</p><a className="back-link" href={sitePath(language === "en" ? "/en/projects/ux" : "/projetos/ux")}>{copy.back}</a></div></section><section><div className="wrap"><article className="project-detail glitchcast-app-case"><div className="project-index">01 / 01<br /><br />2021</div><div><h2>{copy.title}</h2><p>{copy.overview}</p><div className="project-tools">{copy.tools.map((tool) => <span className="project-tool" key={tool}>{tool}</span>)}</div><div className="detail-block"><h3>{copy.problemTitle}</h3><p>{copy.problem}</p></div><div className="detail-block"><h3>{copy.processTitle}</h3><p>{copy.process}</p></div><div className="detail-block"><h3>{copy.interfaceTitle}</h3><p>{copy.interface}</p></div><div className="detail-note">{copy.note}</div></div></article></div></section><SiteContact language={language} /></main><footer><div className="wrap">© 2026 Cecília Rodrigues</div></footer></div>;
++  usePageMeta(copy.title, language);
++
++  return <div className="original-project-page"><header><nav className="nav"><a href={sitePath(language === "en" ? "/en" : "/")} className="logo">CECÍLIA<span>·</span>RODRIGUES</a><div className="nav-links"><a href={sitePath(language === "en" ? "/en#sobre" : "/#sobre")}>{language === "en" ? "About" : "Sobre"}</a><a href={sitePath(language === "en" ? "/en#conhecimentos" : "/#conhecimentos")}>{language === "en" ? "Knowledge" : "Conhecimentos"}</a><a href={sitePath(language === "en" ? "/en#trabalhos" : "/#trabalhos")}>{language === "en" ? "Work" : "Trabalhos"}</a><a href={sitePath(language === "en" ? "/en#contato" : "/#contato")}>{language === "en" ? "Contact" : "Contato"}</a><ThemeToggle language={language} /><a className="plain-language" href={sitePath(language === "en" ? "/projetos/ux/glitchcast-app" : "/en/projects/ux/glitchcast-app")}>{language === "en" ? "PT" : "EN"}</a></div></nav></header><main><section className="page-hero"><div className="wrap"><div className="eyebrow mono">{copy.tag}</div><h1>{copy.title}</h1><p>{copy.intro}</p><a className="back-link" href={sitePath(language === "en" ? "/en/cases/glitchcast" : "/cases/glitchcast")}>{copy.back}</a></div></section><section><div className="wrap"><article className="project-detail glitchcast-app-case"><div className="project-index">01 / 01<br /><br />2021</div><div><h2>{copy.title}</h2><p>{copy.overview}</p><div className="project-tools">{copy.tools.map((tool) => <span className="project-tool" key={tool}>{tool}</span>)}</div><div className="detail-block"><h3>{copy.problemTitle}</h3><p>{copy.problem}</p></div><div className="detail-block"><h3>{copy.processTitle}</h3><p>{copy.process}</p></div><div className="detail-block"><h3>{copy.interfaceTitle}</h3><p>{copy.interface}</p></div><div className="detail-note">{copy.note}</div></div></article></div></section><SiteContact language={language} /></main><footer><div className="wrap">© 2026 Cecília Rodrigues</div></footer></div>;
+ }
+diff --git a/client/src/pages/Home.tsx b/client/src/pages/Home.tsx
+index da5035c..4b15d2e 100644
+--- a/client/src/pages/Home.tsx
++++ b/client/src/pages/Home.tsx
+@@ -4,6 +4,7 @@ import { ArrowDown, ArrowUpRight, Check, Copy, Download, FileText, Mail, Menu, X
+ import ThemeToggle from "@/components/ThemeToggle";
+ import { useLocation } from "wouter";
+ import { sitePath } from "@/lib/sitePath";
++import { copyText, localizeYear, usePageMeta } from "@/lib/pageMeta";
+ 
+ const colors = ["#f0c23a", "#2b3eff", "#ff5a2e", "#2e9e4e", "#a45bea"];
+ 
+@@ -23,11 +24,11 @@ const featuredProjects: FeaturedProject[] = [
+   {
+     slug: "in9-midia",
+     title: "In9 Mídia",
+-    year: "2014 — Presente",
++    year: "2014 — atual",
+     category: { pt: "Digital Signage · UI Design · DOOH · Marketing", en: "Digital Signage · UI Design · DOOH · Marketing" },
+     description: {
+       pt: "Mais de 10 anos de atuação contínua liderando a criação de templates dinâmicos para Digital Signage (DOOH), wireframes de interfaces para apps e plataformas corporativas, além de gestão de campanhas de Google Ads.",
+-      en: "Over 10 years of continuous role leading dynamic templates for Digital Signage (DOOH), app and software interface wireframes, and corporate Google Ads campaigns.",
++      en: "Over 10 years of continuous work leading the creation of dynamic Digital Signage (DOOH) templates, interface wireframes for apps and corporate platforms, and Google Ads campaign management.",
+     },
+     image: asset("in9/templatesin9.png"),
+     tags: ["Digital Signage", "DOOH", "UI Wireframes", "Google Ads", "Redes Sociais"],
+@@ -50,8 +51,8 @@ const featuredProjects: FeaturedProject[] = [
+     year: "2018–2021",
+     category: { pt: "Identidade Visual · Papelaria · Redes Sociais · Web", en: "Visual Identity · Stationery · Social Media · Web" },
+     description: {
+-      pt: "Construção de marca completa, papelaria física e institucional, estratégia contínua de conteúdo para redes sociais e reestruturação web para empresa de consultas médicas especializadas.",
+-      en: "Comprehensive brand identity system, corporate stationery, social media content strategy, and website restructuring for a specialized healthcare clinic.",
++      pt: "Construção de marca completa, papelaria física e institucional, estratégia contínua de conteúdo para redes sociais e reestruturação web para uma empresa especializada em consultas a bancos de dados e recuperação de crédito.",
++      en: "Comprehensive brand identity system, corporate stationery, ongoing social media content strategy, and website restructuring for a company specializing in database lookups and credit recovery.",
+     },
+     image: asset("ksi/ksiposts.png"),
+     tags: ["Identidade de Marca", "Papelaria", "Mídias Sociais", "Design Gráfico"],
+@@ -59,17 +60,31 @@ const featuredProjects: FeaturedProject[] = [
+   {
+     slug: "e-ai-man-jogo",
+     title: "E aí Man (Jogo)",
+-    year: "2016-Presente",
++    year: "2016 — atual",
+     category: { pt: "UI de Jogo · Level Design · Concept Art · Personagens", en: "Game UI · Level Design · Concept Art · Characters" },
+     description: {
+       pt: "Jogo 2D de aventura, plataforma e puzzle ambientado em uma comunidade brasileira. Desenvolvimento conceitual completo: interfaces de jogo (menus, HUD), level design de fases e ilustração de personagens.",
+       en: "A 2D adventure and puzzle platformer set in a Brazilian community. Complete visual development: in-game UI (menus, HUD), level design progression, and character concept art.",
+     },
+     image: asset("eaiman/eaiman-grupo.jpg"),
+-    tags: ["Game UI", "Level Design", "Ilustração", "Construct2","JavaScript", "Narrativa"],
++    tags: ["Game UI", "Level Design", "Ilustração", "Construct 2", "JavaScript", "Narrativa"],
+   },
+ ];
+ 
++// Tradução das tags dos destaques para a versão em inglês.
++const tagTranslations: Record<string, string> = {
++  "Redes Sociais": "Social Media",
++  "Arquitetura da Informação": "Information Architecture",
++  Cultura: "Culture",
++  "Identidade de Marca": "Brand Identity",
++  Papelaria: "Stationery",
++  "Mídias Sociais": "Social Media",
++  "Design Gráfico": "Graphic Design",
++  "Ilustração": "Illustration",
++  Narrativa: "Storytelling",
++};
++const translateTag = (tag: string, language: Language) => (language === "en" ? tagTranslations[tag] || tag : tag);
++
+ type ArchiveProject = {
+   category: "ux" | "grafico" | "ilustracao" | "marketing";
+   label: { pt: string; en: string };
+@@ -147,7 +162,7 @@ const archiveProjects: ArchiveProject[] = [
+     year: "2018",
+     title: "Lilaz",
+     description: {
+-      pt: "Identidade e embalagens personalizadas para atelier de decorações afetivas.",
++      pt: "Identidade e embalagens personalizadas para ateliê de decorações afetivas.",
+       en: "Delicate identity and custom packaging for a boutique decoration studio.",
+     },
+     slug: "lilaz",
+@@ -228,14 +243,14 @@ const content = {
+     seeProject: "Ver projeto completo",
+   },
+   en: {
+-    nav: ["About", "Knowledge", "Featured", "Other Works", "Contact"],
++    nav: ["About", "Skills", "Featured", "Other Works", "Contact"],
+     heroEyebrow: "Multidisciplinary Designer · 12+ years of experience",
+     heroWords: ["the essential", "digital product", "UX design", "branding", "visual universe"],
+     heroTitle: ["Organizing ideas and", "giving shape to"],
+     heroSub: (
+       <>
+-        I’m <strong>Cecília Rodrigues</strong>, holding a bachelor's degree from <strong>UFBA</strong> and a specialization from <strong>UNEB</strong>.
+-        Working across digital products, brand identities, illustration, and visual communication — bringing method, consistency, and artistic craft to brands, games, and interfaces.
++        I’m <strong>Cecília Rodrigues</strong>, with a bachelor’s degree from <strong>UFBA</strong> and a specialization from <strong>UNEB</strong>.
++        I work across digital products, brand identities, illustration, and visual communication — bringing method, consistency, and artistic craft to brands, games, and digital experiences.
+       </>
+     ),
+     heroPrimary: "See featured",
+@@ -246,10 +261,10 @@ const content = {
+     aboutTitle: "About",
+     about: [
+       <>
+-        <strong>Bachelor in Industrial Design and Visual Communication (UFBA)</strong> and <strong>Specialist in Digital Game Design (UNEB)</strong>, with postgraduate studies in Digital Design and Web Development (UniAlphaville).
++        <strong>Bachelor’s degree in Industrial Design with a focus on Visual Communication (UFBA)</strong> and <strong>Specialist in Digital Game Design (UNEB)</strong>, with postgraduate studies in Digital Design and Web Development (UniAlphaville).
+       </>,
+       <>
+-        Working continuously since <strong>2014 at In9 Mídia</strong> as Graphic and UI Designer, developing Digital Signage (DOOH) templates, app interface wireframes, and corporate campaigns. Combined with over a decade of branding systems, editorial illustration, game art, and digital marketing — focused on clear messaging and high visual impact.
++        Working continuously since <strong>2014 at In9 Mídia</strong> as a Graphic and UI Designer, leading Digital Signage (DOOH) templates, app wireframes, and corporate campaigns. This experience adds to over a decade of branding, editorial illustration, game art, and digital marketing projects — always focused on clear, relevant communication with strong visual impact.
+       </>,
+     ],
+     skills: [
+@@ -259,7 +274,7 @@ const content = {
+       ["Illustration & Game Art", "Characters / Game UI / Level Design"],
+     ],
+     knowledgeTag: "Tools and skills",
+-    knowledgeTitle: "Knowledge and skills",
++    knowledgeTitle: "Skills and expertise",
+     knowledgeDescription: "Key tools and core competencies guiding my work.",
+     tools: [
+       ["Interface Design (UI/UX)", "Figma · Wireframing · User Testing · Prototyping"],
+@@ -296,7 +311,8 @@ function Stamp({ children, tone = "blue" }: { children: React.ReactNode; tone?:
+ 
+ export default function Home() {
+   const [location, navigate] = useLocation();
+-  const language: Language = location === "/en" ? "en" : "pt";
++  // Aceita "/en" e "/en/" (o GitHub Pages redireciona para o endereço com barra no final).
++  const language: Language = location === "/en" || location.startsWith("/en/") ? "en" : "pt";
+   const copy = content[language];
+   const [activeFilter, setActiveFilter] = useState("todos");
+   const [wordIndex, setWordIndex] = useState(0);
+@@ -305,8 +321,10 @@ export default function Home() {
+ 
+   const email = "ceciliacrdes@gmail.com";
+ 
+-  const handleCopyEmail = () => {
+-    navigator.clipboard.writeText(email);
++  usePageMeta(undefined, language);
++
++  const handleCopyEmail = async () => {
++    if (!(await copyText(email))) return;
+     setEmailCopied(true);
+     setTimeout(() => setEmailCopied(false), 2200);
+   };
+@@ -323,6 +341,11 @@ export default function Home() {
+     return () => window.clearInterval(timer);
+   }, [copy.heroWords.length]);
+ 
++  // Só exibe filtros que têm pelo menos um projeto, evitando grades vazias.
++  const availableFilters = copy.filters.filter(
++    ([value]) => value === "todos" || archiveProjects.some((project) => project.category === value),
++  );
++
+   const displayedArchive =
+     activeFilter === "todos"
+       ? archiveProjects
+@@ -356,7 +379,7 @@ export default function Home() {
+           <div className="nav-tools">
+             <ThemeToggle language={language} />
+             <span className="availability">
+-              <i /> {language === "pt" ? "Disponível p/ projetos" : "Available for projects"}
++              <i /> {language === "pt" ? "Disponível para projetos" : "Available for projects"}
+             </span>
+             <button
+               className="lang-switch"
+@@ -477,14 +500,14 @@ export default function Home() {
+                 <div className="featured-card-content">
+                   <div className="featured-card-meta">
+                     <span>{project.category[language]}</span>
+-                    <small>{project.year}</small>
++                    <small>{localizeYear(project.year, language)}</small>
+                   </div>
+                   <h3>{project.title}</h3>
+                   <p>{project.description[language]}</p>
+                   <div className="featured-card-tags">
+                     {project.tags.map((tag) => (
+                       <span className="featured-tag" key={tag}>
+-                        {tag}
++                        {translateTag(tag, language)}
+                       </span>
+                     ))}
+                   </div>
+@@ -508,7 +531,7 @@ export default function Home() {
+           />
+ 
+           <div className="filters">
+-            {copy.filters.map(([value, label]) => (
++            {availableFilters.map(([value, label]) => (
+               <button
+                 className={activeFilter === value ? "active" : ""}
+                 key={value}
+@@ -585,7 +608,7 @@ export default function Home() {
+               {/* Currículo em PDF */}
+               <div className="contact-card-box">
+                 <span className="contact-box-label">
+-                  {language === "en" ? "Curriculum Vitae" : "Currículo Oficial"}
++                  {language === "en" ? "Resume / CV" : "Currículo"}
+                 </span>
+                 <div className="contact-box-actions">
+                   <a
+diff --git a/client/src/pages/NotFound.tsx b/client/src/pages/NotFound.tsx
+index c4374ee..dc03b11 100644
+--- a/client/src/pages/NotFound.tsx
++++ b/client/src/pages/NotFound.tsx
+@@ -2,12 +2,15 @@ import { Button } from "@/components/ui/button";
+ import { Card, CardContent } from "@/components/ui/card";
+ import { AlertCircle, Home } from "lucide-react";
+ import { useLocation } from "wouter";
++import { usePageMeta } from "@/lib/pageMeta";
+ 
+ export default function NotFound() {
+-  const [, setLocation] = useLocation();
++  const [location, setLocation] = useLocation();
++  const english = location === "/en" || location.startsWith("/en/");
++  usePageMeta(english ? "Page not found" : "Página não encontrada", english ? "en" : "pt");
+ 
+   const handleGoHome = () => {
+-    setLocation("/");
++    setLocation(english ? "/en" : "/");
+   };
+ 
+   return (
+@@ -24,13 +27,13 @@ export default function NotFound() {
+           <h1 className="text-4xl font-bold text-slate-900 mb-2">404</h1>
+ 
+           <h2 className="text-xl font-semibold text-slate-700 mb-4">
+-            Page Not Found
++            {english ? "Page not found" : "Página não encontrada"}
+           </h2>
+ 
+           <p className="text-slate-600 mb-8 leading-relaxed">
+-            Sorry, the page you are looking for doesn't exist.
++            {english ? "Sorry, the page you are looking for doesn't exist." : "Desculpe, a página que você procura não existe."}
+             <br />
+-            It may have been moved or deleted.
++            {english ? "It may have been moved or deleted." : "Ela pode ter sido movida ou removida."}
+           </p>
+ 
+           <div
+@@ -42,7 +45,7 @@ export default function NotFound() {
+               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
+             >
+               <Home className="w-4 h-4 mr-2" />
+-              Go Home
++              {english ? "Go to homepage" : "Voltar ao início"}
+             </Button>
+           </div>
+         </CardContent>
+diff --git a/client/src/pages/ProjectPage.tsx b/client/src/pages/ProjectPage.tsx
+index c975395..4b4b157 100644
+--- a/client/src/pages/ProjectPage.tsx
++++ b/client/src/pages/ProjectPage.tsx
+@@ -3,6 +3,7 @@ import ThemeToggle from "@/components/ThemeToggle";
+ import SiteContact from "@/components/SiteContact";
+ import { useLocation, useRoute } from "wouter";
+ import { sitePath } from "@/lib/sitePath";
++import { usePageMeta } from "@/lib/pageMeta";
+ import { getMuseumsMockups } from "@/lib/museumsMockups";
+ 
+ type Category = "graphic" | "ux" | "illustration" | "marketing";
+@@ -14,7 +15,7 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
+   graphic: {
+     pt: { title: "Branding", tag: "Projetos por categoria", intro: "Marcas, sistemas, embalagens e peças gráficas para transformar ideias em presença visual.", back: "← Voltar ao portfólio", projects: [
+       { id: "glitchcast", title: "Glitchcast", year: "2021", text: "Identidade visual desenvolvida em 2021 para o podcast do grupo Glitch404, com sistema de marca, lettering e variações de aplicação.", tools: ["Illustrator", "Photoshop", "Branding", "UX"], details: [{ title: "Sistema visual", text: "Desenvolvimento da identidade do Glitchcast a partir do símbolo do microfone, das formas do coelho e de uma paleta vibrante com variações para diferentes fundos.", }, { title: "Paleta e variações", text: "Definição das cores, versões do logotipo e combinações para diferentes contextos de aplicação.", media: portfolioAsset("glitchcast/Projeto Glitchcast1.png"), alt: "Paleta de cores e versões do logotipo Glitchcast" }, { title: "Aplicações do logotipo", text: "Variações do símbolo e da assinatura visual para manter reconhecimento em diferentes formatos.", media: portfolioAsset("glitchcast/Projeto Glitchcast2.png"), alt: "Aplicações do logotipo Glitchcast" }, { title: "Mídias sociais", text: "Peças de comunicação para episódios, conteúdos e divulgação do podcast nas redes sociais.", media: portfolioAsset("glitchcast/Projeto Glitchcast3.png"), alt: "Peças de mídias sociais do Glitchcast" }, { title: "Aplicações em produtos", text: "Mockups que apresentam a identidade em produtos e materiais de divulgação.", media: portfolioAsset("glitchcast/Projeto Glitchcast4.png"), alt: "Aplicações do Glitchcast em copo e roupas" }, { title: "Key visuals", text: "Exploração dos elementos principais da identidade em composições que apresentam o universo visual do podcast e suas possibilidades de aplicação.", }, { title: "Produtos", text: "Aplicações da identidade em produtos e materiais de divulgação, como camisetas, canecas, adesivos, ecobags e outros itens para criar presença de marca além do podcast." }] },
+-      { id: "ksi-identidade", title: "KSI Consultas", year: "2018–2021", text: "Construção de marca, papelaria e mídias sociais para uma empresa de consultas especializadas.", tools: ["Illustrator", "Identidade visual", "Papelaria", "Mídias sociais"] , details: [ { title: "Logotipo", media: portfolioAsset("ksi/ksilogo1.png"), alt: "Logotipo — KSI Consultas" }, { title: "Variação do logotipo", media: portfolioAsset("ksi/ksilogo2.png"), alt: "Variação do logotipo — KSI Consultas" }, { title: "Aplicação na fachada", media: portfolioAsset("ksi/Entrada corporativa moderna com logo KSI consultas.png"), alt: "Aplicação na fachada — KSI Consultas" }, { title: "Pasta corporativa", media: portfolioAsset("ksi/KSI Consultas pasta corporativa.png"), alt: "Pasta corporativa — KSI Consultas" }, { title: "Papel timbrado", media: portfolioAsset("ksi/KSI Consultas timbrado.png"), alt: "Papel timbrado — KSI Consultas" }, { title: "Crachás corporativos", media: portfolioAsset("ksi/Crachás corporativos KSI Consultas em vermelho.png"), alt: "Crachás corporativos — KSI Consultas" }, { title: "Redes sociais", media: portfolioAsset("ksi/ksi-midiassociais.png"), alt: "Presen\u00e7a digital e redes sociais da KSI Consultas" }, { title: "Posts", media: portfolioAsset("ksi/ksiposts.png"), alt: "Pe\u00e7as para redes sociais da KSI Consultas" } ]},
++      { id: "ksi-identidade", title: "KSI Consultas", year: "2018–2021", text: "Construção de marca, papelaria e mídias sociais para uma empresa especializada em consultas a bancos de dados e recuperação de crédito.", tools: ["Illustrator", "Identidade visual", "Papelaria", "Mídias sociais"] , details: [ { title: "Logotipo", media: portfolioAsset("ksi/ksilogo1.png"), alt: "Logotipo — KSI Consultas" }, { title: "Variação do logotipo", media: portfolioAsset("ksi/ksilogo2.png"), alt: "Variação do logotipo — KSI Consultas" }, { title: "Aplicação na fachada", media: portfolioAsset("ksi/Entrada corporativa moderna com logo KSI consultas.png"), alt: "Aplicação na fachada — KSI Consultas" }, { title: "Pasta corporativa", media: portfolioAsset("ksi/KSI Consultas pasta corporativa.png"), alt: "Pasta corporativa — KSI Consultas" }, { title: "Papel timbrado", media: portfolioAsset("ksi/KSI Consultas timbrado.png"), alt: "Papel timbrado — KSI Consultas" }, { title: "Crachás corporativos", media: portfolioAsset("ksi/Crachás corporativos KSI Consultas em vermelho.png"), alt: "Crachás corporativos — KSI Consultas" }, { title: "Redes sociais", media: portfolioAsset("ksi/ksi-midiassociais.png"), alt: "Presen\u00e7a digital e redes sociais da KSI Consultas" }, { title: "Posts", media: portfolioAsset("ksi/ksiposts.png"), alt: "Pe\u00e7as para redes sociais da KSI Consultas" } ]},
+       { id: "recomendaria", title: "Recomendaria", year: "2019", text: "Naming e identidade para uma plataforma de indicações entre profissionais, do logotipo ao aplicativo.", tools: ["Illustrator", "Figma", "Naming"] },
+       { id: "sempre-vitta", title: "Sempre Vitta", year: "2017", text: "Identidade visual para uma marca ligada à natureza, ao cuidado e à vitalidade.", tools: ["Illustrator", "Branding", "Identidade visual"], details: [{ title: "Logotipo", text: "Construção da identidade visual do Sempre Vitta a partir de uma linguagem orgânica e acolhedora.", media: portfolioAsset("sempre-vitta/semprevittalogo1.png"), alt: "Logotipo Sempre Vitta" }, { title: "Variações", media: portfolioAsset("sempre-vitta/semprevittalogo2.png"), alt: "Variações do logotipo Sempre Vitta" }, { title: "Camiseta", media: portfolioAsset("sempre-vitta/semprevitta-t-shirt.png"), alt: "Camiseta com a identidade Sempre Vitta" }, { title: "Ecobag", media: portfolioAsset("sempre-vitta/semprevitta-tote-bag.png"), alt: "Ecobag com a identidade Sempre Vitta" }, { title: "Embalagem", media: portfolioAsset("sempre-vitta/semprevitta-bag-of-gojiberries.png"), alt: "Embalagem de goji berries Sempre Vitta" }] },
+       { id: "lcr", title: "LCR Marcenaria", year: "2018", text: "Marca e sinalização de oficina para uma marcenaria artesanal, inspirada nas texturas da madeira bruta.", tools: ["Illustrator", "Identidade visual", "Sinalização"], details: [{ title: "Logotipo", text: "Marca desenvolvida para a LCR Marcenaria, combinando as iniciais do nome com uma presença direta e artesanal.", media: portfolioAsset("lcr/lcrlogo.png"), alt: "Logotipo LCR Marcenaria" }, { title: "Cores", media: portfolioAsset("lcr/lcrcores.png"), alt: "Cores da identidade visual da LCR Marcenaria" }, { title: "Variações", media: portfolioAsset("lcr/lecrlogovariantes.png"), alt: "Variações do logotipo LCR Marcenaria" }] },
+@@ -22,7 +23,7 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
+     ] },
+     en: { title: "Branding", tag: "Projects by category", intro: "Brands, systems, packaging and graphic pieces that turn ideas into visual presence.", back: "← Back to portfolio", projects: [
+       { id: "glitchcast", title: "Glitchcast", year: "2021", text: "Visual identity developed in 2021 for the Glitch404 group podcast, with a brand system, lettering and application variations.", tools: ["Illustrator", "Photoshop", "Branding", "UX"], details: [{ title: "Visual system", text: "Development of the Glitchcast identity from the microphone symbol, rabbit forms and a vibrant palette with variations for different backgrounds.", }, { title: "Palette and variations", text: "Definition of colors, logo versions and combinations for different application contexts.", media: portfolioAsset("glitchcast/Projeto Glitchcast1.png"), alt: "Glitchcast color palette and logo versions" }, { title: "Logo applications", text: "Symbol and signature variations designed to preserve recognition across formats.", media: portfolioAsset("glitchcast/Projeto Glitchcast2.png"), alt: "Glitchcast logo applications" }, { title: "Social media", text: "Communication pieces for episodes, content and podcast promotion across social platforms.", media: portfolioAsset("glitchcast/Projeto Glitchcast3.png"), alt: "Glitchcast social media pieces" }, { title: "Product applications", text: "Mockups presenting the identity on products and promotional materials.", media: portfolioAsset("glitchcast/Projeto Glitchcast4.png"), alt: "Glitchcast applications on a cup and clothing" }, { title: "Key visuals", text: "Exploration of the identity’s main elements in compositions that present the podcast’s visual universe and its application possibilities.", }, { title: "Products", text: "Applications of the identity across merchandise and promotional materials, including T-shirts, mugs, stickers, tote bags and other items that extend the brand beyond the podcast." }] },
+-      { id: "ksi-identidade", title: "KSI Consultas", year: "2018–2021", text: "Brand identity, stationery and social media management for a specialized healthcare company.", tools: ["Illustrator", "Visual identity", "Stationery", "Social media"] , details: [ { title: "Logo", media: portfolioAsset("ksi/ksilogo1.png"), alt: "Logo — KSI Consultas" }, { title: "Logo variation", media: portfolioAsset("ksi/ksilogo2.png"), alt: "Logo variation — KSI Consultas" }, { title: "Entrance signage", media: portfolioAsset("ksi/Entrada corporativa moderna com logo KSI consultas.png"), alt: "Entrance signage — KSI Consultas" }, { title: "Corporate folder", media: portfolioAsset("ksi/KSI Consultas pasta corporativa.png"), alt: "Corporate folder — KSI Consultas" }, { title: "Letterhead", media: portfolioAsset("ksi/KSI Consultas timbrado.png"), alt: "Letterhead — KSI Consultas" }, { title: "Corporate badges", media: portfolioAsset("ksi/Crachás corporativos KSI Consultas em vermelho.png"), alt: "Corporate badges — KSI Consultas" }, { title: "Social media", media: portfolioAsset("ksi/ksi-midiassociais.png"), alt: "KSI Consultas digital presence and social media" }, { title: "Posts", media: portfolioAsset("ksi/ksiposts.png"), alt: "KSI Consultas social media posts" } ]},
++      { id: "ksi-identidade", title: "KSI Consultas", year: "2018–2021", text: "Brand identity, stationery and social media management for a company specializing in database lookups and credit recovery.", tools: ["Illustrator", "Visual identity", "Stationery", "Social media"] , details: [ { title: "Logo", media: portfolioAsset("ksi/ksilogo1.png"), alt: "Logo — KSI Consultas" }, { title: "Logo variation", media: portfolioAsset("ksi/ksilogo2.png"), alt: "Logo variation — KSI Consultas" }, { title: "Entrance signage", media: portfolioAsset("ksi/Entrada corporativa moderna com logo KSI consultas.png"), alt: "Entrance signage — KSI Consultas" }, { title: "Corporate folder", media: portfolioAsset("ksi/KSI Consultas pasta corporativa.png"), alt: "Corporate folder — KSI Consultas" }, { title: "Letterhead", media: portfolioAsset("ksi/KSI Consultas timbrado.png"), alt: "Letterhead — KSI Consultas" }, { title: "Corporate badges", media: portfolioAsset("ksi/Crachás corporativos KSI Consultas em vermelho.png"), alt: "Corporate badges — KSI Consultas" }, { title: "Social media", media: portfolioAsset("ksi/ksi-midiassociais.png"), alt: "KSI Consultas digital presence and social media" }, { title: "Posts", media: portfolioAsset("ksi/ksiposts.png"), alt: "KSI Consultas social media posts" } ]},
+       { id: "recomendaria", title: "Recomendaria", year: "2019", text: "Naming and identity for a professional referral platform, from logo to app.", tools: ["Illustrator", "Figma", "Naming"] },
+       { id: "sempre-vitta", title: "Sempre Vitta", year: "2017", text: "Visual identity for a brand connected to nature, care and vitality.", tools: ["Illustrator", "Branding", "Visual identity"], details: [{ title: "Logo", text: "Visual identity developed for Sempre Vitta through an organic and welcoming language.", media: portfolioAsset("sempre-vitta/semprevittalogo1.png"), alt: "Sempre Vitta logo" }, { title: "Variations", media: portfolioAsset("sempre-vitta/semprevittalogo2.png"), alt: "Sempre Vitta logo variations" }, { title: "T-shirt", media: portfolioAsset("sempre-vitta/semprevitta-t-shirt.png"), alt: "T-shirt with the Sempre Vitta identity" }, { title: "Tote bag", media: portfolioAsset("sempre-vitta/semprevitta-tote-bag.png"), alt: "Tote bag with the Sempre Vitta identity" }, { title: "Packaging", media: portfolioAsset("sempre-vitta/semprevitta-bag-of-gojiberries.png"), alt: "Sempre Vitta goji berries packaging" }] },
+       { id: "lcr", title: "LCR Marcenaria", year: "2018", text: "Brand identity and workshop signage inspired by raw wood textures.", tools: ["Illustrator", "Visual identity", "Signage"], details: [{ title: "Logo", text: "Identity developed for LCR Marcenaria, combining the initials of the name with a direct, handcrafted presence.", media: portfolioAsset("lcr/lcrlogo.png"), alt: "LCR Marcenaria logo" }, { title: "Colors", media: portfolioAsset("lcr/lcrcores.png"), alt: "LCR Marcenaria visual identity colors" }, { title: "Logo variations", media: portfolioAsset("lcr/lecrlogovariantes.png"), alt: "LCR Marcenaria logo variations" }] },
+@@ -80,7 +81,7 @@ const pages: Record<Category, { pt: PageCopy; en: PageCopy }> = {
+     ] },
+   },
+   marketing: {
+-    pt: { title: "Marketing", tag: "Projetos por categoria", intro: "Campanhas, conteúdos e presença digital para aproximar marcas de suas pessoas.", back: "← Voltar ao portfólio", projects: [
++    pt: { title: "Marketing", tag: "Projetos por categoria", intro: "Campanhas, conteúdos e presença digital para aproximar marcas do seu público.", back: "← Voltar ao portfólio", projects: [
+       { id: "in9", title: "In9 Mídia", year: "2021–2026", text: "Gestão de redes sociais e campanhas de Google Ads para empresa de software e sinalização digital.", tools: ["Canva", "Adobe Express", "Google Ads"] },
+     ] },
+     en: { title: "Marketing", tag: "Projects by category", intro: "Campaigns, content and digital presence to bring brands closer to their people.", back: "← Back to portfolio", projects: [
+@@ -122,6 +123,7 @@ export default function ProjectPage() {
+   const category = normalizeCategory((enParams?.category || ptParams?.category || "graphic") as string);
+   const copy = pages[category][language];
+   const homePath = language === "en" ? "/en" : "/";
++  usePageMeta(copy.title, language);
+   const switchPath = language === "en" ? `/projetos/${category === "graphic" ? "grafico" : category === "illustration" ? "ilustracao" : category}` : `/en/projects/${category}`;
+ 
+   return <div className="original-project-page"><header><nav className="nav"><a href={sitePath(homePath)} className="logo">CECÍLIA<span>·</span>RODRIGUES</a><div className="nav-links"><a href={sitePath(`${homePath}#sobre`)}>{language === "en" ? "About" : "Sobre"}</a><a href={sitePath(`${homePath}#conhecimentos`)}>{language === "en" ? "Knowledge" : "Conhecimentos"}</a><a href={sitePath(`${homePath}#trabalhos`)}>{language === "en" ? "Work" : "Trabalhos"}</a><a href={sitePath(`${homePath}#contato`)}>{language === "en" ? "Contact" : "Contato"}</a><ThemeToggle language={language} /><button className="plain-language" onClick={() => navigate(switchPath)}>{language === "en" ? "PT" : "EN"}</button></div></nav></header><main><section className="page-hero"><div className="wrap"><div className="eyebrow mono">{copy.tag}</div><h1>{copy.title}</h1><p>{copy.intro}</p><a className="back-link" href={sitePath(`${homePath}#trabalhos`)}>{copy.back}</a></div></section><section><div className="wrap"><div className="project-list">{copy.projects.map((project, index) => <article className="project-detail" id={project.id} key={project.id}><div className="project-index">{String(index + 1).padStart(2, "0")} / {String(copy.projects.length).padStart(2, "0")}<br /><br />{project.year}</div><div><h2>{project.title}</h2><p>{project.text}</p><div className="project-tools">{project.tools.map((tool) => <span className="project-tool" key={tool}>{tool}</span>)}</div>{project.id === "proposta-valor" ? <><MuseumsCarousel project={project} language={language} /><MuseumsMockups language={language} /></> : project.details?.map((detail, detailIndex) => <div className="detail-block" key={`${project.id}-${detail.title}`}><h3>{detail.title}</h3>{detail.text && <p>{detail.text}</p>}{detail.media && <img src={detail.media} alt={detail.alt || ""} loading="lazy" />}{detailIndex === 0 && project.details && project.details.length > 1 && <div className="detail-gallery" />}</div>)}<div className="detail-note">{language === "en" ? "Project presented in Cecília Rodrigues’ portfolio" : "Projeto apresentado no portfólio de Cecília Rodrigues"}</div></div></article>)}</div></div></section>{category === "graphic" && <section className="wrap" style={{ paddingBottom: "100px" }}><a className="back-link" href={sitePath(language === "en" ? "/en/projects/ux/glitchcast-app" : "/projetos/ux/glitchcast-app")}>{language === "en" ? "View the Glitchcast App UX project →" : "Ver o projeto UX do Glitchcast App →"}</a></section>}<SiteContact language={language} /></main><footer><div className="wrap">© 2026 Cecília Rodrigues</div></footer></div>;
+diff --git a/scripts/prepare-pages.mjs b/scripts/prepare-pages.mjs
+index ceed6b2..13cc242 100644
+--- a/scripts/prepare-pages.mjs
++++ b/scripts/prepare-pages.mjs
+@@ -1,4 +1,4 @@
+-import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
++import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+ import path from "node:path";
+ import { fileURLToPath } from "node:url";
+ 
+@@ -19,6 +19,8 @@ export async function preparePages(outputDirectory = path.join(root, "dist/publi
+     ...slugs.flatMap((slug) => [`cases/${slug}`, `en/cases/${slug}`]),
+   ];
+ 
++  // Script de depuração do ambiente Manus: útil só no desenvolvimento, não deve ir para o site publicado.
++  await rm(path.join(outputDirectory, "__manus__"), { recursive: true, force: true });
+   await copyFile(index, path.join(outputDirectory, "404.html"));
+   await writeFile(path.join(outputDirectory, ".nojekyll"), "");
+   for (const route of routes) {
+-- 
+2.43.0
+

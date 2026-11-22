@@ -1,0 +1,216 @@
+From 5165b1e54c4c123089976584a3f5eba1ebcc2b16 Mon Sep 17 00:00:00 2001
+From: x <x@x>
+Date: Sat, 21 Nov 2026 22:53:41 -0300
+Subject: [PATCH] =?UTF-8?q?Palavras=20mais=20curtas=20no=20t=C3=ADtulo=20e?=
+ =?UTF-8?q?=20anima=C3=A7=C3=B5es=20de=20entrada=20nas=20se=C3=A7=C3=B5es?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01UXrWAY24NJB2SoF9ZSjHEq
+---
+ client/src/index.css                   | 12 +++++
+ client/src/lib/useReveal.ts            | 67 ++++++++++++++++++++++++++
+ client/src/pages/CasePage.tsx          |  2 +
+ client/src/pages/GlitchcastAppPage.tsx |  3 ++
+ client/src/pages/Home.tsx              |  7 ++-
+ client/src/pages/ProjectPage.tsx       |  2 +
+ 6 files changed, 91 insertions(+), 2 deletions(-)
+ create mode 100644 client/src/lib/useReveal.ts
+
+diff --git a/client/src/index.css b/client/src/index.css
+index 045319c..8093f07 100644
+--- a/client/src/index.css
++++ b/client/src/index.css
+@@ -222,3 +222,15 @@
+ .dark .contact-details a:hover,.dark .site-contact-network a:hover{color:var(--paper)}
+ .dark .marquee span:nth-child(odd){color:var(--paper)}
+ .dark .site-contact-tag,.dark .site-contact-network small,.dark .contact-details small,.dark .old-footer{opacity:1}
++/* Animações de entrada: o título abre ao carregar a página e as seções aparecem ao rolar. */
++@keyframes reveal-up{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
++.old-hero .hero-copy>*,.case-hero .wrap>*,.original-project-page .page-hero .wrap>*{animation:reveal-up .8s cubic-bezier(.22,1,.36,1) both}
++.old-hero .hero-copy>*:nth-child(2),.case-hero .wrap>*:nth-child(2),.original-project-page .page-hero .wrap>*:nth-child(2){animation-delay:.1s}
++.old-hero .hero-copy>*:nth-child(3),.case-hero .wrap>*:nth-child(3),.original-project-page .page-hero .wrap>*:nth-child(3){animation-delay:.2s}
++.old-hero .hero-copy>*:nth-child(4),.case-hero .wrap>*:nth-child(4),.original-project-page .page-hero .wrap>*:nth-child(4){animation-delay:.3s}
++.old-hero .hero-copy>*:nth-child(5),.case-hero .wrap>*:nth-child(5),.original-project-page .page-hero .wrap>*:nth-child(5){animation-delay:.4s}
++.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);transition-delay:calc(var(--reveal-index,0) * 90ms)}
++.reveal.reveal-fade{transform:none}
++.reveal.is-visible{opacity:1;transform:none}
++@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.old-hero .hero-copy>*,.case-hero .wrap>*,.original-project-page .page-hero .wrap>*{animation:none}}
++@media print{.reveal{opacity:1;transform:none}}
+diff --git a/client/src/lib/useReveal.ts b/client/src/lib/useReveal.ts
+new file mode 100644
+index 0000000..ead067e
+--- /dev/null
++++ b/client/src/lib/useReveal.ts
+@@ -0,0 +1,67 @@
++import { useLayoutEffect } from "react";
++
++// Blocos que entram com animação ao aparecer na tela.
++const REVEAL_SELECTOR = [
++  ".section-title", ".about-copy", ".knowledge-line", ".filters", ".featured-card", ".work-card",
++  ".contact-card-box", ".case-navigation .wrap", ".case-section", ".case-project-nav .wrap",
++  ".site-contact-tag", ".site-contact-section h2", ".project-detail",
++].join(",");
++
++// Itens de grade/lista que entram em sequência, um após o outro.
++const STAGGER_SELECTOR = ".knowledge-line, .featured-card, .work-card, .contact-card-box";
++
++// Cartões da grade "Outros trabalhos" só esmaecem (o deslocamento mostraria o fundo entre eles).
++const FADE_ONLY_SELECTOR = ".work-card";
++
++/**
++ * Aplica animação de entrada aos blocos da página quando eles entram na tela.
++ * Sem suporte a IntersectionObserver ou com "reduzir movimento" ativado, o conteúdo aparece direto.
++ */
++export function useReveal(deps: unknown[] = []) {
++  // useLayoutEffect: as classes entram antes da primeira pintura, sem "piscar" o conteúdo.
++  useLayoutEffect(() => {
++    if (typeof window === "undefined" || !("IntersectionObserver" in window)) return;
++    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
++
++    const elements = Array.from(document.querySelectorAll<HTMLElement>(REVEAL_SELECTOR)).filter(
++      (element) => element.dataset.revealed !== "true",
++    );
++
++    // Depois que o bloco aparece, as classes da animação saem e o estilo original (hover etc.) volta a valer.
++    const finish = (element: HTMLElement) => {
++      element.dataset.revealed = "true";
++      element.classList.remove("reveal", "reveal-fade", "is-visible");
++      element.style.removeProperty("--reveal-index");
++    };
++
++    const observer = new IntersectionObserver(
++      (entries) => {
++        entries.forEach((entry) => {
++          if (!entry.isIntersecting) return;
++          const element = entry.target as HTMLElement;
++          element.classList.add("is-visible");
++          observer.unobserve(element);
++          window.setTimeout(() => finish(element), 1200);
++        });
++      },
++      { rootMargin: "0px 0px -8% 0px", threshold: 0 },
++    );
++
++    elements.forEach((element) => {
++      if (element.matches(STAGGER_SELECTOR) && element.parentElement) {
++        const siblings = Array.from(element.parentElement.children).filter((child) => child.matches(STAGGER_SELECTOR));
++        element.style.setProperty("--reveal-index", String(siblings.indexOf(element) % 4));
++      }
++      element.classList.add("reveal");
++      if (element.matches(FADE_ONLY_SELECTOR)) element.classList.add("reveal-fade");
++      observer.observe(element);
++    });
++
++    // Ao trocar de página ou idioma, nada fica escondido pela metade.
++    return () => {
++      observer.disconnect();
++      elements.forEach(finish);
++    };
++    // eslint-disable-next-line react-hooks/exhaustive-deps
++  }, deps);
++}
+diff --git a/client/src/pages/CasePage.tsx b/client/src/pages/CasePage.tsx
+index e542334..08ec4fe 100644
+--- a/client/src/pages/CasePage.tsx
++++ b/client/src/pages/CasePage.tsx
+@@ -5,6 +5,7 @@ import { useLocation, useRoute } from "wouter";
+ import { useEffect, useRef, useState } from "react";
+ import type { ReactNode } from "react";
+ import { sitePath } from "@/lib/sitePath";
++import { useReveal } from "@/lib/useReveal";
+ import { getMuseumsMockups } from "@/lib/museumsMockups";
+ import { localizeYear, usePageMeta } from "@/lib/pageMeta";
+ import NotFound from "@/pages/NotFound";
+@@ -361,6 +362,7 @@ export default function CasePage() {
+   const slug = enParams?.slug || ptParams?.slug;
+   const project = cases[language].find((item) => item.slug === slug);
+   usePageMeta(project?.title ?? (language === "en" ? "Page not found" : "Página não encontrada"), language);
++  useReveal([slug, language]);
+ 
+   useEffect(() => {
+     if (!enlargedMedia) return;
+diff --git a/client/src/pages/GlitchcastAppPage.tsx b/client/src/pages/GlitchcastAppPage.tsx
+index cd03b9d..4ec3e49 100644
+--- a/client/src/pages/GlitchcastAppPage.tsx
++++ b/client/src/pages/GlitchcastAppPage.tsx
+@@ -2,6 +2,7 @@ import { useLocation } from "wouter";
+ import SiteContact from "@/components/SiteContact";
+ import ThemeToggle from "@/components/ThemeToggle";
+ import { sitePath } from "@/lib/sitePath";
++import { useReveal } from "@/lib/useReveal";
+ import { usePageMeta } from "@/lib/pageMeta";
+ 
+ export default function GlitchcastAppPage() {
+@@ -39,5 +40,7 @@ export default function GlitchcastAppPage() {
+ 
+   usePageMeta(copy.title, language);
+ 
++  useReveal([language]);
++
+   return <div className="original-project-page"><header><nav className="nav"><a href={sitePath(language === "en" ? "/en" : "/")} className="logo">CECÍLIA<span>·</span>RODRIGUES</a><div className="nav-links"><a href={sitePath(language === "en" ? "/en#sobre" : "/#sobre")}>{language === "en" ? "About" : "Sobre"}</a><a href={sitePath(language === "en" ? "/en#conhecimentos" : "/#conhecimentos")}>{language === "en" ? "Knowledge" : "Conhecimentos"}</a><a href={sitePath(language === "en" ? "/en#trabalhos" : "/#trabalhos")}>{language === "en" ? "Work" : "Trabalhos"}</a><a href={sitePath(language === "en" ? "/en#contato" : "/#contato")}>{language === "en" ? "Contact" : "Contato"}</a><ThemeToggle language={language} /><a className="plain-language" href={sitePath(language === "en" ? "/projetos/ux/glitchcast-app" : "/en/projects/ux/glitchcast-app")}>{language === "en" ? "PT" : "EN"}</a></div></nav></header><main><section className="page-hero"><div className="wrap"><div className="eyebrow mono">{copy.tag}</div><h1>{copy.title}</h1><p>{copy.intro}</p><a className="back-link" href={sitePath(language === "en" ? "/en/cases/glitchcast" : "/cases/glitchcast")}>{copy.back}</a></div></section><section><div className="wrap"><article className="project-detail glitchcast-app-case"><div className="project-index">01 / 01<br /><br />2021</div><div><h2>{copy.title}</h2><p>{copy.overview}</p><div className="project-tools">{copy.tools.map((tool) => <span className="project-tool" key={tool}>{tool}</span>)}</div><div className="detail-block"><h3>{copy.problemTitle}</h3><p>{copy.problem}</p></div><div className="detail-block"><h3>{copy.processTitle}</h3><p>{copy.process}</p></div><div className="detail-block"><h3>{copy.interfaceTitle}</h3><p>{copy.interface}</p></div><div className="detail-note">{copy.note}</div></div></article></div></section><SiteContact language={language} /></main><footer><div className="wrap">© 2026 Cecília Rodrigues</div></footer></div>;
+ }
+diff --git a/client/src/pages/Home.tsx b/client/src/pages/Home.tsx
+index 4b15d2e..4c28b0d 100644
+--- a/client/src/pages/Home.tsx
++++ b/client/src/pages/Home.tsx
+@@ -4,6 +4,7 @@ import { ArrowDown, ArrowUpRight, Check, Copy, Download, FileText, Mail, Menu, X
+ import ThemeToggle from "@/components/ThemeToggle";
+ import { useLocation } from "wouter";
+ import { sitePath } from "@/lib/sitePath";
++import { useReveal } from "@/lib/useReveal";
+ import { copyText, localizeYear, usePageMeta } from "@/lib/pageMeta";
+ 
+ const colors = ["#f0c23a", "#2b3eff", "#ff5a2e", "#2e9e4e", "#a45bea"];
+@@ -186,7 +187,7 @@ const content = {
+   pt: {
+     nav: ["Sobre", "Conhecimentos", "Destaques", "Outros Trabalhos", "Contato"],
+     heroEyebrow: "Designer Multidisciplinar · 12+ anos de mercado",
+-    heroWords: ["essencial", "produto digital", "UX design", "branding", "universo visual"],
++    heroWords: ["essencial", "digital", "UX design", "branding", "imaginário"],
+     heroTitle: ["Organizando ideias e", "dando forma ao"],
+     heroSub: (
+       <>
+@@ -245,7 +246,7 @@ const content = {
+   en: {
+     nav: ["About", "Skills", "Featured", "Other Works", "Contact"],
+     heroEyebrow: "Multidisciplinary Designer · 12+ years of experience",
+-    heroWords: ["the essential", "digital product", "UX design", "branding", "visual universe"],
++    heroWords: ["essence", "digital", "UX design", "branding", "visuals"],
+     heroTitle: ["Organizing ideas and", "giving shape to"],
+     heroSub: (
+       <>
+@@ -323,6 +324,8 @@ export default function Home() {
+ 
+   usePageMeta(undefined, language);
+ 
++  useReveal([language]);
++
+   const handleCopyEmail = async () => {
+     if (!(await copyText(email))) return;
+     setEmailCopied(true);
+diff --git a/client/src/pages/ProjectPage.tsx b/client/src/pages/ProjectPage.tsx
+index 4b4b157..161f1db 100644
+--- a/client/src/pages/ProjectPage.tsx
++++ b/client/src/pages/ProjectPage.tsx
+@@ -3,6 +3,7 @@ import ThemeToggle from "@/components/ThemeToggle";
+ import SiteContact from "@/components/SiteContact";
+ import { useLocation, useRoute } from "wouter";
+ import { sitePath } from "@/lib/sitePath";
++import { useReveal } from "@/lib/useReveal";
+ import { usePageMeta } from "@/lib/pageMeta";
+ import { getMuseumsMockups } from "@/lib/museumsMockups";
+ 
+@@ -124,6 +125,7 @@ export default function ProjectPage() {
+   const copy = pages[category][language];
+   const homePath = language === "en" ? "/en" : "/";
+   usePageMeta(copy.title, language);
++  useReveal([category, language]);
+   const switchPath = language === "en" ? `/projetos/${category === "graphic" ? "grafico" : category === "illustration" ? "ilustracao" : category}` : `/en/projects/${category}`;
+ 
+   return <div className="original-project-page"><header><nav className="nav"><a href={sitePath(homePath)} className="logo">CECÍLIA<span>·</span>RODRIGUES</a><div className="nav-links"><a href={sitePath(`${homePath}#sobre`)}>{language === "en" ? "About" : "Sobre"}</a><a href={sitePath(`${homePath}#conhecimentos`)}>{language === "en" ? "Knowledge" : "Conhecimentos"}</a><a href={sitePath(`${homePath}#trabalhos`)}>{language === "en" ? "Work" : "Trabalhos"}</a><a href={sitePath(`${homePath}#contato`)}>{language === "en" ? "Contact" : "Contato"}</a><ThemeToggle language={language} /><button className="plain-language" onClick={() => navigate(switchPath)}>{language === "en" ? "PT" : "EN"}</button></div></nav></header><main><section className="page-hero"><div className="wrap"><div className="eyebrow mono">{copy.tag}</div><h1>{copy.title}</h1><p>{copy.intro}</p><a className="back-link" href={sitePath(`${homePath}#trabalhos`)}>{copy.back}</a></div></section><section><div className="wrap"><div className="project-list">{copy.projects.map((project, index) => <article className="project-detail" id={project.id} key={project.id}><div className="project-index">{String(index + 1).padStart(2, "0")} / {String(copy.projects.length).padStart(2, "0")}<br /><br />{project.year}</div><div><h2>{project.title}</h2><p>{project.text}</p><div className="project-tools">{project.tools.map((tool) => <span className="project-tool" key={tool}>{tool}</span>)}</div>{project.id === "proposta-valor" ? <><MuseumsCarousel project={project} language={language} /><MuseumsMockups language={language} /></> : project.details?.map((detail, detailIndex) => <div className="detail-block" key={`${project.id}-${detail.title}`}><h3>{detail.title}</h3>{detail.text && <p>{detail.text}</p>}{detail.media && <img src={detail.media} alt={detail.alt || ""} loading="lazy" />}{detailIndex === 0 && project.details && project.details.length > 1 && <div className="detail-gallery" />}</div>)}<div className="detail-note">{language === "en" ? "Project presented in Cecília Rodrigues’ portfolio" : "Projeto apresentado no portfólio de Cecília Rodrigues"}</div></div></article>)}</div></div></section>{category === "graphic" && <section className="wrap" style={{ paddingBottom: "100px" }}><a className="back-link" href={sitePath(language === "en" ? "/en/projects/ux/glitchcast-app" : "/projetos/ux/glitchcast-app")}>{language === "en" ? "View the Glitchcast App UX project →" : "Ver o projeto UX do Glitchcast App →"}</a></section>}<SiteContact language={language} /></main><footer><div className="wrap">© 2026 Cecília Rodrigues</div></footer></div>;
+-- 
+2.43.0
+

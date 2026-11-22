@@ -1,0 +1,5 @@
+Checkpoint criado em 21/11/2026, antes da troca das palavras do título e das animações de entrada.
+
+Esta pasta guarda os arquivos como estavam antes dessa mudança. Para desfazer, copie os
+arquivos desta pasta de volta para os mesmos caminhos no projeto e apague o arquivo novo
+client/src/lib/useReveal.ts.

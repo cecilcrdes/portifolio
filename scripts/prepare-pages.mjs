@@ -1,4 +1,4 @@
-import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -19,6 +19,8 @@ export async function preparePages(outputDirectory = path.join(root, "dist/publi
     ...slugs.flatMap((slug) => [`cases/${slug}`, `en/cases/${slug}`]),
   ];
 
+  // Script de depuração do ambiente Manus: útil só no desenvolvimento, não deve ir para o site publicado.
+  await rm(path.join(outputDirectory, "__manus__"), { recursive: true, force: true });
   await copyFile(index, path.join(outputDirectory, "404.html"));
   await writeFile(path.join(outputDirectory, ".nojekyll"), "");
   for (const route of routes) {

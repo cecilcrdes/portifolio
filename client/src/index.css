@@ -222,3 +222,15 @@
 .dark .contact-details a:hover,.dark .site-contact-network a:hover{color:var(--paper)}
 .dark .marquee span:nth-child(odd){color:var(--paper)}
 .dark .site-contact-tag,.dark .site-contact-network small,.dark .contact-details small,.dark .old-footer{opacity:1}
+/* Animações de entrada: o título abre ao carregar a página e as seções aparecem ao rolar. */
+@keyframes reveal-up{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.old-hero .hero-copy>*,.case-hero .wrap>*,.original-project-page .page-hero .wrap>*{animation:reveal-up .8s cubic-bezier(.22,1,.36,1) both}
+.old-hero .hero-copy>*:nth-child(2),.case-hero .wrap>*:nth-child(2),.original-project-page .page-hero .wrap>*:nth-child(2){animation-delay:.1s}
+.old-hero .hero-copy>*:nth-child(3),.case-hero .wrap>*:nth-child(3),.original-project-page .page-hero .wrap>*:nth-child(3){animation-delay:.2s}
+.old-hero .hero-copy>*:nth-child(4),.case-hero .wrap>*:nth-child(4),.original-project-page .page-hero .wrap>*:nth-child(4){animation-delay:.3s}
+.old-hero .hero-copy>*:nth-child(5),.case-hero .wrap>*:nth-child(5),.original-project-page .page-hero .wrap>*:nth-child(5){animation-delay:.4s}
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);transition-delay:calc(var(--reveal-index,0) * 90ms)}
+.reveal.reveal-fade{transform:none}
+.reveal.is-visible{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.old-hero .hero-copy>*,.case-hero .wrap>*,.original-project-page .page-hero .wrap>*{animation:none}}
+@media print{.reveal{opacity:1;transform:none}}

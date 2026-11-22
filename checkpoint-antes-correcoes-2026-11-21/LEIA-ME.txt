@@ -1,0 +1,11 @@
+Checkpoint criado em 21/11/2026, antes das correções de funcionamento e textos.
+
+Esta pasta guarda as versões dos arquivos exatamente como estavam na sua pasta local
+antes das correções. Para desfazer, copie os arquivos desta pasta de volta para os
+mesmos caminhos no projeto. O arquivo client/src/lib/pageMeta.ts é novo: ao desfazer,
+apague-o também.
+
+Observação: a client/src/pages/Home.tsx desta pasta é a versão local, que estava
+atrás do GitHub (o commit "ajustes textos" de 08/11 só existe no GitHub). As
+correções foram feitas a partir da versão do GitHub, que já inclui essas mudanças.
+No GitHub, o ponto anterior às correções é o commit 97c571e ("ajustes textos").

@@ -4,6 +4,8 @@ import { ArrowDown, ArrowUpRight, Check, Copy, Download, FileText, Mail, Menu, X
 import ThemeToggle from "@/components/ThemeToggle";
 import { useLocation } from "wouter";
 import { sitePath } from "@/lib/sitePath";
+import { useReveal } from "@/lib/useReveal";
+import { copyText, localizeYear, usePageMeta } from "@/lib/pageMeta";
 
 const colors = ["#f0c23a", "#2b3eff", "#ff5a2e", "#2e9e4e", "#a45bea"];
 
@@ -23,11 +25,11 @@ const featuredProjects: FeaturedProject[] = [
   {
     slug: "in9-midia",
     title: "In9 Mídia",
-    year: "2014 — Presente",
+    year: "2014 — atual",
     category: { pt: "Digital Signage · UI Design · DOOH · Marketing", en: "Digital Signage · UI Design · DOOH · Marketing" },
     description: {
       pt: "Mais de 10 anos de atuação contínua liderando a criação de templates dinâmicos para Digital Signage (DOOH), wireframes de interfaces para apps e plataformas corporativas, além de gestão de campanhas de Google Ads.",
-      en: "Over 10 years of continuous role leading dynamic templates for Digital Signage (DOOH), app and software interface wireframes, and corporate Google Ads campaigns.",
+      en: "Over 10 years of continuous work leading the creation of dynamic Digital Signage (DOOH) templates, interface wireframes for apps and corporate platforms, and Google Ads campaign management.",
     },
     image: asset("in9/templatesin9.png"),
     tags: ["Digital Signage", "DOOH", "UI Wireframes", "Google Ads", "Redes Sociais"],
@@ -50,8 +52,8 @@ const featuredProjects: FeaturedProject[] = [
     year: "2018–2021",
     category: { pt: "Identidade Visual · Papelaria · Redes Sociais · Web", en: "Visual Identity · Stationery · Social Media · Web" },
     description: {
-      pt: "Construção de marca completa, papelaria física e institucional, estratégia contínua de conteúdo para redes sociais e reestruturação web para empresa de consultas médicas especializadas.",
-      en: "Comprehensive brand identity system, corporate stationery, social media content strategy, and website restructuring for a specialized healthcare clinic.",
+      pt: "Construção de marca completa, papelaria física e institucional, estratégia contínua de conteúdo para redes sociais e reestruturação web para uma empresa especializada em consultas a bancos de dados e recuperação de crédito.",
+      en: "Comprehensive brand identity system, corporate stationery, ongoing social media content strategy, and website restructuring for a company specializing in database lookups and credit recovery.",
     },
     image: asset("ksi/ksiposts.png"),
     tags: ["Identidade de Marca", "Papelaria", "Mídias Sociais", "Design Gráfico"],
@@ -59,16 +61,30 @@ const featuredProjects: FeaturedProject[] = [
   {
     slug: "e-ai-man-jogo",
     title: "E aí Man (Jogo)",
-    year: "2020",
+    year: "2016 — atual",
     category: { pt: "UI de Jogo · Level Design · Concept Art · Personagens", en: "Game UI · Level Design · Concept Art · Characters" },
     description: {
       pt: "Jogo 2D de aventura, plataforma e puzzle ambientado em uma comunidade brasileira. Desenvolvimento conceitual completo: interfaces de jogo (menus, HUD), level design de fases e ilustração de personagens.",
       en: "A 2D adventure and puzzle platformer set in a Brazilian community. Complete visual development: in-game UI (menus, HUD), level design progression, and character concept art.",
     },
     image: asset("eaiman/eaiman-grupo.jpg"),
-    tags: ["Game UI", "Level Design", "Ilustração", "Construct 2", "Narrativa"],
+    tags: ["Game UI", "Level Design", "Ilustração", "Construct 2", "JavaScript", "Narrativa"],
   },
 ];
+
+// Tradução das tags dos destaques para a versão em inglês.
+const tagTranslations: Record<string, string> = {
+  "Redes Sociais": "Social Media",
+  "Arquitetura da Informação": "Information Architecture",
+  Cultura: "Culture",
+  "Identidade de Marca": "Brand Identity",
+  Papelaria: "Stationery",
+  "Mídias Sociais": "Social Media",
+  "Design Gráfico": "Graphic Design",
+  "Ilustração": "Illustration",
+  Narrativa: "Storytelling",
+};
+const translateTag = (tag: string, language: Language) => (language === "en" ? tagTranslations[tag] || tag : tag);
 
 type ArchiveProject = {
   category: "ux" | "grafico" | "ilustracao" | "marketing";
@@ -111,8 +127,8 @@ const archiveProjects: ArchiveProject[] = [
     year: "2019",
     title: "Recomendaria",
     description: {
-      pt: "Naming e identidade de marca para plataforma colaborativa de recomendações profissionais.",
-      en: "Naming and brand identity for a professional referral and networking platform.",
+      pt: "Identidade de marca para plataforma  de recomendações.",
+      en: "Brand identity for a recommendation platform.",
     },
     slug: "recomendaria",
     image: asset("recomendaria/recomendaria logo completa.jpg"),
@@ -123,8 +139,8 @@ const archiveProjects: ArchiveProject[] = [
     year: "2017",
     title: "Sempre Vitta",
     description: {
-      pt: "Identidade visual acolhedora e embalagens para marca ligada à alimentação natural e vitalidade.",
-      en: "Organic visual language and packaging system for a health and vitality food brand.",
+      pt: "Identidade visual acolhedora e embalagens para marca de alimentos naturais e vida saudável.",
+      en: "A welcoming visual identity and packaging for a natural foods and healthy living brand.",
     },
     slug: "sempre-vitta",
     image: asset("sempre-vitta/semprevittalogo1.png"),
@@ -147,7 +163,7 @@ const archiveProjects: ArchiveProject[] = [
     year: "2018",
     title: "Lilaz",
     description: {
-      pt: "Identidade e embalagens personalizadas para atelier de decorações afetivas.",
+      pt: "Identidade e embalagens personalizadas para ateliê de decorações afetivas.",
       en: "Delicate identity and custom packaging for a boutique decoration studio.",
     },
     slug: "lilaz",
@@ -171,7 +187,7 @@ const content = {
   pt: {
     nav: ["Sobre", "Conhecimentos", "Destaques", "Outros Trabalhos", "Contato"],
     heroEyebrow: "Designer Multidisciplinar · 12+ anos de mercado",
-    heroWords: ["essencial", "produto digital", "UX design", "branding", "universo visual"],
+    heroWords: ["essencial", "digital", "UX design", "branding", "imaginário"],
     heroTitle: ["Organizando ideias e", "dando forma ao"],
     heroSub: (
       <>
@@ -228,14 +244,14 @@ const content = {
     seeProject: "Ver projeto completo",
   },
   en: {
-    nav: ["About", "Knowledge", "Featured", "Other Works", "Contact"],
+    nav: ["About", "Skills", "Featured", "Other Works", "Contact"],
     heroEyebrow: "Multidisciplinary Designer · 12+ years of experience",
-    heroWords: ["the essential", "digital product", "UX design", "branding", "visual universe"],
+    heroWords: ["essence", "digital", "UX design", "branding", "visuals"],
     heroTitle: ["Organizing ideas and", "giving shape to"],
     heroSub: (
       <>
-        I’m <strong>Cecília Rodrigues</strong>, holding a bachelor's degree from <strong>UFBA</strong> and a specialization from <strong>UNEB</strong>.
-        Working across digital products, brand identities, illustration, and visual communication — bringing method, consistency, and artistic craft to brands, games, and interfaces.
+        I’m <strong>Cecília Rodrigues</strong>, with a bachelor’s degree from <strong>UFBA</strong> and a specialization from <strong>UNEB</strong>.
+        I work across digital products, brand identities, illustration, and visual communication — bringing method, consistency, and artistic craft to brands, games, and digital experiences.
       </>
     ),
     heroPrimary: "See featured",
@@ -246,10 +262,10 @@ const content = {
     aboutTitle: "About",
     about: [
       <>
-        <strong>Bachelor in Industrial Design and Visual Communication (UFBA)</strong> and <strong>Specialist in Digital Game Design (UNEB)</strong>, with postgraduate studies in Digital Design and Web Development (UniAlphaville).
+        <strong>Bachelor’s degree in Industrial Design with a focus on Visual Communication (UFBA)</strong> and <strong>Specialist in Digital Game Design (UNEB)</strong>, with postgraduate studies in Digital Design and Web Development (UniAlphaville).
       </>,
       <>
-        Working continuously since <strong>2014 at In9 Mídia</strong> as Graphic and UI Designer, developing Digital Signage (DOOH) templates, app interface wireframes, and corporate campaigns. Combined with over a decade of branding systems, editorial illustration, game art, and digital marketing — focused on clear messaging and high visual impact.
+        Working continuously since <strong>2014 at In9 Mídia</strong> as a Graphic and UI Designer, leading Digital Signage (DOOH) templates, app wireframes, and corporate campaigns. This experience adds to over a decade of branding, editorial illustration, game art, and digital marketing projects — always focused on clear, relevant communication with strong visual impact.
       </>,
     ],
     skills: [
@@ -259,7 +275,7 @@ const content = {
       ["Illustration & Game Art", "Characters / Game UI / Level Design"],
     ],
     knowledgeTag: "Tools and skills",
-    knowledgeTitle: "Knowledge and skills",
+    knowledgeTitle: "Skills and expertise",
     knowledgeDescription: "Key tools and core competencies guiding my work.",
     tools: [
       ["Interface Design (UI/UX)", "Figma · Wireframing · User Testing · Prototyping"],
@@ -296,7 +312,8 @@ function Stamp({ children, tone = "blue" }: { children: React.ReactNode; tone?: 
 
 export default function Home() {
   const [location, navigate] = useLocation();
-  const language: Language = location === "/en" ? "en" : "pt";
+  // Aceita "/en" e "/en/" (o GitHub Pages redireciona para o endereço com barra no final).
+  const language: Language = location === "/en" || location.startsWith("/en/") ? "en" : "pt";
   const copy = content[language];
   const [activeFilter, setActiveFilter] = useState("todos");
   const [wordIndex, setWordIndex] = useState(0);
@@ -305,8 +322,12 @@ export default function Home() {
 
   const email = "ceciliacrdes@gmail.com";
 
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(email);
+  usePageMeta(undefined, language);
+
+  useReveal([language]);
+
+  const handleCopyEmail = async () => {
+    if (!(await copyText(email))) return;
     setEmailCopied(true);
     setTimeout(() => setEmailCopied(false), 2200);
   };
@@ -322,6 +343,11 @@ export default function Home() {
     }, 2300);
     return () => window.clearInterval(timer);
   }, [copy.heroWords.length]);
+
+  // Só exibe filtros que têm pelo menos um projeto, evitando grades vazias.
+  const availableFilters = copy.filters.filter(
+    ([value]) => value === "todos" || archiveProjects.some((project) => project.category === value),
+  );
 
   const displayedArchive =
     activeFilter === "todos"
@@ -356,7 +382,7 @@ export default function Home() {
           <div className="nav-tools">
             <ThemeToggle language={language} />
             <span className="availability">
-              <i /> {language === "pt" ? "Disponível p/ projetos" : "Available for projects"}
+              <i /> {language === "pt" ? "Disponível para projetos" : "Available for projects"}
             </span>
             <button
               className="lang-switch"
@@ -477,14 +503,14 @@ export default function Home() {
                 <div className="featured-card-content">
                   <div className="featured-card-meta">
                     <span>{project.category[language]}</span>
-                    <small>{project.year}</small>
+                    <small>{localizeYear(project.year, language)}</small>
                   </div>
                   <h3>{project.title}</h3>
                   <p>{project.description[language]}</p>
                   <div className="featured-card-tags">
                     {project.tags.map((tag) => (
                       <span className="featured-tag" key={tag}>
-                        {tag}
+                        {translateTag(tag, language)}
                       </span>
                     ))}
                   </div>
@@ -508,7 +534,7 @@ export default function Home() {
           />
 
           <div className="filters">
-            {copy.filters.map(([value, label]) => (
+            {availableFilters.map(([value, label]) => (
               <button
                 className={activeFilter === value ? "active" : ""}
                 key={value}
@@ -585,7 +611,7 @@ export default function Home() {
               {/* Currículo em PDF */}
               <div className="contact-card-box">
                 <span className="contact-box-label">
-                  {language === "en" ? "Curriculum Vitae" : "Currículo Oficial"}
+                  {language === "en" ? "Resume / CV" : "Currículo"}
                 </span>
                 <div className="contact-box-actions">
                   <a
